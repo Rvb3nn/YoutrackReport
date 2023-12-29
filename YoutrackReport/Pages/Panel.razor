@@ -1,0 +1,152 @@
+﻿@* @page "/Panel"
+
+<PageTitle>Datos</PageTitle>
+
+@using Newtonsoft.Json
+@using System.Text.Json
+@using Newtonsoft.Json.Linq
+@using YoutrackReport.Servicios.Contrato
+@using YoutrackReport.Data
+@using YoutrackReport.DTOs
+
+@inject IObtienePanelDPrincipal panel
+
+<h2>Panel</h2>
+
+@if (root != null)
+{
+    <h5>Datos del Issue</h5>
+
+    <div>
+        <p>ID Readable: @root.idReadable</p>
+        <p>Summary: @root.summary</p>
+        <p>Description: @root.description</p>
+        <p>ID: @root.id</p>
+    <p>Type: @root.type</p>
+    </div>
+
+    <hr>
+
+    <p>Prioridad: @priority</p>
+    <p>Tipo: @type</p>
+    <p>Estado: @state</p>
+    <p>Asignado a: @assignee</p>
+    <p>Fecha inicio: @fechaInicio?.ToString("d MMM yyyy")</p>
+    <p>Analista QA: @analistaQA</p>
+    <p>Fecha termino real: @fechaTerminoReal?.ToString("d MMM yyyy")</p>
+    <p>Jefe de proyecto: @jefeProyecto</p>
+    <p>Dificultad: @dificultad</p>
+    <p>ID MH: @idMH</p>
+}
+
+@code {
+    private Root root;
+    private string idProyecto = "0-46";
+    private string idIssue = "2-796";
+
+    private string priority;
+    private string type;
+    private string state;
+    private string assignee;
+    private DateTime? fechaInicio;
+    private string analistaQA;
+    private DateTime? fechaTerminoReal;
+    private string jefeProyecto;
+    private string dificultad;
+    private string idMH;
+
+    protected override async Task OnInitializedAsync()
+    {
+        await ObtenerData();
+    }
+
+    private async Task ObtenerData()
+    {
+        root = await panel.ObtienePanel(idProyecto, idIssue);
+
+        priority = GetFieldValue("Priority", root.customFields);
+        type = GetFieldValue("Type", root.customFields);
+        state = GetFieldValue("State", root.customFields);
+        assignee = GetFieldValue("Assignee", root.customFields);
+        fechaInicio = GetFecha("Fecha inicio", root.customFields);
+        analistaQA = GetFieldValue("Analista QA", root.customFields);
+        fechaTerminoReal = GetFecha("Fecha termino real", root.customFields);
+        jefeProyecto = GetFieldValue("Jefe de proyecto", root.customFields);
+        dificultad = GetFieldValue("Dificultad", root.customFields);
+        idMH = GetFieldValue("ID MH", root.customFields);
+    }
+
+    private string GetFieldValue(string fieldName, List<CustomField>? customFields)
+    {
+        if (customFields != null)
+        {
+            var field = customFields.SingleOrDefault(f => f.name == fieldName);
+            if (field?.value != null)
+            {
+                // Agrega esta línea para imprimir el contenido del campo en la consola
+                Console.WriteLine($"Field Value ({fieldName}): {field.value}");
+
+                dynamic result;
+                if (field.name == "Jefe de proyecto" || field.name == "Priority" || field.name == "Type" ||
+                    field.name == "Assignee" || field.name == "Analista QA" || field.name == "Dificultad")
+                {
+                    result = JsonConvert.DeserializeObject<dynamic>(field.value.ToString());
+                    return result.name;
+                }
+
+                if (field.name == "ID MH")
+                {
+                    // Para el campo "ID MH" que es un valor directo
+                    return field.value.ToString();
+                }
+
+                if (field.name == "State")
+                {
+                    // Manejar el caso específico de la lista de estados
+                    try
+                    {
+                        result = JsonConvert.DeserializeObject<List<dynamic>>(field.value.ToString());
+                        if (result != null && result.Count > 0)
+                        {
+                            // Obtener el nombre del primer elemento de la lista
+                            return result[0]?.name;
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        Console.WriteLine($"Error deserializando 'State': {ex.Message}");
+                    }
+                }
+            }
+        }
+
+        return "";
+    }
+
+    private DateTime GetFecha(string fieldName, List<CustomField>? customFields)
+    {
+        // Obtener el campo correspondiente al nombre proporcionado
+        var field = customFields?.SingleOrDefault(f => f.name == fieldName);
+
+        // Imprimir el tipo del valor del campo en la consola (esto puede ser útil para depurar)
+        Console.WriteLine(field?.value.GetType());
+
+        // Verificar si el valor del campo es un número (JsonValueKind.Number)
+        if (field?.value is JsonElement jsonElement && jsonElement.ValueKind == JsonValueKind.Number)
+        {
+            // Obtener el valor del campo como un entero largo
+            long ticks = jsonElement.GetInt64();
+
+            // Crear una instancia de DateTime a partir de los milisegundos desde la época Unix
+            DateTime fecha = DateTime.UnixEpoch.AddMilliseconds(ticks);
+
+            // Devolver la fecha obtenida
+            return fecha;
+        }
+
+        // Si no se puede obtener la fecha, devolver el valor por defecto DateTime.MinValue
+        return DateTime.MinValue;
+    }
+
+}
+ *@

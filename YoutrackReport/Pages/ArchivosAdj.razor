@@ -1,0 +1,81 @@
+﻿@page "/ArchivosAdj"
+
+<PageTitle>Datos </PageTitle>
+
+
+
+@using YoutrackReport.Servicios.Contrato;
+@using YoutrackReport.Data
+@using YoutrackReport.DTOs
+
+
+@inject IObtieneArchivoAdj archivos;
+
+<h2>Archivos</h2>
+
+@if (arch== null)
+{
+    <p><em>Loading...</em></p>
+}
+else
+{
+    <table class="table">
+        <thead>
+            <tr>
+                <th>name</th>
+                <th>size</th>
+                <th>extension</th>
+                <th>uptated</th>
+                <th>author</th>
+                <th>metaData</th>
+                <th>created</th>
+                <th>charset</th>
+                <th>url</th>
+                <th>mimeType</th>
+                <th>id</th>
+                <th>type</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var dato in arch)
+            {
+                <tr>
+                    <td>@dato.name</td>
+                    <td>@dato.size</td>
+                    <td>@dato.extension</td>
+                    <td>@dato.updated</td>
+                    <td>@dato.author</td>
+                    <td>@dato.metaData</td>
+                    <td>@dato.created</td>
+                    <td>@dato.charset</td>
+                    <td>@dato.url</td>
+                    <td>@dato.mimeType</td>
+                    <td>@dato.id</td>
+                    <td>@dato.type</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+
+@code {
+    private List<ArchivoAdjDTO> arch;
+
+
+
+    protected override async Task OnInitializedAsync()
+    {
+        await ObtenerData();
+
+
+    }
+
+    private async Task<List<ArchivoAdjDTO>> ObtenerData()
+    {
+
+        return arch = await archivos.ObtieneArchivos();
+    }
+
+
+
+}

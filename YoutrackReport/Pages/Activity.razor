@@ -1,0 +1,62 @@
+﻿@page "/Activity"
+
+<PageTitle>Datos </PageTitle>
+
+@using YoutrackReport.Servicios.Contrato;
+@using YoutrackReport.Data
+@using YoutrackReport.DTOs
+
+@inject IObtieneActivity activities;
+
+<h1>Activities</h1>
+
+@if (actividad == null)
+{
+    <p><em>Loading...</em></p>
+}
+else
+{
+    <table class="table">
+        <thead>
+            <tr>
+                <th>id</th>
+                <th>target</th>
+                <th>author</th>
+                <th>timestamp</th>
+                <th>type</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var dato in actividad)
+            {
+                <tr>
+                    <td>@dato.id</td>
+                    <td>@dato.target.id</td>
+                    <td>@dato.author.name</td>
+                    <td>@ConvertirTimestamp(dato.timestamp ?? 0)</td>
+                    <td>@dato.type</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+
+@code {
+    private List<ActivityDTO> actividad;
+
+    protected override async Task OnInitializedAsync()
+    {
+        await ObtenerData();
+    }
+
+    private async Task<List<ActivityDTO>> ObtenerData()
+    {
+        return actividad = await activities.ObtieneActivities();
+    }
+
+    // Función para convertir un campo de timestamp a DateTime
+    private DateTime ConvertirTimestamp(long timestamp)
+    {
+        return DateTime.UnixEpoch.AddMilliseconds(timestamp);
+    }
+}

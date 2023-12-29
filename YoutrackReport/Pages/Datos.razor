@@ -1,0 +1,112 @@
+﻿@page "/datosHistoricos"
+
+<PageTitle>Datos Historicos EEUU</PageTitle>
+
+
+
+@using YoutrackReport.Servicios.Contrato;
+@using YoutrackReport.Data
+@using YoutrackReport.DTOs
+
+
+@inject IObtieneInformacionCovidService InformacionService; 
+
+<h1>Datos Historicos</h1>
+
+<p>Obtiene los datos historicos de covid en EEUU</p>
+
+@if (datosHistoricos == null)
+{
+    <p><em>Loading...</em></p>
+}
+else
+{
+    <table class="table">
+        <thead>
+            <tr>
+                <th>date</th>
+                <th>states</th>
+                <th>positive</th>
+              @*   <th>Positive</th>
+                <th>Negative</th>
+                <th>Pending</th>
+                <th>Hospitalized Currently</th>
+                <th>Hospitalized Cumulative</th>
+                <th>In ICU Currently</th>
+                <th>In ICU Cumulative</th>
+                <th>On Ventilator Currently</th>
+                <th>On Ventilator Cumulative</th>
+                <th>Date Checked</th>
+                <th>Death</th>
+                <th>Hospitalized</th>
+                <th>Total Test Results</th>
+                <th>Last Modified</th>
+                <th>Recovered</th>
+                <th>Total</th>
+                <th>Positive/Negative</th>
+                <th>Death Increase</th>
+                <th>Hospitalized Increase</th>
+                <th>Negative Increase</th>
+                <th>Positive Increase</th>
+                <th>Total Test Results Increase</th>
+                <th>Hash</th> *@
+
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var dato in datosHistoricos)
+            {
+                <tr>
+                    <td>@dato.date</td>
+                     <td>@dato.states</td>
+                    <td>@dato.positive</td>
+                   @*  <td>@dato.negative</td>
+                    <td>@dato.pending</td>
+                    <td>@dato.hospitalizedCurrently</td>
+                    <td>@dato.hospitalizedCumulative</td>
+                    <td>@dato.inIcuCurrently</td>
+                    <td>@dato.inIcuCumulative</td>
+                    <td>@dato.onVentilatorCurrently</td>
+                    <td>@dato.onVentilatorCumulative</td>
+                    <td>@dato.dateChecked</td>
+                    <td>@dato.death</td>
+                    <td>@dato.hospitalized</td>
+                    <td>@dato.totalTestResults</td>
+                    <td>@dato.lastModified</td>
+                    <td>@dato.recovered</td>
+                    <td>@dato.total</td>
+                    <td>@dato.posNeg</td>
+                    <td>@dato.deathIncrease</td>
+                    <td>@dato.hospitalizedIncrease</td>
+                    <td>@dato.negativeIncrease</td>
+                    <td>@dato.positiveIncrease</td>
+                    <td>@dato.totalTestResultsIncrease</td>
+                    <td>@dato.hash</td> *@
+
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+
+@code {
+    private List<DatosHistoricos> datosHistoricos;
+
+
+
+    protected override async Task OnInitializedAsync() 
+    {
+        await ObtenerData();
+
+
+    }
+
+    private async Task<List<DatosHistoricos>> ObtenerData()
+    {
+
+        return datosHistoricos = await InformacionService.ObtieneInformacionCovid();
+    }
+    
+
+    
+}

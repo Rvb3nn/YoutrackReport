@@ -1,0 +1,99 @@
+is_global = true
+build_property.TargetFramework = net6.0
+build_property.TargetPlatformMinVersion = 
+build_property.UsingMicrosoftNETSdkWeb = true
+build_property.ProjectTypeGuids = 
+build_property.InvariantGlobalization = 
+build_property.PlatformNeutralAssembly = 
+build_property.EnforceExtendedAnalyzerRules = 
+build_property._SupportedPlatformList = Linux,macOS,Windows
+build_property.RootNamespace = YoutrackReport
+build_property.RootNamespace = YoutrackReport
+build_property.ProjectDir = C:\Users\rtoro\OneDrive\Escritorio\ALL\Tareas U\Practica I Profesional\Prosys\YoutrackReport\YoutrackReport\YoutrackReport\
+build_property.EnableComHosting = 
+build_property.EnableGeneratedComInterfaceComImportInterop = 
+build_property.RazorLangVersion = 6.0
+build_property.SupportLocalizedComponentNames = 
+build_property.GenerateRazorMetadataSourceChecksumAttributes = 
+build_property.MSBuildProjectDirectory = C:\Users\rtoro\OneDrive\Escritorio\ALL\Tareas U\Practica I Profesional\Prosys\YoutrackReport\YoutrackReport\YoutrackReport
+build_property._RazorSourceGeneratorDebug = 
+
+[C:/Users/rtoro/OneDrive/Escritorio/ALL/Tareas U/Practica I Profesional/Prosys/YoutrackReport/YoutrackReport/YoutrackReport/App.razor]
+build_metadata.AdditionalFiles.TargetPath = QXBwLnJhem9y
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/rtoro/OneDrive/Escritorio/ALL/Tareas U/Practica I Profesional/Prosys/YoutrackReport/YoutrackReport/YoutrackReport/Pages/Activity.razor]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcQWN0aXZpdHkucmF6b3I=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/rtoro/OneDrive/Escritorio/ALL/Tareas U/Practica I Profesional/Prosys/YoutrackReport/YoutrackReport/YoutrackReport/Pages/ArchivosAdj.razor]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcQXJjaGl2b3NBZGoucmF6b3I=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/rtoro/OneDrive/Escritorio/ALL/Tareas U/Practica I Profesional/Prosys/YoutrackReport/YoutrackReport/YoutrackReport/Pages/Comentario.razor]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcQ29tZW50YXJpby5yYXpvcg==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/rtoro/OneDrive/Escritorio/ALL/Tareas U/Practica I Profesional/Prosys/YoutrackReport/YoutrackReport/YoutrackReport/Pages/Counter.razor]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcQ291bnRlci5yYXpvcg==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/rtoro/OneDrive/Escritorio/ALL/Tareas U/Practica I Profesional/Prosys/YoutrackReport/YoutrackReport/YoutrackReport/Pages/Datos.razor]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcRGF0b3MucmF6b3I=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/rtoro/OneDrive/Escritorio/ALL/Tareas U/Practica I Profesional/Prosys/YoutrackReport/YoutrackReport/YoutrackReport/Pages/FetchData.razor]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcRmV0Y2hEYXRhLnJhem9y
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/rtoro/OneDrive/Escritorio/ALL/Tareas U/Practica I Profesional/Prosys/YoutrackReport/YoutrackReport/YoutrackReport/Pages/Index.razor]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcSW5kZXgucmF6b3I=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/rtoro/OneDrive/Escritorio/ALL/Tareas U/Practica I Profesional/Prosys/YoutrackReport/YoutrackReport/YoutrackReport/Pages/MainPage.razor]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcTWFpblBhZ2UucmF6b3I=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/rtoro/OneDrive/Escritorio/ALL/Tareas U/Practica I Profesional/Prosys/YoutrackReport/YoutrackReport/YoutrackReport/Pages/Metricas.razor]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcTWV0cmljYXMucmF6b3I=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/rtoro/OneDrive/Escritorio/ALL/Tareas U/Practica I Profesional/Prosys/YoutrackReport/YoutrackReport/YoutrackReport/Pages/Panel.razor]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcUGFuZWwucmF6b3I=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/rtoro/OneDrive/Escritorio/ALL/Tareas U/Practica I Profesional/Prosys/YoutrackReport/YoutrackReport/YoutrackReport/Pages/Proyectos.razor]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcUHJveWVjdG9zLnJhem9y
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/rtoro/OneDrive/Escritorio/ALL/Tareas U/Practica I Profesional/Prosys/YoutrackReport/YoutrackReport/YoutrackReport/Pages/Usuarios.razor]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcVXN1YXJpb3MucmF6b3I=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/rtoro/OneDrive/Escritorio/ALL/Tareas U/Practica I Profesional/Prosys/YoutrackReport/YoutrackReport/YoutrackReport/Shared/SurveyPrompt.razor]
+build_metadata.AdditionalFiles.TargetPath = U2hhcmVkXFN1cnZleVByb21wdC5yYXpvcg==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/rtoro/OneDrive/Escritorio/ALL/Tareas U/Practica I Profesional/Prosys/YoutrackReport/YoutrackReport/YoutrackReport/_Imports.razor]
+build_metadata.AdditionalFiles.TargetPath = X0ltcG9ydHMucmF6b3I=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/rtoro/OneDrive/Escritorio/ALL/Tareas U/Practica I Profesional/Prosys/YoutrackReport/YoutrackReport/YoutrackReport/Shared/MainLayout.razor]
+build_metadata.AdditionalFiles.TargetPath = U2hhcmVkXE1haW5MYXlvdXQucmF6b3I=
+build_metadata.AdditionalFiles.CssScope = b-wr7onyuto3
+
+[C:/Users/rtoro/OneDrive/Escritorio/ALL/Tareas U/Practica I Profesional/Prosys/YoutrackReport/YoutrackReport/YoutrackReport/Shared/NavMenu.razor]
+build_metadata.AdditionalFiles.TargetPath = U2hhcmVkXE5hdk1lbnUucmF6b3I=
+build_metadata.AdditionalFiles.CssScope = b-c5wr27zsnw
+
+[C:/Users/rtoro/OneDrive/Escritorio/ALL/Tareas U/Practica I Profesional/Prosys/YoutrackReport/YoutrackReport/YoutrackReport/Pages/Error.cshtml]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcRXJyb3IuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/rtoro/OneDrive/Escritorio/ALL/Tareas U/Practica I Profesional/Prosys/YoutrackReport/YoutrackReport/YoutrackReport/Pages/_Host.cshtml]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcX0hvc3QuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/rtoro/OneDrive/Escritorio/ALL/Tareas U/Practica I Profesional/Prosys/YoutrackReport/YoutrackReport/YoutrackReport/Pages/_Layout.cshtml]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcX0xheW91dC5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
