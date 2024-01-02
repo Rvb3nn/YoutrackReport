@@ -7,5 +7,6 @@ namespace YoutrackReport.Servicios.Contrato
     public interface IObtieneMetricas
     {
         Task<List<MetricasDTO>> ObtieneMetricasV();
+        IAsyncEnumerable<string> CalcularTotales();
     }
 }
