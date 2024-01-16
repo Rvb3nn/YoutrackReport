@@ -19,7 +19,7 @@ namespace YoutrackReport.DTOs
         public string DueDate { get; set; }
         public string Estimacion { get; set; }
         public string FechaInicio { get; set; }
-        public string FechaTerminoDesa { get; set; }
+        public string? FechaTerminoDesa { get; set; } = null;
         public string FechaTerminoQA { get; set; }
         public string FechaTerminoReal { get; set; }
         public string URLJira { get; set; }
@@ -31,6 +31,37 @@ namespace YoutrackReport.DTOs
         public string SprintsSeparadosPorComa { get; set; }
         public string Completado { get; set; }
         public string FixedInBuild { get; set; }
+
+        public IEnumerable<object> ToArray()
+        {
+            return new object[] {
+        Subsystem,
+        Type,
+        Priority,
+        State,
+        RechazoHDI,
+        EncargadoHDI,
+        JefeDeProyecto,
+        Assignee,
+        DueDate,
+        Estimacion,
+        FechaInicio,
+        FechaTerminoDesa,
+        FechaTerminoQA,
+        FechaTerminoReal,
+        URLJira,
+        URLBitbucket,
+        URLSonarQube,
+        Dificultad,
+        IDMh,
+        IDAgil,
+        SprintsSeparadosPorComa,
+        Completado,
+        FixedInBuild
+        };
+        }
+
+
 
     }
 

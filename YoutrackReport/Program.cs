@@ -19,7 +19,7 @@ builder.Services.AddScoped<IObtieneProyectosServices, ObtieneProyectosServices>(
 builder.Services.AddScoped<IObtieneArchivoAdj, ObtieneArchivoAdj>();
 builder.Services.AddScoped<IObtieneComentario, ObtieneComentario>();
 builder.Services.AddScoped<IObtieneActivity, ObtieneActivity>();
-builder.Services.AddScoped<IObtieneMetricas, ObtieneMetricas>();
+builder.Services.AddScoped<ObtieneMetricas>();
 
 var app = builder.Build();
 

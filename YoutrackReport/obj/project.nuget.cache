@@ -1,10 +1,14 @@
 {
   "version": 2,
-  "dgSpecHash": "uSFA2bdlg1hLx9vlXiLlXMuqKaII5fo76Kk+vSnQrncOlxlU+bTTcs1pYQrst//5K/AMV6EGRkZCPiXIbE8HmQ==",
+  "dgSpecHash": "FVjcdGVA90TlUepeb5t3T/ifvRXdHgRA1p93y0+g78WF0AfUzxnb8m35/1PEwAQnsQvOnr8HYm+QsVpeJ2xG0g==",
   "success": true,
-  "projectFilePath": "C:\\Users\\rtoro\\OneDrive\\Escritorio\\ALL\\Tareas U\\Practica I Profesional\\Prosys\\YoutrackReport\\YoutrackReport\\YoutrackReport\\YoutrackReport.csproj",
+  "projectFilePath": "C:\\Users\\rtoro\\OneDrive\\Escritorio\\ALL\\Tareas U\\Practica I Profesional\\Prosys\\YoutrackReportCAMBIO\\YoutrackReport\\YoutrackReport\\YoutrackReport\\YoutrackReport.csproj",
   "expectedPackageFiles": [
+    "C:\\Users\\rtoro\\.nuget\\packages\\chart.js\\3.7.1\\chart.js.3.7.1.nupkg.sha512",
     "C:\\Users\\rtoro\\.nuget\\packages\\newtonsoft.json\\13.0.3\\newtonsoft.json.13.0.3.nupkg.sha512",
+    "C:\\Users\\rtoro\\.nuget\\packages\\serilog\\2.12.0\\serilog.2.12.0.nupkg.sha512",
+    "C:\\Users\\rtoro\\.nuget\\packages\\serilog.sinks.async\\1.5.0\\serilog.sinks.async.1.5.0.nupkg.sha512",
+    "C:\\Users\\rtoro\\.nuget\\packages\\serilog.sinks.file\\5.0.0\\serilog.sinks.file.5.0.0.nupkg.sha512",
     "C:\\Users\\rtoro\\.nuget\\packages\\system.runtime.compilerservices.unsafe\\6.0.0\\system.runtime.compilerservices.unsafe.6.0.0.nupkg.sha512",
     "C:\\Users\\rtoro\\.nuget\\packages\\system.text.encodings.web\\8.0.0\\system.text.encodings.web.8.0.0.nupkg.sha512",
     "C:\\Users\\rtoro\\.nuget\\packages\\system.text.json\\8.0.0\\system.text.json.8.0.0.nupkg.sha512"

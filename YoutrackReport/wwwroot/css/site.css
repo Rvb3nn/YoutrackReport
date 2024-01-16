@@ -62,3 +62,51 @@ a, .btn-link {
     .blazor-error-boundary::after {
         content: "An error has occurred."
     }
+
+
+
+
+/* metricasStyle.css */
+
+/* Estilos generales de las cartas */
+#cartas-container {
+    text-align: center; /* Centra las cartas horizontalmente */
+}
+
+.estado-box {
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.3s ease, box-shadow 0.3s ease;
+    box-sizing: border-box; /* Incluye el padding y el borde en el ancho total */
+    display: inline-block; /* Hace que las cartas se muestren en línea */
+}
+
+.estado-box.enCurso {
+    background-color: #FFA500; /* Naranja */
+}
+
+.estado-box.terminado {
+    background-color: #00FF00; /* Verde */
+}
+
+/* Estilos de las cartas al pasar el mouse */
+.estado-box:hover {
+    transform: scale(1.05);
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+}
+
+
+
+/* Estilos para los elementos dentro de las cartas */
+.estado-title {
+    font-size: 20px;
+    margin-bottom: 10px;
+    font-family: monospace, sans-serif;
+    font-weight: bold;
+}
+
+.estado-number {
+    font-size: 30px;
+    font-weight: bold;
+    color: white;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5); /* Agrega sombra al texto */
+}

@@ -1,0 +1,27 @@
+
+/* metricasStyle.css */
+
+/* Estilos generales de las cartas */
+.estado-box {
+    padding: 20px;
+    margin: 20px;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+/* Estilo cuando el mouse está sobre la carta de "En curso" */
+.estado-box.enCurso {
+    background-color: #FFA500; /* Naranja */
+}
+
+/* Estilo cuando el mouse está sobre la carta de "Terminado" */
+.estado-box.terminado {
+    background-color: #00FF00; /* Verde */
+}
+
+/* Estilos de las cartas al pasar el mouse */
+.estado-box:hover {
+    transform: scale(1.05);
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+}

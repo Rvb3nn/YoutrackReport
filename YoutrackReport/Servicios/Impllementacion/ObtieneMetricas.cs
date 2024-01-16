@@ -2,16 +2,19 @@
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Net.Http;
 using System.Net.Http.Json;
 using System.Threading.Tasks;
 using YoutrackReport.DTOs;
+using YoutrackReport.Pages;
 using YoutrackReport.Servicios.Contrato;
 
 namespace YoutrackReport.Servicios.Impllementacion
 {
-    public class ObtieneMetricas : IObtieneMetricas
+    public class ObtieneMetricas
     {
+
         private readonly HttpClient _httpClient;
 
         public ObtieneMetricas(HttpClient httpClient)
@@ -19,197 +22,270 @@ namespace YoutrackReport.Servicios.Impllementacion
             _httpClient = httpClient;
         }
 
-        public async Task<List<MetricasDTO>> ObtieneMetricasV()
+        //METODO QUE CONSUME API
+        private async Task<List<MetricasDTO>> ObtenerDatosApi(string endpoint)
         {
-            //var api = "https://prosysspa.youtrack.cloud/api/issues?fields=summary,customFields(id,name,value(id,name))";
-            var api = "https://prosysspa.youtrack.cloud/api/issues?fields=customFields(name,value(name))";
-
-            try
-            {
-                var request = new HttpRequestMessage(HttpMethod.Get, api);
-                request.Headers.Add("Authorization", "Bearer perm:UGFibG9fRWxndWV0YQ==.NTgtMTA=.LeJvALnkcWG2POgkNBoAoMUb4XyxMR");
-
-                var response = await _httpClient.SendAsync(request);
-                response.EnsureSuccessStatusCode();
-
-                var metricasc = await response.Content.ReadFromJsonAsync<List<MetricasDTO>>();
-
-                return metricasc ?? new List<MetricasDTO>();
-            }
-            catch (Exception)
-            {
-                throw;
-            }
-        }
-
-        public async IAsyncEnumerable<string> CalcularTotales()
-        {
-            List<FieldsDTO> datos = new List<FieldsDTO>();
-            int CantidadEnCurso = 0;
-            int CantidadTerminado = 0;
-
             var client = new HttpClient();
             var request = new HttpRequestMessage
             {
                 Method = HttpMethod.Get,
-                RequestUri = new Uri("https://prosysspa.youtrack.cloud/api/issues?fields=customFields(name,value(name))"),
+                RequestUri = new Uri(endpoint),
                 Headers =
-            {
-                { "User-Agent", "insomnia/2023.5.8" },
-                { "Authorization", "Bearer perm:UGFibG9fRWxndWV0YQ==.NTgtMTA=.LeJvALnkcWG2POgkNBoAoMUb4XyxMR" },
-            },
+                {
+                    { "User-Agent", "insomnia/2023.5.8" },
+                    { "Authorization", "Bearer perm:TWFyaW9fUmFtaXJleg==.NTgtMTU=.3iMaKjmBBMj6eXomhtsZ0eBvNAuyNB" },
+                },
             };
 
             var response = await client.SendAsync(request);
+            response.EnsureSuccessStatusCode();
+
             var body = await response.Content.ReadAsStringAsync();
-            var resul = JsonConvert.DeserializeObject<List<MetricasDTO>>(body);
+            var result = JsonConvert.DeserializeObject<List<MetricasDTO>>(body);
+
+            return result;
+        }
 
 
-            //recorro "resul", variable que contiene el resultado de la petición al servicio
-            //para recorrer la variable "resul", esta es asignada a una nueva variable de recorrido llamada "res"
-            foreach (MetricasDTO res in resul)
+
+        // Método para obtener y transformar datos comunes
+        public async Task<List<FieldsDTO>> ObtenerDatosComunes(string endpoint)
+        {
+            try
             {
-                FieldsDTO prueba = new FieldsDTO();
+                DataTable dt = new DataTable();
 
-                // if (res.customField.FindAll(x => x.Name == "Subsystem").FirstOrDefault().Value != null)
-                // {
-                //     prueba.Subsystem = JsonConvert.DeserializeObject<Value>(res.customField.FindAll(x => x.Name == "Subsystem").FirstOrDefault().Value.ToString()).name;
-                // }
-
-                // if (res.customField.FindAll(x => x.Name == "Type").FirstOrDefault().Value != null)
-                // {
-                //     prueba.Type = JsonConvert.DeserializeObject<Value>(res.customField.FindAll(x => x.Name == "Type").FirstOrDefault().Value.ToString()).name;
-                // }
-
-                // if (res.customField.FindAll(x => x.Name == "Priority").FirstOrDefault().Value != null)
-                // {
-                //     prueba.Priority = JsonConvert.DeserializeObject<Value>(res.customField.FindAll(x => x.Name == "Priority").FirstOrDefault().Value.ToString()).name;
-                // }
-
-                if (res.customField.FindAll(x => x.Name == "State").FirstOrDefault().Value != null)
+                foreach (var property in typeof(FieldsDTO).GetProperties())
                 {
-                    prueba.State = JsonConvert.DeserializeObject<Value>(res.customField.FindAll(x => x.Name == "State").FirstOrDefault().Value.ToString()).name;
+                    // Obtén el nombre de la propiedad
+                    string propertyName = property.Name;
+
+                    // Obtén el tipo de datos de la propiedad
+                    Type propertyType = property.PropertyType;
+
+                    // Agrega la columna al DataTable
+                    dt.Columns.Add(propertyName, propertyType);
                 }
 
-                // if (res.customField.FindAll(x => x.Name == "Rechazo HDI").FirstOrDefault().Value != null)
-                // {
-                //     prueba.RechazoHDI = JsonConvert.DeserializeObject<Value>(res.customField.FindAll(x => x.Name == "Rechazo HDI").FirstOrDefault().Value.ToString()).name;
-                // }
-
-                // if (res.customField.FindAll(x => x.Name == "Encargado HDI").FirstOrDefault().Value != null)
-                // {
-                //     prueba.EncargadoHDI = JsonConvert.DeserializeObject<Value>(res.customField.FindAll(x => x.Name == "Encargado HDI").FirstOrDefault().Value.ToString()).name;
-                // }
-
-                // if (res.customField.FindAll(x => x.Name == "Jefe de proyecto").FirstOrDefault().Value != null)
-                // {
-                //     prueba.JefeDeProyecto = JsonConvert.DeserializeObject<Value>(res.customField.FindAll(x => x.Name == "Jefe de proyecto").FirstOrDefault().Value.ToString()).name;
-                // }
-
-                // if (res.customField.FindAll(x => x.Name == "Assignee").FirstOrDefault().Value)
-                // {
-                //     prueba.Assignee = JsonConvert.DeserializeObject<Value>(res.customField.FindAll(x => x.Name == "Assignee").FirstOrDefault().Value.ToString()).name;
-                // }
-
-                // if (res.customField.FindAll(x => x.Name == "Due Date").FirstOrDefault().Value)
-                // {
-                //     prueba.DueDate = res.customField.FindAll(x => x.Name == "Due Date").FirstOrDefault().Value.ToString();      //No deserializa porque aqui entra directo al valor
-                // }
-
-                // if (res.customField.FindAll(x => x.Name == "Estimacion").FirstOrDefault().Value)
-                // {
-                //     prueba.Estimacion = JsonConvert.DeserializeObject<Value>(res.customField.FindAll(x => x.Name == "Estimacion").FirstOrDefault().Value.ToString()).name;
-                // }
-
-                // if (res.customField.FindAll(x => x.Name == "FechaInicio").FirstOrDefault().Value)
-                // {
-                //     prueba.FechaInicio = JsonConvert.DeserializeObject<Value>(res.customField.FindAll(x => x.Name == "FechaInicio").FirstOrDefault().Value.ToString()).name;
-                // }
-
-                // if (res.customField.FindAll(x => x.Name == "FechaTerminoDesa").FirstOrDefault().Value)
-                // {
-                //     prueba.FechaTerminoDesa = JsonConvert.DeserializeObject<Value>(res.customField.FindAll(x => x.Name == "FechaTerminoDesa").FirstOrDefault().Value.ToString()).name;
-                // }
-
-                // if (res.customField.FindAll(x => x.Name == "FechaTerminoQA").FirstOrDefault().Value)
-                // {
-                //     prueba.FechaTerminoQA = JsonConvert.DeserializeObject<Value>(res.customField.FindAll(x => x.Name == "FechaTerminoQA").FirstOrDefault().Value.ToString()).name;
-                // }
-
-                // if (res.customField.FindAll(x => x.Name == "FechaTerminoReal").FirstOrDefault().Value)
-                // {
-                //     prueba.FechaTerminoReal = JsonConvert.DeserializeObject<Value>(res.customField.FindAll(x => x.Name == "FechaTerminoReal").FirstOrDefault().Value.ToString()).name;
-                // }
-
-                // if (res.customField.FindAll(x => x.Name == "URL Jira").FirstOrDefault().Value)
-                // {
-                //     prueba.URLJira = res.customField.FindAll(x => x.Name == "URL Jira").FirstOrDefault().Value.ToString();          //No deserializa porque aqui entra directo al valor
-                // }
-
-                // if (res.customField.FindAll(x => x.Name == "URL Bitbucket").FirstOrDefault().Value)
-                // {
-                //     prueba.URLBitbucket = res.customField.FindAll(x => x.Name == "URL Bitbucket").FirstOrDefault().Value.ToString();        //No deserializa porque aqui entra directo al valor
-                // }
-
-                // if (res.customField.FindAll(x => x.Name == "URLSonarQube").FirstOrDefault().Value)
-                // {
-                //     prueba.URLSonarQube = JsonConvert.DeserializeObject<Value>(res.customField.FindAll(x => x.Name == "URLSonarQube").FirstOrDefault().Value.ToString()).name;
-                // }
-
-                // if (res.customField.FindAll(x => x.Name == "Dificultad").FirstOrDefault().Value)
-                // {
-                //     prueba.Dificultad = JsonConvert.DeserializeObject<Value>(res.customField.FindAll(x => x.Name == "Dificultad").FirstOrDefault().Value.ToString()).name;
-                // }
-
-                // if (res.customField.FindAll(x => x.Name == "ID Mh").FirstOrDefault().Value)
-                // {
-                //     prueba.IDMh = JsonConvert.DeserializeObject<Value>(res.customField.FindAll(x => x.Name == "ID Mh").FirstOrDefault().Value.ToString()).name;
-                // }
-
-                // if (res.customField.FindAll(x => x.Name == "IDAgil").FirstOrDefault().Value)
-                // {
-                //     prueba.IDAgil = JsonConvert.DeserializeObject<Value>(res.customField.FindAll(x => x.Name == "IDAgil").FirstOrDefault().Value.ToString()).name;
-                // }
-
-                // if (res.customField.FindAll(x => x.Name == "SprintsSeparadosPorComa").FirstOrDefault().Value)
-                // {
-                //     prueba.SprintsSeparadosPorComa = JsonConvert.DeserializeObject<Value>(res.customField.FindAll(x => x.Name == "SprintsSeparadosPorComa").FirstOrDefault().Value.ToString()).name;
-                // }
-
-                // if (res.customField.FindAll(x => x.Name == "Completado").FirstOrDefault().Value)
-                // {
-                //     prueba.Completado = JsonConvert.DeserializeObject<Value>(res.customField.FindAll(x => x.Name == "Completado").FirstOrDefault().Value.ToString()).name;
-                // }
-
-                // if (res.customField.FindAll(x => x.Name == "FixedInBuild").FirstOrDefault().Value)
-                // {
-                //     prueba.FixedInBuild = JsonConvert.DeserializeObject<Value>(res.customField.FindAll(x => x.Name == "FixedInBuild").FirstOrDefault().Value.ToString()).name;
-                // }
+                var result = await ObtenerDatosApi(endpoint);
+                List<FieldsDTO> datos = new List<FieldsDTO>();
 
 
-                //al final de cada recorrido del foreach, lleno la lista "datos" (FieldsDTO) 
-                datos.Add(prueba);
+                foreach (var res in result)
+                {
+
+
+                    FieldsDTO prueba = new FieldsDTO();
+
+                    if (res.customField.FindAll(x => x.Name == "Subsystem").FirstOrDefault()?.Value != null)
+                    {
+                        prueba.Subsystem = JsonConvert.DeserializeObject<Value>(res.customField.FindAll(x => x.Name == "Subsystem").FirstOrDefault().Value.ToString()).name;
+                    }
+
+                    if (res.customField.FindAll(x => x.Name == "State").FirstOrDefault()?.Value != null)
+                    {
+                        prueba.State = JsonConvert.DeserializeObject<Value>(res.customField.FindAll(x => x.Name == "State").FirstOrDefault().Value.ToString()).name;
+                    }
+
+                    if (res.customField.FindAll(x => x.Name == "Jefe de proyecto").FirstOrDefault()?.Value != null)
+                    {
+                        prueba.JefeDeProyecto = JsonConvert.DeserializeObject<Value>(res.customField.FindAll(x => x.Name == "Jefe de proyecto").FirstOrDefault().Value.ToString()).name;
+                    }
+
+                    //FECHAS
+                    //Valida el campo Fecha termino desa
+                    var cantidad = res.customField.FindAll(x => x.Name == "Fecha Termino Desa").Count();
+                    if (cantidad > 0)
+                    {
+                        if (res.customField.FindAll(x => x.Name == "Fecha Termino Desa").FirstOrDefault().Value != null)
+                        {
+                            long fechaTerminoDesaValue = Convert.ToInt64(res.customField.FindAll(x => x.Name == "Fecha Termino Desa").FirstOrDefault().Value);
+                            DateTime fechaTerminoDesa = DateTimeOffset.FromUnixTimeMilliseconds(fechaTerminoDesaValue).UtcDateTime;
+
+                            prueba.FechaTerminoDesa = fechaTerminoDesa.ToString();
+                        }
+                    }
+
+                    if (res.customField.FindAll(x => x.Name == "Fecha termino real").FirstOrDefault().Value != null)
+                    {
+                        long fechaTerminoRealValue = Convert.ToInt64(res.customField.FindAll(x => x.Name == "Fecha termino real").FirstOrDefault().Value);
+                        DateTime fechaTerminoReal = DateTimeOffset.FromUnixTimeMilliseconds(fechaTerminoRealValue).UtcDateTime;
+
+                        prueba.FechaTerminoReal = fechaTerminoReal.ToString();
+                    }
+
+                    var cantidadQA = res.customField.FindAll(x => x.Name == "Fecha Termino QA").Count();
+                    if (cantidadQA > 0)
+                    {
+                        if (res.customField.FindAll(x => x.Name == "Fecha Termino QA").FirstOrDefault().Value != null)
+                        {
+                            long fechaTerminoQAValue = Convert.ToInt64(res.customField.FindAll(x => x.Name == "Fecha Termino QA").FirstOrDefault().Value);
+                            DateTime fechaTerminoQA = DateTimeOffset.FromUnixTimeMilliseconds(fechaTerminoQAValue).UtcDateTime;
+
+                            prueba.FechaTerminoQA = fechaTerminoQA.ToString();
+                        }
+                    }
+
+
+                    var idMhField = res.customField.Find(x => x.Name == "ID MH");
+                    if (idMhField?.Value != null)
+                    {
+                        prueba.IDMh = idMhField.Value.ToString();
+                    }
+
+                    // Agrega la fila al DataTable
+                    dt.Rows.Add(new object[] {
+                    prueba.Subsystem,
+                    prueba.Type,
+                    prueba.Priority,
+                    prueba.State,
+                    prueba.RechazoHDI,
+                    prueba.EncargadoHDI,
+                    prueba.JefeDeProyecto,
+                    prueba.Assignee,
+                    prueba.DueDate,
+                    prueba.Estimacion,
+                    prueba.FechaInicio,
+                    prueba.FechaTerminoDesa,
+                    prueba.FechaTerminoQA,
+                    prueba.FechaTerminoReal,
+                    prueba.URLJira,
+                    prueba.URLBitbucket,
+                    prueba.URLSonarQube,
+                    prueba.Dificultad,
+                    prueba.IDMh,
+                    prueba.IDAgil,
+                    prueba.SprintsSeparadosPorComa,
+                    prueba.Completado,
+                    prueba.FixedInBuild,
+                });
+
+
+                    //dt.Rows.Add(prueba.ToArray());
+
+
+                    datos.Add(prueba);
+                }
+
+                return datos;
 
             }
+            catch (Exception)
+            {
+
+                throw;
+            }
+        }
+
+
+        //Metodo para obtener totales de estados general
+        public async IAsyncEnumerable<MetricasKPI> CalcularTotales(List<FieldsDTO> metricas)
+        {
+            MetricasKPI metricasKPI = new MetricasKPI();
+
+            //Llamada al metodo que obtiene la api
+            var datos = metricas;
 
             //Calcular totales
-            CantidadEnCurso = datos.FindAll(x => x.State == "En curso").ToList().Count();
-            CantidadTerminado = datos.FindAll(x => x.State == "Terminado").ToList().Count();
+            metricasKPI.CantidadEnCurso = datos.FindAll(x => x.State == "En curso").ToList().Count();
+            metricasKPI.CantidadTerminado = datos.FindAll(x => x.State == "Terminado").ToList().Count();
 
-            //creo un objeto "resultado" para poder entregar mas de un valor en el método
-            var resultado = new
-            {
-                enCurso = CantidadEnCurso,
-                terminado = CantidadTerminado
-            };
-
-            //convierto el objeto a JSON
-            string jsonResultado = JsonConvert.SerializeObject(resultado);
-
-            //yield return es para devolver resultados en forma de iteración 
-            //en vez de devolver todo de una, va iterando el return y lo puedes recorrer con un foreach
-            yield return jsonResultado;
+            return metricasKPI;
 
         }
+
+
+        //Metodo para cacular totales por jefe de proyecto
+        public async IAsyncEnumerable<string> CalcularTotalesPorJP(List<FieldsDTO> metricas)
+        {
+            // Obtener la lista de jefes de proyecto únicos
+            List<string> jefesProyectoUnicos = await ObtenerJefesProyectoUnicos();
+
+            //Llamada al metodo que obtiene la api
+
+            var datos = metricas;
+
+            var datosTer = datos.Where(x => x.State == "Terminado" || x.State == "Cerrado").ToList();
+           
+
+            // Calcular totales por cada jefe de proyecto
+            foreach (var jefeProyecto in jefesProyectoUnicos)
+            {
+
+                int CantidadTerminadoJP = datosTer.Where(x => x.JefeDeProyecto == jefeProyecto).Count();
+                int CantidadDesarrolloJP = datos.Where(x => x.State == "En desarrollo" || x.State == "Pendiente" || x.State == "Detenido" || x.State == "En curso" && x.JefeDeProyecto == jefeProyecto).Count();
+                int CantidadDetenidoJP = datos.FindAll(x => x.State == "Instalación QA" || x.State == "Exitoso completo" || x.State == "Pruebas PROSYS" || x.State == "Fallido" || x.State == "Exitoso liviano" && x.JefeDeProyecto == jefeProyecto).Count();
+                int CantidadPorIniciarJP = datos.FindAll(x => x.State == "Certificación producción" || x.State == "Instalación producción" && x.JefeDeProyecto == jefeProyecto).Count();
+
+
+                //Probar atrasos JP
+                //List<FieldsDTO> lista = datos.Where(x => x.JefeDeProyecto == "Javier Zapata" && (x.FechaTerminoQA != null ? DateTime.Parse(x.FechaTerminoQA) : DateTime.Now) < DateTime.Now && x.State == "Instalación QA").ToList();
+                //List<FieldsDTO> listaDe = datos.Where(x => x.JefeDeProyecto == "Barbara Jeria" &&((x.FechaTerminoDesa != null ? DateTime.Parse(x.FechaTerminoDesa) : DateTime.Now) < DateTime.Now) &&(x.State == "En desarrollo" || x.State == "Pendiente" || x.State == "Detenido" || x.State == "En curso")).ToList();
+                //List<FieldsDTO> listaQA = datos.Where(x => x.JefeDeProyecto == "Javier Zapata" && ((x.FechaTerminoQA != null ? DateTime.Parse(x.FechaTerminoQA) : DateTime.Now) < DateTime.Now) && (x.State == "Instalación QA" || x.State == "Exitoso completo" || x.State == "Pruebas PROSYS" || x.State == "Fallido" || x.State == "Exitoso liviano")).ToList();
+
+                int CantidadAtrasosDesa = datos.Where(x => x.JefeDeProyecto == jefeProyecto &&((x.FechaTerminoDesa != null ? DateTime.Parse(x.FechaTerminoDesa) : DateTime.Now) < DateTime.Now) &&(x.State == "En desarrollo" || x.State == "Pendiente" || x.State == "Detenido" || x.State == "En curso")).Count();
+                int CantidadAtrasosQA = datos.Where(x => x.JefeDeProyecto == jefeProyecto &&((x.FechaTerminoQA != null ? DateTime.Parse(x.FechaTerminoQA) : DateTime.Now) < DateTime.Now) &&(x.State == "Instalación QA" || x.State == "Exitoso completo" || x.State == "Pruebas PROSYS" || x.State == "Fallido" || x.State == "Exitoso liviano")).Count();
+                //int CantidadAtrasosQA = datos.Where(x => x.JefeDeProyecto == jefeProyecto && (x.FechaTerminoQA != null ? DateTime.Parse(x.FechaTerminoQA) : DateTime.Now) < DateTime.Now && x.State == "Instalación QA").Count();
+                int CantidadAtrasosReal = datos.Where(x => x.JefeDeProyecto == jefeProyecto && (DateTime.Parse(x.FechaTerminoReal) < DateTime.Now && x.State != "Terminado")).Count();
+
+
+                int totalProyectos = CantidadTerminadoJP + CantidadDesarrolloJP + CantidadDetenidoJP + CantidadPorIniciarJP;
+                //int totalAtrasos = CantidadAtrasosDesa + CantidadAtrasosReal + CantidadAtrasosQA;
+
+                int CantidadEnCursoJP = totalProyectos - CantidadTerminadoJP;
+
+
+                // Crear un objeto con los totales por cada jefe de proyecto
+                var resultadoJP = new
+                {
+                    jefeProyecto,
+                    enCursoJP = CantidadEnCursoJP,
+                    terminadoJP = CantidadTerminadoJP,
+                    desarrolloJP = CantidadDesarrolloJP,
+                    detenidoJP = CantidadDetenidoJP,
+                    porIniciarJP = CantidadPorIniciarJP,
+                    //atrasosDesa = CantidadAtrasosDesa,
+                    atrasosReal = CantidadAtrasosReal,
+                    //atrasosQA = CantidadAtrasosQA,
+                    totalProyectos,
+                    //totalAtrasos
+                };
+
+                // Convertir el objeto a JSON y devolverlo
+                string jsonResultadoJP = JsonConvert.SerializeObject(resultadoJP);
+                yield return jsonResultadoJP;
+            }
+        }
+
+
+        //Metodo para tener los jefes de proyectos
+        public async Task<List<string>> ObtenerJefesProyectoUnicos()
+        {
+
+            var api = "https://prosysspa.youtrack.cloud/api/issues?fields=customFields(name,value(name))";
+            var result = await ObtenerDatosApi(api);
+
+            // Lista para almacenar jefes de proyecto únicos
+            List<string> jefesProyectoUnicos = new List<string>();
+
+            foreach (MetricasDTO res in result)
+            {
+                if (res.customField.FindAll(x => x.Name == "Jefe de proyecto").FirstOrDefault()?.Value != null)
+                {
+                    string jefeProyecto = JsonConvert.DeserializeObject<Value>(res.customField.FindAll(x => x.Name == "Jefe de proyecto").FirstOrDefault().Value.ToString()).name;
+
+                    // Agrega a la lista si aún no está presente
+                    if (!jefesProyectoUnicos.Contains(jefeProyecto))
+                    {
+                        jefesProyectoUnicos.Add(jefeProyecto);
+                    }
+                }
+            }
+
+            return jefesProyectoUnicos;
+        }
+
     }
 }
+
+

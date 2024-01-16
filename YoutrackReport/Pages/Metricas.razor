@@ -1,60 +1,158 @@
 ﻿
-
 @page "/Metricas"
 @using Newtonsoft.Json
+@using Newtonsoft.Json.Linq
 @using YoutrackReport.DTOs
 @using YoutrackReport.Servicios.Contrato
+@using System.Collections.Generic
+@using YoutrackReport.Servicios.Impllementacion
+
+@inject ObtieneMetricas ObtieneMetricasService
 
 
-@inject IObtieneMetricas ObtieneMetricasService
+<!-- Archivo CSS para estilos de las cartas -->
+<link rel="stylesheet" href="~/css/metricasStyle.css" />
+
+<!-- Referencia AdminLTE-->
+@* <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/admin-lte@3.2/dist/css/adminlte.min.css"> *@
 
 
 <!-- INICIO HTML -->
-<h2>Métricas</h2>
 
-@if (metricas != null) {
-    
-    <p><br /></p>
-    <p>Total de proyectos: <b>@totalProyectos</b></p>
-    <p>Total de cantidad En curso: <b>@resultado.enCurso</b></p>
-    <p>Total de cantidad Terminado: <b>@resultado.terminado</b></p>
-
-} else {
-    <div style="width:350px;position:relative;margin:0 auto;">
-        <p><img src="loading.gif" width="165" height="165" /></p>
-        <p>Calculando información</p>
+<div class="container text-center">
+    <div class="row">
+        <div class="col-md-12" style="padding-bottom: 10px">
+            <h2>Métricas</h2>
+        </div>
     </div>
 
-}
+    @if (metricas != null)
+    {
+        <div class="row">
+            <div class="col-md-12">
+
+                <div class="card text-dark bg-light mb-3">
+
+                    <div class="card-body">
+
+                        <div class="row">
+                            <div class="col-md">
+                                <div class="card text-dark bg-info mb-3 estado-box">
+                                    <div class="card-body">
+                                        <h5 class="card-title">Total de proyectos</h5>
+                                        <p class="card-text">@totalProyectos</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md">
+                                <div class="card text-dark bg-warning mb-3 estado-box">
+                                    <div class="card-body">
+                                        <h5 class="card-title">En curso</h5>
+                                        <p class="card-text">@totalProyectosEnCurso</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md">
+                                <div class="card text-white bg-success mb-3 estado-box">
+                                    <div class="card-body">
+                                        <h5 class="card-title">Terminado</h5>
+                                        <p class="card-text">@resultado.terminado</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+            </div>
+        </div>
+
+        <div class="row" style="padding-top: 50px">
+            <div class="col-12">
+                <!-- <div class="col-header">Proyectos por jefe de proyectos</div> -->
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th scope="col">Jefe de proyectos</th>
+                            <th scope="col">Total</th>
+                            <th scope="col">Terminados</th>
+                            <th scope="col">En curso</th>
+                            <th scope="col">Desarrollo</th>
+                            <th scope="col">Detenido</th>
+                            <th scope="col">Por iniciar</th>
+                            <th scope="col">Atrasados</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var jefeProyecto in lista)
+                        {
+                            <tr>
+                                <td>@jefeProyecto.jefeProyecto</td>
+                                <td>@jefeProyecto.totalProyectos</td>
+                                <td>@jefeProyecto.terminadoJP </td>
+                                <td>@jefeProyecto.enCursoJP</td>
+                                <td>@jefeProyecto.desarrolloJP</td>
+                                <td>@jefeProyecto.detenidoJP</td>
+                                <td>@jefeProyecto.porIniciarJP</td>
+                                @* <td>@jefeProyecto.atrasosReal</td> *@
+                                @* <td>@jefeProyecto.atrasosQA</td> *@
+                                @* <td>@jefeProyecto.atrasosDesa</td> *@
+                                <td>@jefeProyecto.totalAtrasos</td>
+                            </tr>
+                        }
+                     
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+    }
+    else
+    {
+        <div class="spinner-grow text-primary" role="status">
+            <span class="visually-hidden">Cargando...</span>
+        </div>
+    }
+
+</div>
 
 <!-- FIN HTML -->
 
 
 @code {
-    private List<MetricasDTO> metricas;
+    private List<FieldsDTO> metricas;
     public int totalProyectos = 0;
+    public int totalProyectosEnCurso = 0;
     dynamic resultado = null;
+    private List<ResultadoJsonJP> lista = new();
+    dynamic resultadoJP = null;
 
     protected override async Task OnInitializedAsync()
     {
-
         try
         {
-            metricas = await ObtieneMetricasService.ObtieneMetricasV();
+
+            metricas = await ObtieneMetricasService.ObtenerDatosComunes("https://prosysspa.youtrack.cloud/api/issues?fields=customFields(name,value(name))");
 
             if (metricas != null)
             {
                 totalProyectos = metricas.Count;
 
-                //se recorre por el yield return
-                //como redeclaré el método CalcularTotales como IAsyncEnumerable, esa fue la solución que encontré
-                await foreach (var jsonResultado in ObtieneMetricasService.CalcularTotales())
+                 var metricasKPI = ObtieneMetricasService.CalcularTotales(metricas);
+
+
+
+                await foreach (var jsonResultadoJP in ObtieneMetricasService.CalcularTotalesPorJP(metricas))
                 {
-                    resultado = JsonConvert.DeserializeObject<ResultadoJson>(jsonResultado);
+
+                    resultadoJP = JsonConvert.DeserializeObject<ResultadoJsonJP>(jsonResultadoJP);
+                    lista.Add(resultadoJP);
                 }
 
             }
-
         }
         catch (Exception ex)
         {
@@ -63,7 +161,6 @@
         }
     }
 
-
     //Clase que contiene los valores que retorna el método CalcularTotales()
     public class ResultadoJson
     {
@@ -71,7 +168,20 @@
         public int terminado { get; set; }
     }
 
+    public class ResultadoJsonJP
+    {
+        public string jefeProyecto { get; set; }
+        public int totalProyectos { get; set; }
+        public int totalAtrasos { get; set; }
+        public int enCursoJP { get; set; }
+        public int terminadoJP { get; set; }
+        public int desarrolloJP { get; set; }
+        public int detenidoJP { get; set; }
+        public int porIniciarJP { get; set; }
+        public int atrasosDesa { get; set; }
+        public int atrasosReal { get; set; }
+        public int atrasosQA { get; set; }
+    }
+
 
 }
-
-
