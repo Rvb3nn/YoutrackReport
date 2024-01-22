@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\rtoro\\OneDrive\\Escritorio\\YoutrackReport\\YoutrackReport\\YoutrackReport.csproj": {}
+    "C:\\Users\\rtoro\\OneDrive\\Escritorio\\ALL\\Tareas U\\Git\\YoutrackReport\\YoutrackReport\\YoutrackReport.csproj": {}
   },
   "projects": {
-    "C:\\Users\\rtoro\\OneDrive\\Escritorio\\YoutrackReport\\YoutrackReport\\YoutrackReport.csproj": {
+    "C:\\Users\\rtoro\\OneDrive\\Escritorio\\ALL\\Tareas U\\Git\\YoutrackReport\\YoutrackReport\\YoutrackReport.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\rtoro\\OneDrive\\Escritorio\\YoutrackReport\\YoutrackReport\\YoutrackReport.csproj",
+        "projectUniqueName": "C:\\Users\\rtoro\\OneDrive\\Escritorio\\ALL\\Tareas U\\Git\\YoutrackReport\\YoutrackReport\\YoutrackReport.csproj",
         "projectName": "YoutrackReport",
-        "projectPath": "C:\\Users\\rtoro\\OneDrive\\Escritorio\\YoutrackReport\\YoutrackReport\\YoutrackReport.csproj",
+        "projectPath": "C:\\Users\\rtoro\\OneDrive\\Escritorio\\ALL\\Tareas U\\Git\\YoutrackReport\\YoutrackReport\\YoutrackReport.csproj",
         "packagesPath": "C:\\Users\\rtoro\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\rtoro\\OneDrive\\Escritorio\\YoutrackReport\\YoutrackReport\\obj\\",
+        "outputPath": "C:\\Users\\rtoro\\OneDrive\\Escritorio\\ALL\\Tareas U\\Git\\YoutrackReport\\YoutrackReport\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
@@ -45,6 +45,10 @@
         "net6.0": {
           "targetAlias": "net6.0",
           "dependencies": {
+            "Blazored.Modal": {
+              "target": "Package",
+              "version": "[7.1.0, )"
+            },
             "Chart.js": {
               "target": "Package",
               "version": "[3.7.1, )"

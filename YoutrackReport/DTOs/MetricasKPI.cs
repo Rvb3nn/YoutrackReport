@@ -23,6 +23,10 @@ namespace YoutrackReport.DTOs
         public int AtrasoDesarrolloJP { get; set; }
         public int AtrasoQAJP { get; set; }
         public int AtrasoProduccionJP { get; set; }
+        public List<FieldsDTO> AtrasosDesaList { get; set; }
+        public List<FieldsDTO> AtrasosQAList { get; set; }
+        public List<FieldsDTO> AtrasosProdList { get; set; }
+
     }
 
 }

@@ -9,91 +9,91 @@ build_property.EnforceExtendedAnalyzerRules =
 build_property._SupportedPlatformList = Linux,macOS,Windows
 build_property.RootNamespace = YoutrackReport
 build_property.RootNamespace = YoutrackReport
-build_property.ProjectDir = C:\Users\rtoro\OneDrive\Escritorio\YoutrackReport\YoutrackReport\
+build_property.ProjectDir = C:\Users\rtoro\OneDrive\Escritorio\ALL\Tareas U\Git\YoutrackReport\YoutrackReport\
 build_property.EnableComHosting = 
 build_property.EnableGeneratedComInterfaceComImportInterop = 
 build_property.RazorLangVersion = 6.0
 build_property.SupportLocalizedComponentNames = 
 build_property.GenerateRazorMetadataSourceChecksumAttributes = 
-build_property.MSBuildProjectDirectory = C:\Users\rtoro\OneDrive\Escritorio\YoutrackReport\YoutrackReport
+build_property.MSBuildProjectDirectory = C:\Users\rtoro\OneDrive\Escritorio\ALL\Tareas U\Git\YoutrackReport\YoutrackReport
 build_property._RazorSourceGeneratorDebug = 
 
-[C:/Users/rtoro/OneDrive/Escritorio/YoutrackReport/YoutrackReport/App.razor]
+[C:/Users/rtoro/OneDrive/Escritorio/ALL/Tareas U/Git/YoutrackReport/YoutrackReport/App.razor]
 build_metadata.AdditionalFiles.TargetPath = QXBwLnJhem9y
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/rtoro/OneDrive/Escritorio/YoutrackReport/YoutrackReport/Pages/Activity.razor]
+[C:/Users/rtoro/OneDrive/Escritorio/ALL/Tareas U/Git/YoutrackReport/YoutrackReport/Pages/Activity.razor]
 build_metadata.AdditionalFiles.TargetPath = UGFnZXNcQWN0aXZpdHkucmF6b3I=
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/rtoro/OneDrive/Escritorio/YoutrackReport/YoutrackReport/Pages/ArchivosAdj.razor]
+[C:/Users/rtoro/OneDrive/Escritorio/ALL/Tareas U/Git/YoutrackReport/YoutrackReport/Pages/ArchivosAdj.razor]
 build_metadata.AdditionalFiles.TargetPath = UGFnZXNcQXJjaGl2b3NBZGoucmF6b3I=
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/rtoro/OneDrive/Escritorio/YoutrackReport/YoutrackReport/Pages/Comentario.razor]
+[C:/Users/rtoro/OneDrive/Escritorio/ALL/Tareas U/Git/YoutrackReport/YoutrackReport/Pages/Comentario.razor]
 build_metadata.AdditionalFiles.TargetPath = UGFnZXNcQ29tZW50YXJpby5yYXpvcg==
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/rtoro/OneDrive/Escritorio/YoutrackReport/YoutrackReport/Pages/Counter.razor]
+[C:/Users/rtoro/OneDrive/Escritorio/ALL/Tareas U/Git/YoutrackReport/YoutrackReport/Pages/Counter.razor]
 build_metadata.AdditionalFiles.TargetPath = UGFnZXNcQ291bnRlci5yYXpvcg==
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/rtoro/OneDrive/Escritorio/YoutrackReport/YoutrackReport/Pages/Datos.razor]
+[C:/Users/rtoro/OneDrive/Escritorio/ALL/Tareas U/Git/YoutrackReport/YoutrackReport/Pages/Datos.razor]
 build_metadata.AdditionalFiles.TargetPath = UGFnZXNcRGF0b3MucmF6b3I=
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/rtoro/OneDrive/Escritorio/YoutrackReport/YoutrackReport/Pages/FetchData.razor]
+[C:/Users/rtoro/OneDrive/Escritorio/ALL/Tareas U/Git/YoutrackReport/YoutrackReport/Pages/FetchData.razor]
 build_metadata.AdditionalFiles.TargetPath = UGFnZXNcRmV0Y2hEYXRhLnJhem9y
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/rtoro/OneDrive/Escritorio/YoutrackReport/YoutrackReport/Pages/Index.razor]
+[C:/Users/rtoro/OneDrive/Escritorio/ALL/Tareas U/Git/YoutrackReport/YoutrackReport/Pages/Index.razor]
 build_metadata.AdditionalFiles.TargetPath = UGFnZXNcSW5kZXgucmF6b3I=
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/rtoro/OneDrive/Escritorio/YoutrackReport/YoutrackReport/Pages/MainPage.razor]
+[C:/Users/rtoro/OneDrive/Escritorio/ALL/Tareas U/Git/YoutrackReport/YoutrackReport/Pages/MainPage.razor]
 build_metadata.AdditionalFiles.TargetPath = UGFnZXNcTWFpblBhZ2UucmF6b3I=
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/rtoro/OneDrive/Escritorio/YoutrackReport/YoutrackReport/Pages/Metricas.razor]
+[C:/Users/rtoro/OneDrive/Escritorio/ALL/Tareas U/Git/YoutrackReport/YoutrackReport/Pages/Metricas.razor]
 build_metadata.AdditionalFiles.TargetPath = UGFnZXNcTWV0cmljYXMucmF6b3I=
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/rtoro/OneDrive/Escritorio/YoutrackReport/YoutrackReport/Pages/Panel.razor]
+[C:/Users/rtoro/OneDrive/Escritorio/ALL/Tareas U/Git/YoutrackReport/YoutrackReport/Pages/Panel.razor]
 build_metadata.AdditionalFiles.TargetPath = UGFnZXNcUGFuZWwucmF6b3I=
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/rtoro/OneDrive/Escritorio/YoutrackReport/YoutrackReport/Pages/Proyectos.razor]
+[C:/Users/rtoro/OneDrive/Escritorio/ALL/Tareas U/Git/YoutrackReport/YoutrackReport/Pages/Proyectos.razor]
 build_metadata.AdditionalFiles.TargetPath = UGFnZXNcUHJveWVjdG9zLnJhem9y
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/rtoro/OneDrive/Escritorio/YoutrackReport/YoutrackReport/Pages/Usuarios.razor]
+[C:/Users/rtoro/OneDrive/Escritorio/ALL/Tareas U/Git/YoutrackReport/YoutrackReport/Pages/Usuarios.razor]
 build_metadata.AdditionalFiles.TargetPath = UGFnZXNcVXN1YXJpb3MucmF6b3I=
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/rtoro/OneDrive/Escritorio/YoutrackReport/YoutrackReport/Shared/SurveyPrompt.razor]
+[C:/Users/rtoro/OneDrive/Escritorio/ALL/Tareas U/Git/YoutrackReport/YoutrackReport/Shared/SurveyPrompt.razor]
 build_metadata.AdditionalFiles.TargetPath = U2hhcmVkXFN1cnZleVByb21wdC5yYXpvcg==
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/rtoro/OneDrive/Escritorio/YoutrackReport/YoutrackReport/_Imports.razor]
+[C:/Users/rtoro/OneDrive/Escritorio/ALL/Tareas U/Git/YoutrackReport/YoutrackReport/_Imports.razor]
 build_metadata.AdditionalFiles.TargetPath = X0ltcG9ydHMucmF6b3I=
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/rtoro/OneDrive/Escritorio/YoutrackReport/YoutrackReport/Shared/MainLayout.razor]
+[C:/Users/rtoro/OneDrive/Escritorio/ALL/Tareas U/Git/YoutrackReport/YoutrackReport/Shared/MainLayout.razor]
 build_metadata.AdditionalFiles.TargetPath = U2hhcmVkXE1haW5MYXlvdXQucmF6b3I=
 build_metadata.AdditionalFiles.CssScope = b-wr7onyuto3
 
-[C:/Users/rtoro/OneDrive/Escritorio/YoutrackReport/YoutrackReport/Shared/NavMenu.razor]
+[C:/Users/rtoro/OneDrive/Escritorio/ALL/Tareas U/Git/YoutrackReport/YoutrackReport/Shared/NavMenu.razor]
 build_metadata.AdditionalFiles.TargetPath = U2hhcmVkXE5hdk1lbnUucmF6b3I=
 build_metadata.AdditionalFiles.CssScope = b-c5wr27zsnw
 
-[C:/Users/rtoro/OneDrive/Escritorio/YoutrackReport/YoutrackReport/Pages/Error.cshtml]
+[C:/Users/rtoro/OneDrive/Escritorio/ALL/Tareas U/Git/YoutrackReport/YoutrackReport/Pages/Error.cshtml]
 build_metadata.AdditionalFiles.TargetPath = UGFnZXNcRXJyb3IuY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/rtoro/OneDrive/Escritorio/YoutrackReport/YoutrackReport/Pages/_Host.cshtml]
+[C:/Users/rtoro/OneDrive/Escritorio/ALL/Tareas U/Git/YoutrackReport/YoutrackReport/Pages/_Host.cshtml]
 build_metadata.AdditionalFiles.TargetPath = UGFnZXNcX0hvc3QuY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/rtoro/OneDrive/Escritorio/YoutrackReport/YoutrackReport/Pages/_Layout.cshtml]
+[C:/Users/rtoro/OneDrive/Escritorio/ALL/Tareas U/Git/YoutrackReport/YoutrackReport/Pages/_Layout.cshtml]
 build_metadata.AdditionalFiles.TargetPath = UGFnZXNcX0xheW91dC5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 

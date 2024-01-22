@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Data;
 using System.Net.Http;
 using System.Net.Http.Json;
+using System.Reflection.PortableExecutable;
 using System.Threading.Tasks;
 using YoutrackReport.DTOs;
 using YoutrackReport.Pages;
@@ -97,6 +98,22 @@ namespace YoutrackReport.Servicios.Impllementacion
                         prueba.JefeDeProyecto = JsonConvert.DeserializeObject<Value>(res.customField.FindAll(x => x.Name == "Jefe de proyecto").FirstOrDefault().Value.ToString()).name;
                     }
 
+                    if (res.customField.FindAll(x => x.Name == "Assignee").FirstOrDefault()?.Value != null)
+                    {
+                        prueba.Assignee = JsonConvert.DeserializeObject<Value>(res.customField.FindAll(x => x.Name == "Assignee").FirstOrDefault().Value.ToString()).name;
+                    }
+
+                    //if (res.customField.FindAll(x => x.Name == "URL Jira").FirstOrDefault()?.Value != null)
+                    //{
+                    //    prueba.URLJira = JsonConvert.DeserializeObject<Value>(res.customField.FindAll(x => x.Name == "URL Jira").FirstOrDefault().Value.ToString()).name;
+                    //}
+
+                    var URLJiraField = res.customField.Find(x => x.Name == "URL Jira");
+                    if (URLJiraField?.Value != null)
+                    {
+                        prueba.URLJira = URLJiraField.Value.ToString();
+                    }
+
                     //FECHAS
                     //Valida el campo Fecha termino desa
                     var cantidad = res.customField.FindAll(x => x.Name == "Fecha Termino Desa").Count();
@@ -175,9 +192,9 @@ namespace YoutrackReport.Servicios.Impllementacion
                 return datos;
 
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-
+                string messoa = ex.Message + "AAAAAAAAAA" + ex.StackTrace;
                 throw;
             }
         }
@@ -218,35 +235,21 @@ namespace YoutrackReport.Servicios.Impllementacion
             {
                 KPI_Lista_JP jpKpi = new();
                 jpKpi.NomJP = jefeProyecto;
-                jpKpi.CantidadTerminadoJP = datosTer.Where(x => x.JefeDeProyecto == jefeProyecto).Count();               
+                jpKpi.CantidadTerminadoJP = datosTer.Where(x => x.JefeDeProyecto == jefeProyecto).Count();
                 jpKpi.CantidadDesarrolloJP = datos.Where(x => x.JefeDeProyecto == jefeProyecto && (x.State == "En desarrollo" || x.State == "Pendiente" || x.State == "Detenido" || x.State == "En curso")).Count();
                 jpKpi.CantidadDetenidoJP = datos.Where(x => x.JefeDeProyecto == jefeProyecto && (x.State == "Instalación QA" || x.State == "Exitoso completo" || x.State == "Pruebas PROSYS" || x.State == "Fallido" || x.State == "Exitoso liviano")).Count();
                 jpKpi.CantidadPorIniciarJP = datos.Where(x => x.JefeDeProyecto == jefeProyecto && (x.State == "Certificación producción" || x.State == "Instalación producción")).Count();
 
-                ////Listas para testar datos
-                List<FieldsDTO> TestDesa = datos.Where(x => x.JefeDeProyecto == jefeProyecto && (x.State == "En desarrollo" || x.State == "Pendiente" || x.State == "Detenido" || x.State == "En curso")).ToList();
-                List<FieldsDTO> TestDete = datos.Where(x => x.JefeDeProyecto == jefeProyecto && (x.State == "Instalación QA" || x.State == "Exitoso completo" || x.State == "Pruebas PROSYS" || x.State == "Fallido" || x.State == "Exitoso liviano")).ToList();
-                List<FieldsDTO> TestIni = datos.Where(x => x.JefeDeProyecto == jefeProyecto && (x.State == "Certificación producción" || x.State == "Instalación producción")).ToList();
+                //Proyectos atrasados por estados de jefe de proyecto
+                jpKpi.AtrasoDesarrolloJP = datos.Where(x => x.JefeDeProyecto == jefeProyecto && ((x.FechaTerminoDesa != null ? DateTime.Parse(x.FechaTerminoDesa) : DateTime.Now) < DateTime.Now) && (x.State == "En desarrollo" || x.State == "Pendiente" || x.State == "Detenido" || x.State == "En curso")).Count();
+                jpKpi.AtrasoQAJP = datos.Where(x => x.JefeDeProyecto == jefeProyecto && ((x.FechaTerminoQA != null ? DateTime.Parse(x.FechaTerminoQA) : DateTime.Now) < DateTime.Now) && (x.State == "Instalación QA" || x.State == "Exitoso completo" || x.State == "Pruebas PROSYS" || x.State == "Fallido" || x.State == "Exitoso liviano")).Count();
+                jpKpi.AtrasoProduccionJP = datos.Where(x => x.JefeDeProyecto == jefeProyecto && ((x.FechaTerminoReal != null ? DateTime.Parse(x.FechaTerminoReal) : DateTime.Now) < DateTime.Now) && (x.State == "Instalación producción" || x.State == "Certificación producción")).Count();
+             
 
-                ////Proyectos atrasados por estados de jefe de proyecto
-                //jpKpi.AtrasoDesarrolloJP = datos.Where(x => x.JefeDeProyecto == jefeProyecto && ((x.FechaTerminoDesa != null ? DateTime.Parse(x.FechaTerminoDesa) : DateTime.Now) < DateTime.Now) && (x.State == "En desarrollo" || x.State == "Pendiente" || x.State == "Detenido" || x.State == "En curso")).Count();
-                //jpKpi.AtrasoQAJP = datos.Where(x => x.JefeDeProyecto == jefeProyecto && ((x.FechaTerminoQA != null ? DateTime.Parse(x.FechaTerminoQA) : DateTime.Now) < DateTime.Now) && (x.State == "Instalación QA" || x.State == "Exitoso completo" || x.State == "Pruebas PROSYS" || x.State == "Fallido" || x.State == "Exitoso liviano")).Count();
-                //jpKpi.AtrasoProduccionJP = datos.Where(x => x.JefeDeProyecto == jefeProyecto && ((x.FechaTerminoReal != null ? DateTime.Parse(x.FechaTerminoReal) : DateTime.Now) < DateTime.Now) && (x.State == "Instalación producción" || x.State == "Certificación producción")).Count();
-
-                //Sin conteo nulos
-                jpKpi.AtrasoDesarrolloJP = datos.Where(x => x.JefeDeProyecto == jefeProyecto && ((x.FechaTerminoDesa != null ? DateTime.Parse(x.FechaTerminoDesa) : DateTime.Now.AddDays(1)) < DateTime.Now) && (x.State == "En desarrollo" || x.State == "Pendiente" || x.State == "Detenido" || x.State == "En curso")).Count();
-                jpKpi.AtrasoQAJP = datos.Where(x => x.JefeDeProyecto == jefeProyecto && ((x.FechaTerminoQA != null ? DateTime.Parse(x.FechaTerminoQA) : DateTime.Now.AddDays(1)) < DateTime.Now) && (x.State == "Instalación QA" || x.State == "Exitoso completo" || x.State == "Pruebas PROSYS" || x.State == "Fallido" || x.State == "Exitoso liviano")).Count();
-                jpKpi.AtrasoProduccionJP = datos.Where(x => x.JefeDeProyecto == jefeProyecto && ((x.FechaTerminoReal != null ? DateTime.Parse(x.FechaTerminoReal) : DateTime.Now.AddDays(1)) < DateTime.Now) && (x.State == "Instalación producción" || x.State == "Certificación producción")).Count();
-
-
-                //Test atrasos
-                List<FieldsDTO> TestAtraDesa = datos.Where(x => x.JefeDeProyecto == jefeProyecto && ((x.FechaTerminoDesa != null ? DateTime.Parse(x.FechaTerminoDesa) : DateTime.Now.AddDays(1)) < DateTime.Now) && (x.State == "En desarrollo" || x.State == "Pendiente" || x.State == "Detenido" || x.State == "En curso")).ToList();
-                List<FieldsDTO> TestAtraQA = datos.Where(x => x.JefeDeProyecto == jefeProyecto && ((x.FechaTerminoQA != null ? DateTime.Parse(x.FechaTerminoQA) : DateTime.Now.AddDays(1)) < DateTime.Now) && (x.State == "Instalación QA" || x.State == "Exitoso completo" || x.State == "Pruebas PROSYS" || x.State == "Fallido" || x.State == "Exitoso liviano")).ToList();
-                List<FieldsDTO> TestAtraPro = datos.Where(x => x.JefeDeProyecto == jefeProyecto && ((x.FechaTerminoReal != null ? DateTime.Parse(x.FechaTerminoReal) : DateTime.Now.AddDays(1)) < DateTime.Now) && (x.State == "Instalación producción" || x.State == "Certificación producción")).ToList();
-
-                jpKpi.TotalAtrasosJP = (jpKpi.AtrasoDesarrolloJP + jpKpi.AtrasoQAJP + jpKpi.AtrasoProduccionJP) - jpKpi.CantidadPorIniciarJP;
+                jpKpi.TotalAtrasosJP = jpKpi.AtrasoDesarrolloJP + jpKpi.AtrasoQAJP + jpKpi.AtrasoProduccionJP;
                 jpKpi.TotalJP = jpKpi.CantidadTerminadoJP + jpKpi.CantidadDesarrolloJP + jpKpi.CantidadDetenidoJP + jpKpi.CantidadPorIniciarJP;
                 jpKpi.CantidadEncursoJP = jpKpi.TotalJP - jpKpi.CantidadTerminadoJP;
+
 
                 list_jpKpi.Add(jpKpi);
 
@@ -256,6 +259,74 @@ namespace YoutrackReport.Servicios.Impllementacion
             metricasKPI.kPI_Lista_JPs = list_jpKpi;
             return metricasKPI;
         }
+
+
+        //Lista de los detalles atrasos por jefe de proyecto
+        public List<FieldsDTO> DetallesJpAtrasados (List<FieldsDTO> metricas, string nomJefeProyecto)
+        {
+            var datos = metricas;
+           
+            List<FieldsDTO> jpKpi = new();
+
+            //jpKpi = datos
+            //     .Where(x => x.JefeDeProyecto == nomJefeProyecto && ((((x.FechaTerminoDesa != null ? DateTime.Parse(x.FechaTerminoDesa) : DateTime.Now) < DateTime.Now) && (x.State == "En desarrollo" || x.State == "Pendiente" || x.State == "Detenido" || x.State == "En curso") ) || ((x.FechaTerminoQA != null ? DateTime.Parse(x.FechaTerminoQA) : DateTime.Now) < DateTime.Now) && (x.State == "Instalación QA" || x.State == "Exitoso completo" || x.State == "Pruebas PROSYS" || x.State == "Fallido" || x.State == "Exitoso liviano")) || (((x.FechaTerminoReal != null ? DateTime.Parse(x.FechaTerminoReal) : DateTime.Now) < DateTime.Now) && (x.State == "Instalación producción" || x.State == "Certificación producción")))
+            //     .Select(x =>
+            //     {
+            //         x.Subsystem = x.Subsystem;  
+            //         x.Assignee = x.Assignee;
+            //         x.IDMh = x.IDMh;
+            //         x.URLJira = x.URLJira;
+            //         return x;
+            //     })
+            //     .ToList();
+
+            var jpKpiDesa = datos
+                .Where(x => x.JefeDeProyecto == nomJefeProyecto && ((x.FechaTerminoDesa != null ? DateTime.Parse(x.FechaTerminoDesa) : DateTime.Now) < DateTime.Now) && 
+                (x.State == "En desarrollo" || x.State == "Pendiente" || x.State == "Detenido" || x.State == "En curso"))
+                .Select(x =>
+                {
+                    x.Subsystem = x.Subsystem;  // Agregar el campo Subsystem sin perder la información existente
+                    x.Assignee = x.Assignee;
+                    x.IDMh = x.IDMh;
+                    x.URLJira = x.URLJira;
+                    return x;
+                })
+                .ToList();
+
+            var jpKpiQA = datos
+                .Where(x => x.JefeDeProyecto == nomJefeProyecto && ((x.FechaTerminoQA != null ? DateTime.Parse(x.FechaTerminoQA) : DateTime.Now) < DateTime.Now) && 
+                (x.State == "Instalación QA" || x.State == "Exitoso completo" || x.State == "Pruebas PROSYS" || x.State == "Fallido" || x.State == "Exitoso liviano"))
+                .Select(x =>
+                {
+                    x.Subsystem = x.Subsystem;  // Agregar el campo Subsystem sin perder la información existente
+                    x.Assignee = x.Assignee;
+                    x.IDMh = x.IDMh;
+                    x.URLJira = x.URLJira;
+                    return x;
+                })
+                .ToList();
+
+            var jpKpiProd = datos
+            .Where(x => x.JefeDeProyecto == nomJefeProyecto && ((x.FechaTerminoReal != null ? DateTime.Parse(x.FechaTerminoReal) : DateTime.Now) < DateTime.Now) && 
+            (x.State == "Instalación producción" || x.State == "Certificación producción"))
+            .Select(x =>
+            {
+                x.Subsystem = x.Subsystem;  // Agregar el campo Subsystem sin perder la información existente
+                x.Assignee = x.Assignee;
+                x.IDMh = x.IDMh;
+                x.URLJira = x.URLJira;
+                return x;
+            })
+            .ToList();
+
+            jpKpi.AddRange(jpKpiDesa);
+            jpKpi.AddRange(jpKpiQA);
+            jpKpi.AddRange(jpKpiProd);
+
+            return jpKpi;
+        }
+
+
 
 
         //Metodo para tener los jefes de proyectos
