@@ -8,6 +8,7 @@ namespace YoutrackReport.DTOs
 {
     public class FieldsDTO
     {
+        public string Project { get; set; }
         public string Subsystem { get; set; }
         public string Type { get; set; }
         public string Priority { get; set; }
@@ -35,6 +36,7 @@ namespace YoutrackReport.DTOs
         public IEnumerable<object> ToArray()
         {
             return new object[] {
+        Project,
         Subsystem,
         Type,
         Priority,

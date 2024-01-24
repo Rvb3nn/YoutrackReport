@@ -9,6 +9,7 @@ namespace YoutrackReport.DTOs
 {
     public class MetricasDTO
     {
+        public Project Project { get; set; }
         public string summary { get; set; }
         [JsonProperty("customFields")]
         public List<CustomField> customField { get; set; }
@@ -28,4 +29,9 @@ namespace YoutrackReport.DTOs
         public string Type { get; set; }
     }
 
+    public class Project 
+    { 
+        public string Name { get; set; }
+        public string Type { get; set; }
+    }
 }

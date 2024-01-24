@@ -80,8 +80,14 @@ namespace YoutrackReport.Servicios.Impllementacion
                 foreach (var res in result)
                 {
 
-
                     FieldsDTO prueba = new FieldsDTO();
+
+
+                    if (res.Project != null)
+                    {
+                        // Asigna directamente el valor a la propiedad Project
+                        prueba.Project = res.Project.Name;
+                    }
 
                     if (res.customField.FindAll(x => x.Name == "Subsystem").FirstOrDefault()?.Value != null)
                     {
@@ -102,11 +108,6 @@ namespace YoutrackReport.Servicios.Impllementacion
                     {
                         prueba.Assignee = JsonConvert.DeserializeObject<Value>(res.customField.FindAll(x => x.Name == "Assignee").FirstOrDefault().Value.ToString()).name;
                     }
-
-                    //if (res.customField.FindAll(x => x.Name == "URL Jira").FirstOrDefault()?.Value != null)
-                    //{
-                    //    prueba.URLJira = JsonConvert.DeserializeObject<Value>(res.customField.FindAll(x => x.Name == "URL Jira").FirstOrDefault().Value.ToString()).name;
-                    //}
 
                     var URLJiraField = res.customField.Find(x => x.Name == "URL Jira");
                     if (URLJiraField?.Value != null)
@@ -157,6 +158,7 @@ namespace YoutrackReport.Servicios.Impllementacion
 
                     // Agrega la fila al DataTable
                     dt.Rows.Add(new object[] {
+                    prueba.Project,
                     prueba.Subsystem,
                     prueba.Type,
                     prueba.Priority,
@@ -184,7 +186,6 @@ namespace YoutrackReport.Servicios.Impllementacion
 
 
                     //dt.Rows.Add(prueba.ToArray());
-
 
                     datos.Add(prueba);
                 }
@@ -247,7 +248,7 @@ namespace YoutrackReport.Servicios.Impllementacion
              
 
                 jpKpi.TotalAtrasosJP = jpKpi.AtrasoDesarrolloJP + jpKpi.AtrasoQAJP + jpKpi.AtrasoProduccionJP;
-                jpKpi.TotalJP = jpKpi.CantidadTerminadoJP + jpKpi.CantidadDesarrolloJP + jpKpi.CantidadDetenidoJP + jpKpi.CantidadPorIniciarJP;
+                jpKpi.TotalJP = jpKpi.CantidadTerminadoJP + jpKpi.CantidadDesarrolloJP + jpKpi.CantidadDetenidoJP + jpKpi.CantidadPorIniciarJP + jpKpi.CantidadEncursoJP;
                 jpKpi.CantidadEncursoJP = jpKpi.TotalJP - jpKpi.CantidadTerminadoJP;
 
 
@@ -268,17 +269,12 @@ namespace YoutrackReport.Servicios.Impllementacion
 
                 jpKpi.QAPendiente = datos
                     .Where(x => x.JefeDeProyecto == jefeProyecto && x.FechaTerminoQA != null &&
-                                (x.State == "Pendiente"))
+                                (x.State == "Pendiente" || x.State == "En curso"))
                     .Count();
 
                 jpKpi.QAExitoso = datos
                     .Where(x => x.JefeDeProyecto == jefeProyecto && x.FechaTerminoQA != null &&
                                 (x.State == "Exitoso completo" || x.State == "Exitoso liviano"))
-                    .Count();
-
-                jpKpi.QARealizado = datos
-                    .Where(x => x.JefeDeProyecto == jefeProyecto && x.FechaTerminoQA != null &&
-                                (x.State == "Terminado" || x.State == "Cerrado"))
                     .Count();
 
 
@@ -337,6 +333,7 @@ namespace YoutrackReport.Servicios.Impllementacion
                     x.Assignee = x.Assignee;
                     x.IDMh = x.IDMh;
                     x.URLJira = x.URLJira;
+                    x.Project = x.Project;
                     return x;
                 })
                 .ToList();
@@ -350,6 +347,7 @@ namespace YoutrackReport.Servicios.Impllementacion
                     x.Assignee = x.Assignee;
                     x.IDMh = x.IDMh;
                     x.URLJira = x.URLJira;
+                    x.Project = x.Project;
                     return x;
                 })
                 .ToList();
@@ -363,6 +361,7 @@ namespace YoutrackReport.Servicios.Impllementacion
                 x.Assignee = x.Assignee;
                 x.IDMh = x.IDMh;
                 x.URLJira = x.URLJira;
+                x.Project = x.Project;
                 return x;
             })
             .ToList();
@@ -379,7 +378,7 @@ namespace YoutrackReport.Servicios.Impllementacion
         public async Task<List<string>> ObtenerJefesProyectoUnicos()
         {
 
-            var api = "https://prosysspa.youtrack.cloud/api/issues?fields=customFields(name,value(name))";
+            var api = "https://prosysspa.youtrack.cloud/api/issues?fields=customFields(name,value(name)),project(name,value)";
             var result = await ObtenerDatosApi(api);
 
             // Lista para almacenar jefes de proyecto únicos

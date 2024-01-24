@@ -31,7 +31,6 @@
                     <thead>
                         <tr>
                             <th scope="col">Jefe de proyectos</th>
-                            <th scope="col">Realizados</th>
                             <th scope="col">Pendientes</th>
                             <th scope="col">Estado fallido</th>
                             <th scope="col">Exitoso</th>
@@ -44,7 +43,6 @@
                         {
                             <tr>
                                 <td class="text-start">@jefeProyecto.NomJP</td>
-                                <td>@jefeProyecto.QARealizado</td>
                                 <td>@jefeProyecto.QAPendiente</td>
                                 <td>@jefeProyecto.QAFallido</td>
                                 <td>@jefeProyecto.QAExitoso</td>
@@ -138,7 +136,7 @@
     {
         try
         {
-            metricas = await ObtieneMetricasService.ObtenerDatosComunes("https://prosysspa.youtrack.cloud/api/issues?fields=customFields(name,value(name))");
+            metricas = await ObtieneMetricasService.ObtenerDatosComunes("https://prosysspa.youtrack.cloud/api/issues?fields=customFields(name,value(name)),project(name,value)");
 
             if (metricas != null)
             {
@@ -163,7 +161,7 @@
     //         // Forzar la actualización del estado para que se refleje inmediatamente en la interfaz de usuario
     //         StateHasChanged();
 
-    //         metricas = await ObtieneMetricasService.ObtenerDatosComunes("https://prosysspa.youtrack.cloud/api/issues?fields=customFields(name,value(name))");
+    //         metricas = await ObtieneMetricasService.ObtenerDatosComunes("https://prosysspa.youtrack.cloud/api/issues?fields=customFields(name,value(name)),project(name,value)");
     //         listaQAFechasNulas = ObtieneMetricasService.DetallesQAFechasNull(metricas, jefeProyecto);
     //     }
     //     finally

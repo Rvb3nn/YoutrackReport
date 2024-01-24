@@ -125,13 +125,13 @@
                                                 <table class="table table-striped">
                                                     <thead>
                                                         <tr>
-                                                            <th scope="col">Nombre proyecto</th>
+                                                            <th scope="col">Proyecto</th>
                                                             <th scope="col">Id</th>
-                                                            <th scope="col">Desarrollador</th>
-                                                            <th scope="col">Estado atrasado</th>
-                                                            <th scope="col">Atrasados En desarrollo</th>
-                                                            <th scope="col">Atrasados QA</th>
-                                                            <th scope="col">Atrasados Produccion</th>
+                                                            <th scope="col">Dev</th>
+                                                            <th scope="col">Estado</th>
+                                                            <th scope="col">Fecha En desarrollo</th>
+                                                            <th scope="col">Fecha QA</th>
+                                                            <th scope="col">Fecha Produccion</th>
                                                             <th scope="col">Url Jira</th>
                                                         </tr>
                                                     </thead>
@@ -139,13 +139,29 @@
                                                         @foreach (var atrasoModal in listaAtrasados)
                                                         {
                                                             <tr>
-                                                                <td>@atrasoModal.Subsystem</td>
+                                                                <td>@atrasoModal.Project</td>
                                                                 <td>@atrasoModal.IDMh</td>
                                                                 <td>@atrasoModal.Assignee</td>
                                                                 <td>@atrasoModal.State</td>
-                                                                <td>@atrasoModal.FechaTerminoDesa</td>
-                                                                <td>@atrasoModal.FechaTerminoQA</td>
-                                                                <td>@atrasoModal.FechaTerminoReal</td>
+                                                                <td>
+                                                                    <!--Condicion para eliminar la hora de las fechas ya que algunas fechas son nulas -->
+                                                                    @if (!string.IsNullOrEmpty(atrasoModal.FechaTerminoDesa))
+                                                                    {
+                                                                        @(DateTime.Parse(atrasoModal.FechaTerminoDesa).ToString("dd-MM-yyyy"))
+                                                                    }
+                                                                </td>
+                                                                <td>
+                                                                    @if (!string.IsNullOrEmpty(atrasoModal.FechaTerminoQA))
+                                                                    {
+                                                                        @(DateTime.Parse(atrasoModal.FechaTerminoQA).ToString("dd-MM-yyyy"))
+                                                                    }
+                                                                </td>
+                                                                <td>
+                                                                    @if (!string.IsNullOrEmpty(atrasoModal.FechaTerminoReal))
+                                                                    {
+                                                                        @(DateTime.Parse(atrasoModal.FechaTerminoReal).ToString("dd-MM-yyyy"))
+                                                                    }
+                                                                </td>
                                                                 <td><a href="@atrasoModal.URLJira" target="_blank">Ir</a></td>
                                                             </tr>
                                                         }
@@ -186,10 +202,13 @@
     {
         try
         {
-            metricas = await ObtieneMetricasService.ObtenerDatosComunes("https://prosysspa.youtrack.cloud/api/issues?fields=customFields(name,value(name))");
+            metricas = await ObtieneMetricasService.ObtenerDatosComunes("https://prosysspa.youtrack.cloud/api/issues?fields=customFields(name,value(name)),project(name,value)");
 
             if (metricas != null)
             {
+                //Cuenta todos los proyectos excluyendo los Control de calidad Prosys
+                metricas = metricas.Where(x => x.Project != "Control de calidad Prosys").ToList();
+
                 totalProyectos = metricas.Count;
                 MetricasKPI metricasKPI = ObtieneMetricasService.CalcularTotales(metricas);
                 metricasKPI = await ObtieneMetricasService.CalcularTotalesPorJP(metricas, metricasKPI);
@@ -211,7 +230,11 @@
             // Forzar la actualización del estado para que se refleje inmediatamente en la interfaz de usuario
             StateHasChanged();
 
-            metricas = await ObtieneMetricasService.ObtenerDatosComunes("https://prosysspa.youtrack.cloud/api/issues?fields=customFields(name,value(name))");
+            metricas = await ObtieneMetricasService.ObtenerDatosComunes("https://prosysspa.youtrack.cloud/api/issues?fields=customFields(name,value(name)),project(name,value)");
+
+            //Cuenta todos los proyectos excluyendo los Control de calidad Prosys
+            metricas = metricas.Where(x => x.Project != "Control de calidad Prosys").ToList();
+
             listaAtrasados = ObtieneMetricasService.DetallesJpAtrasados(metricas, jefeProyecto);
         }
         finally
