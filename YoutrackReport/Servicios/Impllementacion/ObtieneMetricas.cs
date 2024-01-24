@@ -251,14 +251,74 @@ namespace YoutrackReport.Servicios.Impllementacion
                 jpKpi.CantidadEncursoJP = jpKpi.TotalJP - jpKpi.CantidadTerminadoJP;
 
 
+                //Cantidad de incidencias con QA y sin QA
+                jpKpi.ConQACount = datos
+                    .Where(x => x.JefeDeProyecto == jefeProyecto && x.FechaTerminoQA != null &&
+                                (x.State == "Instalación QA" || x.State == "Exitoso completo" || x.State == "Pruebas PROSYS" || x.State == "Exitoso liviano"))
+                    .Count();
+
+                jpKpi.SinQACount = datos
+                    .Where(x => x.JefeDeProyecto == jefeProyecto && x.FechaTerminoQA == null &&
+                                (x.State == "Instalación QA" || x.State == "Exitoso completo" || x.State == "Pruebas PROSYS" || x.State == "Exitoso liviano"))
+                    .Count();
+
+                jpKpi.QAFallido = datos
+                    .Where(x => x.JefeDeProyecto == jefeProyecto && x.FechaTerminoQA == null && x.State == "Fallido")
+                    .Count();
+
+                jpKpi.QAPendiente = datos
+                    .Where(x => x.JefeDeProyecto == jefeProyecto && x.FechaTerminoQA != null &&
+                                (x.State == "Pendiente"))
+                    .Count();
+
+                jpKpi.QAExitoso = datos
+                    .Where(x => x.JefeDeProyecto == jefeProyecto && x.FechaTerminoQA != null &&
+                                (x.State == "Exitoso completo" || x.State == "Exitoso liviano"))
+                    .Count();
+
+                jpKpi.QARealizado = datos
+                    .Where(x => x.JefeDeProyecto == jefeProyecto && x.FechaTerminoQA != null &&
+                                (x.State == "Terminado" || x.State == "Cerrado"))
+                    .Count();
+
+
+                //Añade a la lista
                 list_jpKpi.Add(jpKpi);
 
             }
 
             //Asignar la lista de resultados a la propiedad de la clase MetricasKPI
             metricasKPI.kPI_Lista_JPs = list_jpKpi;
+
             return metricasKPI;
         }
+
+
+
+        //public List<FieldsDTO> DetallesQAFechasNull (List<FieldsDTO> metricas, string nomJefeProyecto)
+        //{
+        //    var datos = metricas;
+
+        //    List<FieldsDTO> jpKpi = new();
+
+        //    var jpKpiQASinFecha = datos
+        //        .Where(x => x.JefeDeProyecto == nomJefeProyecto && x.FechaTerminoQA == null &&
+        //        (x.State == "Instalación QA" || x.State == "Exitoso completo" || x.State == "Pruebas PROSYS" || x.State == "Exitoso liviano"))
+        //        .Select(x =>
+        //        {
+        //            x.Subsystem = x.Subsystem;  // Agregar el campo Subsystem sin perder la información existente
+        //            x.Assignee = x.Assignee;
+        //            x.IDMh = x.IDMh;
+        //            x.URLJira = x.URLJira;
+        //            return x;
+        //        })
+        //        .ToList();
+
+
+        //    return jpKpiQASinFecha;
+        //}
+
+
 
 
         //Lista de los detalles atrasos por jefe de proyecto
@@ -267,18 +327,6 @@ namespace YoutrackReport.Servicios.Impllementacion
             var datos = metricas;
            
             List<FieldsDTO> jpKpi = new();
-
-            //jpKpi = datos
-            //     .Where(x => x.JefeDeProyecto == nomJefeProyecto && ((((x.FechaTerminoDesa != null ? DateTime.Parse(x.FechaTerminoDesa) : DateTime.Now) < DateTime.Now) && (x.State == "En desarrollo" || x.State == "Pendiente" || x.State == "Detenido" || x.State == "En curso") ) || ((x.FechaTerminoQA != null ? DateTime.Parse(x.FechaTerminoQA) : DateTime.Now) < DateTime.Now) && (x.State == "Instalación QA" || x.State == "Exitoso completo" || x.State == "Pruebas PROSYS" || x.State == "Fallido" || x.State == "Exitoso liviano")) || (((x.FechaTerminoReal != null ? DateTime.Parse(x.FechaTerminoReal) : DateTime.Now) < DateTime.Now) && (x.State == "Instalación producción" || x.State == "Certificación producción")))
-            //     .Select(x =>
-            //     {
-            //         x.Subsystem = x.Subsystem;  
-            //         x.Assignee = x.Assignee;
-            //         x.IDMh = x.IDMh;
-            //         x.URLJira = x.URLJira;
-            //         return x;
-            //     })
-            //     .ToList();
 
             var jpKpiDesa = datos
                 .Where(x => x.JefeDeProyecto == nomJefeProyecto && ((x.FechaTerminoDesa != null ? DateTime.Parse(x.FechaTerminoDesa) : DateTime.Now) < DateTime.Now) && 
@@ -325,8 +373,6 @@ namespace YoutrackReport.Servicios.Impllementacion
 
             return jpKpi;
         }
-
-
 
 
         //Metodo para tener los jefes de proyectos

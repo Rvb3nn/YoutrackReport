@@ -1,4 +1,4 @@
-﻿@page "/Metricas"
+﻿@page "/FiltrosQA"
 @using Newtonsoft.Json
 @using Newtonsoft.Json.Linq
 @using YoutrackReport.DTOs
@@ -18,68 +18,25 @@
 <div class="container text-center">
     <div class="row">
         <div class="col-md-12" style="padding-bottom: 10px">
-            <h2>Métricas</h2>
+            <h2>Filtros QA</h2>
         </div>
     </div>
 
     @if (metricas != null)
     {
-        <div class="row">
-            <div class="col-md-12">
-
-                <div class="card text-dark bg-light mb-3">
-
-                    <div class="card-body">
-
-                        <div class="row">
-                            <div class="col-md">
-                                <div class="card text-dark bg-info mb-3 estado-box">
-                                    <div class="card-body">
-                                        <h5 class="card-title">Total de proyectos</h5>
-                                        <p class="card-text">@totalProyectos</p>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-md">
-                                <div class="card text-dark bg-warning mb-3 estado-box">
-                                    <div class="card-body">
-                                        <h5 class="card-title">En curso</h5>
-                                        <p class="card-text">@lista.CantidadEnCurso</p>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-md">
-                                <div class="card text-white bg-success mb-3 estado-box">
-                                    <div class="card-body">
-                                        <h5 class="card-title">Terminado</h5>
-                                        <p class="card-text">@lista.CantidadTerminado</p>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                    </div>
-
-                </div>
-
-
-            </div>
-        </div>
-
-        <!-- TABLA JP -->
+        <!-- TABLA Filtros QA -->
         <div class="row" style="padding-top: 50px">
             <div class="col-12">
                 <table class="table table-striped">
                     <thead>
                         <tr>
                             <th scope="col">Jefe de proyectos</th>
-                            <th scope="col">Total</th>
-                            <th scope="col">Terminados</th>
-                            <th scope="col">En curso</th>
-                            <th scope="col">Desarrollo</th>
-                            <th scope="col">Detenido</th>
-                            <th scope="col">Por iniciar</th>
-                            <th scope="col">Atrasados</th>
+                            <th scope="col">Realizados</th>
+                            <th scope="col">Pendientes</th>
+                            <th scope="col">Estado fallido</th>
+                            <th scope="col">Exitoso</th>
+                            <th scope="col">Incidencias con QA</th>
+                            <th scope="col">Incidencias sin QA</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -87,22 +44,21 @@
                         {
                             <tr>
                                 <td class="text-start">@jefeProyecto.NomJP</td>
-                                <td>@jefeProyecto.TotalJP</td>
-                                <td>@jefeProyecto.CantidadTerminadoJP</td>
-                                <td>@jefeProyecto.CantidadEncursoJP</td>
-                                <td>@jefeProyecto.CantidadDesarrolloJP</td>
-                                <td>@jefeProyecto.CantidadDetenidoJP</td>
-                                <td>@jefeProyecto.CantidadPorIniciarJP</td>
-                                <td>@jefeProyecto.TotalAtrasosJP</td>
-                                <td>
+                                <td>@jefeProyecto.QARealizado</td>
+                                <td>@jefeProyecto.QAPendiente</td>
+                                <td>@jefeProyecto.QAFallido</td>
+                                <td>@jefeProyecto.QAExitoso</td>
+                                <td>@jefeProyecto.ConQACount</td>
+                                <td>@jefeProyecto.SinQACount</td>
+                                @* <td>
                                     <!-- Cambio en el atributo data-bs-target para incluir el hash del nombre del jefe de proyecto -->
-                                    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="@($"#exampleModal{jefeProyecto.NomJP.GetHashCode()}")" @onclick="(() => traerDatosDetallesJP(jefeProyecto.NomJP))">
+                                    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="@($"#exampleModal{jefeProyecto.NomJP.GetHashCode()}")" @onclick="(() => traerDatosDetallesQA(jefeProyecto.NomJP))">
                                         Detalles atrasos
                                     </button>
-                                </td>
+                                </td> *@
                             </tr>
 
-                            <!-- Modal -->
+                            @* <!-- Modal -->
                             <!-- Cambio en el id del modal para incluir el hash del nombre del jefe de proyecto -->
                             <div class="modal fade" id="@($"exampleModal{jefeProyecto.NomJP.GetHashCode()}")" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
                                 <div class="modal-dialog modal-xl">
@@ -128,24 +84,20 @@
                                                             <th scope="col">Nombre proyecto</th>
                                                             <th scope="col">Id</th>
                                                             <th scope="col">Desarrollador</th>
-                                                            <th scope="col">Estado atrasado</th>
-                                                            <th scope="col">Atrasados En desarrollo</th>
-                                                            <th scope="col">Atrasados QA</th>
-                                                            <th scope="col">Atrasados Produccion</th>
+                                                            <th scope="col">Estado</th>
+                                                            <th scope="col">QA sin fechas</th>
                                                             <th scope="col">Url Jira</th>
                                                         </tr>
                                                     </thead>
                                                     <tbody>
-                                                        @foreach (var atrasoModal in listaAtrasados)
+                                                        @foreach (var atrasoModal in listaQAFechasNulas)
                                                         {
                                                             <tr>
                                                                 <td>@atrasoModal.Subsystem</td>
                                                                 <td>@atrasoModal.IDMh</td>
                                                                 <td>@atrasoModal.Assignee</td>
                                                                 <td>@atrasoModal.State</td>
-                                                                <td>@atrasoModal.FechaTerminoDesa</td>
-                                                                <td>@atrasoModal.FechaTerminoQA</td>
-                                                                <td>@atrasoModal.FechaTerminoReal</td>
+                                                                <td>@(atrasoModal.FechaTerminoQA != null ? atrasoModal.FechaTerminoQA.ToString() : "Sin fecha")</td>
                                                                 <td><a href="@atrasoModal.URLJira" target="_blank">Ir</a></td>
                                                             </tr>
                                                         }
@@ -158,7 +110,7 @@
                                         </div>
                                     </div>
                                 </div>
-                            </div>
+                            </div> *@
                         }
                     </tbody>
                 </table>
@@ -180,7 +132,7 @@
     private List<FieldsDTO> metricas;
     public int totalProyectos = 0;
     private MetricasKPI lista = new();
-    private List<FieldsDTO> listaAtrasados = new();
+    private List<FieldsDTO> listaQAFechasNulas = new();
 
     protected override async Task OnInitializedAsync()
     {
@@ -202,22 +154,23 @@
         }
     }
 
-    private async Task traerDatosDetallesJP(string jefeProyecto)
-    {
-        try
-        {
-            // Establecer la variable de carga para mostrar el spinner
-            cargandoDetallesJP = jefeProyecto;
-            // Forzar la actualización del estado para que se refleje inmediatamente en la interfaz de usuario
-            StateHasChanged();
+    // private async Task traerDatosDetallesQA(string jefeProyecto)
+    // {
+    //     try
+    //     {
+    //         // Establecer la variable de carga para mostrar el spinner
+    //         cargandoDetallesJP = jefeProyecto;
+    //         // Forzar la actualización del estado para que se refleje inmediatamente en la interfaz de usuario
+    //         StateHasChanged();
 
-            metricas = await ObtieneMetricasService.ObtenerDatosComunes("https://prosysspa.youtrack.cloud/api/issues?fields=customFields(name,value(name))");
-            listaAtrasados = ObtieneMetricasService.DetallesJpAtrasados(metricas, jefeProyecto);
-        }
-        finally
-        {
-            // Restablecer la variable de carga después de completar la obtención de datos
-            cargandoDetallesJP = null;
-        }
-    }
+    //         metricas = await ObtieneMetricasService.ObtenerDatosComunes("https://prosysspa.youtrack.cloud/api/issues?fields=customFields(name,value(name))");
+    //         listaQAFechasNulas = ObtieneMetricasService.DetallesQAFechasNull(metricas, jefeProyecto);
+    //     }
+    //     finally
+    //     {
+    //         // Restablecer la variable de carga después de completar la obtención de datos
+    //         cargandoDetallesJP = null;
+    //     }
+    // }
+
 }
