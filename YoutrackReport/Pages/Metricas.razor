@@ -73,8 +73,8 @@
                     <thead>
                         <tr>
                             <th scope="col">Jefe de proyectos</th>
-                            <th scope="col">Total</th>
-                            <th scope="col">Terminados</th>
+                            @* <th scope="col">Total</th> *@
+                            @* <th scope="col">Terminados</th> *@
                             <th scope="col">En curso</th>
                             <th scope="col">Desarrollo</th>
                             <th scope="col">Detenido</th>
@@ -87,8 +87,8 @@
                         {
                             <tr>
                                 <td class="text-start">@jefeProyecto.NomJP</td>
-                                <td>@jefeProyecto.TotalJP</td>
-                                <td>@jefeProyecto.CantidadTerminadoJP</td>
+                                @* <td>@jefeProyecto.TotalJP</td> *@
+                                @* <td>@jefeProyecto.CantidadTerminadoJP</td> *@
                                 <td>@jefeProyecto.CantidadEncursoJP</td>
                                 <td>@jefeProyecto.CantidadDesarrolloJP</td>
                                 <td>@jefeProyecto.CantidadDetenidoJP</td>
@@ -125,8 +125,7 @@
                                                 <table class="table table-striped">
                                                     <thead>
                                                         <tr>
-                                                            <th scope="col">Proyecto</th>
-                                                            <th scope="col">Id</th>
+                                                            <th scope="col">Url YT</th>
                                                             <th scope="col">Dev</th>
                                                             <th scope="col">Estado</th>
                                                             <th scope="col">Fecha En desarrollo</th>
@@ -139,8 +138,7 @@
                                                         @foreach (var atrasoModal in listaAtrasados)
                                                         {
                                                             <tr>
-                                                                <td>@atrasoModal.Project</td>
-                                                                <td>@atrasoModal.IDMh</td>
+                                                                <td>...</td>
                                                                 <td>@atrasoModal.Assignee</td>
                                                                 <td>@atrasoModal.State</td>
                                                                 <td>
@@ -198,6 +196,7 @@
     private MetricasKPI lista = new();
     private List<FieldsDTO> listaAtrasados = new();
 
+
     protected override async Task OnInitializedAsync()
     {
         try
@@ -243,4 +242,5 @@
             cargandoDetallesJP = null;
         }
     }
+
 }

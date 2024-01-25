@@ -1,4 +1,5 @@
 ﻿
+using Microsoft.Extensions.Configuration;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
@@ -17,10 +18,12 @@ namespace YoutrackReport.Servicios.Impllementacion
     {
 
         private readonly HttpClient _httpClient;
-
-        public ObtieneMetricas(HttpClient httpClient)
+        private readonly IConfiguration _configuration;
+        
+        public ObtieneMetricas(HttpClient httpClient, IConfiguration configuration)
         {
             _httpClient = httpClient;
+            _configuration = configuration;
         }
 
         //METODO QUE CONSUME API
@@ -242,7 +245,7 @@ namespace YoutrackReport.Servicios.Impllementacion
                 jpKpi.CantidadPorIniciarJP = datos.Where(x => x.JefeDeProyecto == jefeProyecto && (x.State == "Certificación producción" || x.State == "Instalación producción")).Count();
 
                 //Proyectos atrasados por estados de jefe de proyecto
-                jpKpi.AtrasoDesarrolloJP = datos.Where(x => x.JefeDeProyecto == jefeProyecto && ((x.FechaTerminoDesa != null ? DateTime.Parse(x.FechaTerminoDesa) : DateTime.Now) < DateTime.Now) && (x.State == "En desarrollo" || x.State == "Pendiente" || x.State == "Detenido" || x.State == "En curso")).Count();
+                jpKpi.AtrasoDesarrolloJP = datos.Where(x => x.JefeDeProyecto == jefeProyecto && ((x.FechaTerminoDesa != null ? DateTime.Parse(x.FechaTerminoDesa) : DateTime.Now) < DateTime.Now) && (x.State == "En desarrollo" || x.State == "En curso")).Count();
                 jpKpi.AtrasoQAJP = datos.Where(x => x.JefeDeProyecto == jefeProyecto && ((x.FechaTerminoQA != null ? DateTime.Parse(x.FechaTerminoQA) : DateTime.Now) < DateTime.Now) && (x.State == "Instalación QA" || x.State == "Exitoso completo" || x.State == "Pruebas PROSYS" || x.State == "Fallido" || x.State == "Exitoso liviano")).Count();
                 jpKpi.AtrasoProduccionJP = datos.Where(x => x.JefeDeProyecto == jefeProyecto && ((x.FechaTerminoReal != null ? DateTime.Parse(x.FechaTerminoReal) : DateTime.Now) < DateTime.Now) && (x.State == "Instalación producción" || x.State == "Certificación producción")).Count();
              
@@ -326,7 +329,7 @@ namespace YoutrackReport.Servicios.Impllementacion
 
             var jpKpiDesa = datos
                 .Where(x => x.JefeDeProyecto == nomJefeProyecto && ((x.FechaTerminoDesa != null ? DateTime.Parse(x.FechaTerminoDesa) : DateTime.Now) < DateTime.Now) && 
-                (x.State == "En desarrollo" || x.State == "Pendiente" || x.State == "Detenido" || x.State == "En curso"))
+                (x.State == "En desarrollo" || x.State == "En curso"))
                 .Select(x =>
                 {
                     x.Subsystem = x.Subsystem;  // Agregar el campo Subsystem sin perder la información existente
@@ -400,6 +403,8 @@ namespace YoutrackReport.Servicios.Impllementacion
 
             return jefesProyectoUnicos;
         }
+
+
 
     }
 }
