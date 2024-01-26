@@ -136,7 +136,7 @@
     {
         try
         {
-            metricas = await ObtieneMetricasService.ObtenerDatosComunes("https://prosysspa.youtrack.cloud/api/issues?fields=customFields(name,value(name)),project(name,value)");
+            metricas = await ObtieneMetricasService.ObtenerDatosComunes();
 
             if (metricas != null)
             {
@@ -161,7 +161,7 @@
     //         // Forzar la actualización del estado para que se refleje inmediatamente en la interfaz de usuario
     //         StateHasChanged();
 
-    //         metricas = await ObtieneMetricasService.ObtenerDatosComunes("https://prosysspa.youtrack.cloud/api/issues?fields=customFields(name,value(name)),project(name,value)");
+    //         metricas = await ObtieneMetricasService.ObtenerDatosComunes();
     //         listaQAFechasNulas = ObtieneMetricasService.DetallesQAFechasNull(metricas, jefeProyecto);
     //     }
     //     finally

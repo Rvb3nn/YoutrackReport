@@ -20,6 +20,7 @@ builder.Services.AddScoped<IObtieneArchivoAdj, ObtieneArchivoAdj>();
 builder.Services.AddScoped<IObtieneComentario, ObtieneComentario>();
 builder.Services.AddScoped<IObtieneActivity, ObtieneActivity>();
 builder.Services.AddScoped<ObtieneMetricas>();
+builder.Services.AddSingleton<ObtieneMetricasJsonYT>();
 
 var app = builder.Build();
 

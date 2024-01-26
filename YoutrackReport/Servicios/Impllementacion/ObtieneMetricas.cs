@@ -12,6 +12,7 @@ using YoutrackReport.DTOs;
 using YoutrackReport.Pages;
 using YoutrackReport.Servicios.Contrato;
 
+
 namespace YoutrackReport.Servicios.Impllementacion
 {
     public class ObtieneMetricas
@@ -27,57 +28,33 @@ namespace YoutrackReport.Servicios.Impllementacion
             _configuration = configuration;
         }
 
-        //METODO QUE CONSUME API
-        private async Task<List<MetricasDTO>> ObtenerDatosApi(string endpoint)
-        {
-            var client = new HttpClient();
-            var request = new HttpRequestMessage
-            {
-                Method = HttpMethod.Get,
-                RequestUri = new Uri(endpoint),
-                Headers =
-                {
-                    { "User-Agent", "insomnia/2023.5.8" },
-                    { "Authorization", "Bearer perm:TWFyaW9fUmFtaXJleg==.NTgtMTU=.3iMaKjmBBMj6eXomhtsZ0eBvNAuyNB" },
-                },
-            };
-
-            //Envio de la solicitud HTTP y manejo de la respuesta
-            var response = await client.SendAsync(request);
-            response.EnsureSuccessStatusCode();
-
-            //Lectura del cuerpo de la respuesta y deserializacion JSON
-            var body = await response.Content.ReadAsStringAsync();
-            var result = JsonConvert.DeserializeObject<List<MetricasDTO>>(body);
-
-            return result;
-        }
-
 
 
         // Método para obtener y transformar datos comunes
-        public async Task<List<FieldsDTO>> ObtenerDatosComunes(string endpoint)
+        public async Task<List<FieldsDTO>> ObtenerDatosComunes()
         {
             try
             {
-                //Creacion de datatable para almacenar datos tabulares
-                DataTable dt = new DataTable();
+                ////Creacion de datatable para almacenar datos tabulares
+                //DataTable dt = new DataTable();
 
-                //Creacion de columnas basado en propiedades de FieldsDTO
-                foreach (var property in typeof(FieldsDTO).GetProperties())
-                {
-                    // Obtén el nombre de la propiedad
-                    string propertyName = property.Name;
+                ////Creacion de columnas basado en propiedades de FieldsDTO
+                //foreach (var property in typeof(FieldsDTO).GetProperties())
+                //{
+                //    // Obtén el nombre de la propiedad
+                //    string propertyName = property.Name;
 
-                    // Obtén el tipo de datos de la propiedad
-                    Type propertyType = property.PropertyType;
+                //    // Obtén el tipo de datos de la propiedad
+                //    Type propertyType = property.PropertyType;
 
-                    // Agrega la columna al DataTable
-                    dt.Columns.Add(propertyName, propertyType);
-                }
+                //    // Agrega la columna al DataTable
+                //    dt.Columns.Add(propertyName, propertyType);
+                //}
+
+                ObtieneMetricasJsonYT obtieneMetricasJsonYT = new();
 
                 //Obtiene los datos desde la API
-                var result = await ObtenerDatosApi(endpoint);
+                var result = await obtieneMetricasJsonYT.ObtenerDatosApi();
                 List<FieldsDTO> datos = new List<FieldsDTO>();
 
                 //Transformacion de datos y llenado del datatable y lista FieldsDTO
@@ -166,33 +143,33 @@ namespace YoutrackReport.Servicios.Impllementacion
                         prueba.IDMh = idMhField.Value.ToString();
                     }
 
-                    // Agrega la fila al DataTable
-                    dt.Rows.Add(new object[] {
-                    prueba.Project,
-                    prueba.Subsystem,
-                    prueba.Type,
-                    prueba.Priority,
-                    prueba.State,
-                    prueba.RechazoHDI,
-                    prueba.EncargadoHDI,
-                    prueba.JefeDeProyecto,
-                    prueba.Assignee,
-                    prueba.DueDate,
-                    prueba.Estimacion,
-                    prueba.FechaInicio,
-                    prueba.FechaTerminoDesa,
-                    prueba.FechaTerminoQA,
-                    prueba.FechaTerminoReal,
-                    prueba.URLJira,
-                    prueba.URLBitbucket,
-                    prueba.URLSonarQube,
-                    prueba.Dificultad,
-                    prueba.IDMh,
-                    prueba.IDAgil,
-                    prueba.SprintsSeparadosPorComa,
-                    prueba.Completado,
-                    prueba.FixedInBuild,
-                });
+                //    // Agrega la fila al DataTable
+                //    dt.Rows.Add(new object[] {
+                //    prueba.Project,
+                //    prueba.Subsystem,
+                //    prueba.Type,
+                //    prueba.Priority,
+                //    prueba.State,
+                //    prueba.RechazoHDI,
+                //    prueba.EncargadoHDI,
+                //    prueba.JefeDeProyecto,
+                //    prueba.Assignee,
+                //    prueba.DueDate,
+                //    prueba.Estimacion,
+                //    prueba.FechaInicio,
+                //    prueba.FechaTerminoDesa,
+                //    prueba.FechaTerminoQA,
+                //    prueba.FechaTerminoReal,
+                //    prueba.URLJira,
+                //    prueba.URLBitbucket,
+                //    prueba.URLSonarQube,
+                //    prueba.Dificultad,
+                //    prueba.IDMh,
+                //    prueba.IDAgil,
+                //    prueba.SprintsSeparadosPorComa,
+                //    prueba.Completado,
+                //    prueba.FixedInBuild,
+                //});
 
 
                     //dt.Rows.Add(prueba.ToArray());
@@ -232,7 +209,7 @@ namespace YoutrackReport.Servicios.Impllementacion
         public async Task<MetricasKPI> CalcularTotalesPorJP(List<FieldsDTO> metricas, MetricasKPI metricasKPI)
         {
             // Obtener la lista de jefes de proyecto únicos
-            List<string> jefesProyectoUnicos = await ObtenerJefesProyectoUnicos();
+            List<string> jefesProyectoUnicos = await ObtenerJefesProyectoUnicos(metricas);
 
             //Obtener datos
             var datos = metricas;
@@ -386,6 +363,7 @@ namespace YoutrackReport.Servicios.Impllementacion
             return jpKpi;
         }
 
+        //Lista de los detalles En curso
         public List<FieldsDTO> DetallesJpModalEnCurso(List<FieldsDTO> metricas, string nomJefeProyecto)
         {
             var datos = metricas;
@@ -413,21 +391,19 @@ namespace YoutrackReport.Servicios.Impllementacion
 
 
 
-        //Metodo para tener los jefes de proyectos
-        public async Task<List<string>> ObtenerJefesProyectoUnicos()
-        {
 
-            var api = "https://prosysspa.youtrack.cloud/api/issues?fields=customFields(name,value(name)),project(name),idReadable";
-            var result = await ObtenerDatosApi(api);
+        //Metodo para tener los jefes de proyectos
+        public async Task<List<string>> ObtenerJefesProyectoUnicos(List<FieldsDTO> metricas)
+        {
 
             // Lista para almacenar jefes de proyecto únicos
             List<string> jefesProyectoUnicos = new List<string>();
 
-            foreach (MetricasDTO res in result)
+            foreach (FieldsDTO res in metricas)
             {
-                if (res.customField.FindAll(x => x.Name == "Jefe de proyecto").FirstOrDefault()?.Value != null)
+                if (res.JefeDeProyecto != null)
                 {
-                    string jefeProyecto = JsonConvert.DeserializeObject<Value>(res.customField.FindAll(x => x.Name == "Jefe de proyecto").FirstOrDefault().Value.ToString()).name;
+                    string jefeProyecto = res.JefeDeProyecto;
 
                     // Agrega a la lista si aún no está presente
                     if (!jefesProyectoUnicos.Contains(jefeProyecto))
