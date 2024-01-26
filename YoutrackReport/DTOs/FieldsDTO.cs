@@ -9,6 +9,7 @@ namespace YoutrackReport.DTOs
     public class FieldsDTO
     {
         public string Project { get; set; }
+        public string idReadable { get; set; }
         public string Subsystem { get; set; }
         public string Type { get; set; }
         public string Priority { get; set; }

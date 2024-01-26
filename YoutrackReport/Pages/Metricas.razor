@@ -89,20 +89,23 @@
                                 <td class="text-start">@jefeProyecto.NomJP</td>
                                 @* <td>@jefeProyecto.TotalJP</td> *@
                                 @* <td>@jefeProyecto.CantidadTerminadoJP</td> *@
-                                <td>@jefeProyecto.CantidadEncursoJP</td>
+                                <td style="cursor: pointer" data-bs-toggle="modal" data-bs-target="@($"#exampleModalEnCurso{jefeProyecto.NomJP.GetHashCode()}")" @onclick="(() => traerDatosDetallesJP(jefeProyecto.NomJP))">@jefeProyecto.CantidadEncursoJP</td>
                                 <td>@jefeProyecto.CantidadDesarrolloJP</td>
                                 <td>@jefeProyecto.CantidadDetenidoJP</td>
                                 <td>@jefeProyecto.CantidadPorIniciarJP</td>
-                                <td>@jefeProyecto.TotalAtrasosJP</td>
-                                <td>
-                                    <!-- Cambio en el atributo data-bs-target para incluir el hash del nombre del jefe de proyecto -->
-                                    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="@($"#exampleModal{jefeProyecto.NomJP.GetHashCode()}")" @onclick="(() => traerDatosDetallesJP(jefeProyecto.NomJP))">
-                                        Detalles atrasos
-                                    </button>
+                                <td class="modal-atraso" style="cursor: pointer;" data-bs-toggle="modal" data-bs-target="@($"#exampleModal{jefeProyecto.NomJP.GetHashCode()}")" @onclick="(() => traerDatosDetallesJP(jefeProyecto.NomJP))">
+                                    <span class="@((jefeProyecto.TotalAtrasosJP != 0) ? "atraso-con-valor" : "")">@jefeProyecto.TotalAtrasosJP</span>
                                 </td>
+
+                                @* <td>
+                        <!-- Cambio en el atributo data-bs-target para incluir el hash del nombre del jefe de proyecto -->
+                        <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="@($"#exampleModal{jefeProyecto.NomJP.GetHashCode()}")" @onclick="(() => traerDatosDetallesJP(jefeProyecto.NomJP))">
+                        Detalles atrasos
+                        </button>
+                        </td> *@
                             </tr>
 
-                            <!-- Modal -->
+                            <!-- Modal ATRASOS-->
                             <!-- Cambio en el id del modal para incluir el hash del nombre del jefe de proyecto -->
                             <div class="modal fade" id="@($"exampleModal{jefeProyecto.NomJP.GetHashCode()}")" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
                                 <div class="modal-dialog modal-xl">
@@ -125,20 +128,19 @@
                                                 <table class="table table-striped">
                                                     <thead>
                                                         <tr>
-                                                            <th scope="col">Url YT</th>
                                                             <th scope="col">Dev</th>
                                                             <th scope="col">Estado</th>
                                                             <th scope="col">Fecha En desarrollo</th>
                                                             <th scope="col">Fecha QA</th>
                                                             <th scope="col">Fecha Produccion</th>
+                                                            <th scope="col">Url YT</th>
                                                             <th scope="col">Url Jira</th>
                                                         </tr>
                                                     </thead>
                                                     <tbody>
-                                                        @foreach (var atrasoModal in listaAtrasados)
+                                                        @foreach (var atrasoModal in listaEnCurso)
                                                         {
                                                             <tr>
-                                                                <td>...</td>
                                                                 <td>@atrasoModal.Assignee</td>
                                                                 <td>@atrasoModal.State</td>
                                                                 <td>
@@ -160,6 +162,80 @@
                                                                         @(DateTime.Parse(atrasoModal.FechaTerminoReal).ToString("dd-MM-yyyy"))
                                                                     }
                                                                 </td>
+                                                                <td><a href="@atrasoModal.idReadable" target="_blank">Ir</a></td>
+                                                                <td><a href="@atrasoModal.URLJira" target="_blank">Ir</a></td>
+                                                            </tr>
+                                                        }
+                                                    </tbody>
+                                                </table>
+                                            }
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+
+                            <!-- MODAL EN CURSO -->
+                            <!-- Cambio en el id del modal para incluir el hash del nombre del jefe de proyecto -->
+                            <div class="modal fade" id="@($"exampleModalEnCurso{jefeProyecto.NomJP.GetHashCode()}")" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                <div class="modal-dialog modal-xl">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <!-- Cambio en el título del modal para incluir el nombre del jefe de proyecto -->
+                                            <h5 class="modal-title" id="exampleModalLabel">Detalles En curso del jefe de proyecto @jefeProyecto.NomJP</h5>
+                                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                        </div>
+                                        <div class="modal-body">
+                                            @if (cargandoDetallesJP == jefeProyecto.NomJP)
+                                            {
+                                                <!-- Spinner para indicar que se están cargando los detalles -->
+                                                <div class="spinner-border" role="status">
+                                                    <span class="visually-hidden">Cargando...</span>
+                                                </div>
+                                            }
+                                            else
+                                            {
+                                                <table class="table table-striped">
+                                                    <thead>
+                                                        <tr>
+                                                            <th scope="col">Dev</th>
+                                                            <th scope="col">Estado</th>
+                                                            <th scope="col">Fecha En desarrollo</th>
+                                                            <th scope="col">Fecha QA</th>
+                                                            <th scope="col">Fecha Produccion</th>
+                                                            <th scope="col">Url YT</th>
+                                                            <th scope="col">Url Jira</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        @foreach (var atrasoModal in listaEnCurso)
+                                                        {
+                                                            <tr>
+                                                                <td>@atrasoModal.Assignee</td>
+                                                                <td>@atrasoModal.State</td>
+                                                                <td>
+                                                                    <!--Condicion para eliminar la hora de las fechas ya que algunas fechas son nulas -->
+                                                                    @if (!string.IsNullOrEmpty(atrasoModal.FechaTerminoDesa))
+                                                                    {
+                                                                        @(DateTime.Parse(atrasoModal.FechaTerminoDesa).ToString("dd-MM-yyyy"))
+                                                                    }
+                                                                </td>
+                                                                <td>
+                                                                    @if (!string.IsNullOrEmpty(atrasoModal.FechaTerminoQA))
+                                                                    {
+                                                                        @(DateTime.Parse(atrasoModal.FechaTerminoQA).ToString("dd-MM-yyyy"))
+                                                                    }
+                                                                </td>
+                                                                <td>
+                                                                    @if (!string.IsNullOrEmpty(atrasoModal.FechaTerminoReal))
+                                                                    {
+                                                                        @(DateTime.Parse(atrasoModal.FechaTerminoReal).ToString("dd-MM-yyyy"))
+                                                                    }
+                                                                </td>
+                                                                <td><a href="@atrasoModal.idReadable" target="_blank">Ir</a></td>
                                                                 <td><a href="@atrasoModal.URLJira" target="_blank">Ir</a></td>
                                                             </tr>
                                                         }
@@ -195,13 +271,14 @@
     public int totalProyectos = 0;
     private MetricasKPI lista = new();
     private List<FieldsDTO> listaAtrasados = new();
+    private List<FieldsDTO> listaEnCurso = new();
 
 
     protected override async Task OnInitializedAsync()
     {
         try
         {
-            metricas = await ObtieneMetricasService.ObtenerDatosComunes("https://prosysspa.youtrack.cloud/api/issues?fields=customFields(name,value(name)),project(name,value)");
+            metricas = await ObtieneMetricasService.ObtenerDatosComunes("https://prosysspa.youtrack.cloud/api/issues?fields=customFields(name,value(name)),project(name),idReadable");
 
             if (metricas != null)
             {
@@ -229,12 +306,24 @@
             // Forzar la actualización del estado para que se refleje inmediatamente en la interfaz de usuario
             StateHasChanged();
 
-            metricas = await ObtieneMetricasService.ObtenerDatosComunes("https://prosysspa.youtrack.cloud/api/issues?fields=customFields(name,value(name)),project(name,value)");
+            metricas = await ObtieneMetricasService.ObtenerDatosComunes("https://prosysspa.youtrack.cloud/api/issues?fields=customFields(name,value(name)),project(name),idReadable");
 
             //Cuenta todos los proyectos excluyendo los Control de calidad Prosys
             metricas = metricas.Where(x => x.Project != "Control de calidad Prosys").ToList();
 
-            listaAtrasados = ObtieneMetricasService.DetallesJpAtrasados(metricas, jefeProyecto);
+            listaAtrasados = ObtieneMetricasService.DetallesJpModalAtrasados(metricas, jefeProyecto);
+
+            // if (tipo == "Atrasados")
+            // {
+            //     listaAtrasados = ObtieneMetricasService.DetallesJpModalAtrasados(metricas, jefeProyecto);
+            // }
+            // else if (tipo == "EnCurso")
+            // {
+            //     listaAtrasados = ObtieneMetricasService.DetallesJpModalEnCurso(metricas, jefeProyecto);
+            // }
+
+            listaEnCurso = ObtieneMetricasService.DetallesJpModalEnCurso(metricas, jefeProyecto);
+
         }
         finally
         {

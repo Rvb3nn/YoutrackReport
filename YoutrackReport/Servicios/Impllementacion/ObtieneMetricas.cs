@@ -19,7 +19,8 @@ namespace YoutrackReport.Servicios.Impllementacion
 
         private readonly HttpClient _httpClient;
         private readonly IConfiguration _configuration;
-        
+        private List<string> _proyectoIds = new List<string>();
+
         public ObtieneMetricas(HttpClient httpClient, IConfiguration configuration)
         {
             _httpClient = httpClient;
@@ -90,6 +91,12 @@ namespace YoutrackReport.Servicios.Impllementacion
                     {
                         // Asigna directamente el valor a la propiedad Project
                         prueba.Project = res.Project.Name;
+                    }
+
+                    if (res.idReadable != null)
+                    {
+                        // Asigna directamente el valor a la propiedad Project
+                        prueba.idReadable = res.idReadable;
                     }
 
                     if (res.customField.FindAll(x => x.Name == "Subsystem").FirstOrDefault()?.Value != null)
@@ -321,7 +328,7 @@ namespace YoutrackReport.Servicios.Impllementacion
 
 
         //Lista de los detalles atrasos por jefe de proyecto
-        public List<FieldsDTO> DetallesJpAtrasados (List<FieldsDTO> metricas, string nomJefeProyecto)
+        public List<FieldsDTO> DetallesJpModalAtrasados(List<FieldsDTO> metricas, string nomJefeProyecto)
         {
             var datos = metricas;
            
@@ -337,6 +344,7 @@ namespace YoutrackReport.Servicios.Impllementacion
                     x.IDMh = x.IDMh;
                     x.URLJira = x.URLJira;
                     x.Project = x.Project;
+                    x.idReadable = _configuration["UrlIndicencias"] + x.idReadable;
                     return x;
                 })
                 .ToList();
@@ -351,6 +359,7 @@ namespace YoutrackReport.Servicios.Impllementacion
                     x.IDMh = x.IDMh;
                     x.URLJira = x.URLJira;
                     x.Project = x.Project;
+                    x.idReadable = _configuration["UrlIndicencias"] + x.idReadable;
                     return x;
                 })
                 .ToList();
@@ -365,6 +374,7 @@ namespace YoutrackReport.Servicios.Impllementacion
                 x.IDMh = x.IDMh;
                 x.URLJira = x.URLJira;
                 x.Project = x.Project;
+                x.idReadable = _configuration["UrlIndicencias"] + x.idReadable;
                 return x;
             })
             .ToList();
@@ -376,12 +386,38 @@ namespace YoutrackReport.Servicios.Impllementacion
             return jpKpi;
         }
 
+        public List<FieldsDTO> DetallesJpModalEnCurso(List<FieldsDTO> metricas, string nomJefeProyecto)
+        {
+            var datos = metricas;
+
+            List<FieldsDTO> jpKpi = new();
+
+            var jpKpiEnCurso = datos
+                .Where(x => x.JefeDeProyecto == nomJefeProyecto && (x.State == "En desarrollo" || x.State == "Pendiente" || x.State == "Detenido" || x.State == "En curso" || x.State == "Instalación QA" || x.State == "Exitoso completo" || x.State == "Pruebas PROSYS" || x.State == "Fallido" || x.State == "Exitoso liviano" || x.State == "Instalación producción" || x.State == "Certificación producción"))
+                .Select(x =>
+                {
+                    x.Subsystem = x.Subsystem;  // Agregar el campo Subsystem sin perder la información existente
+                    x.Assignee = x.Assignee;
+                    x.IDMh = x.IDMh;
+                    x.URLJira = x.URLJira;
+                    x.Project = x.Project;
+                    x.idReadable = _configuration["UrlIndicencias"] + x.idReadable;
+                    return x;
+                })
+                .ToList();
+
+            //jpKpi.AddRange(jpKpiEnCurso);
+
+            return jpKpiEnCurso;
+        }
+
+
 
         //Metodo para tener los jefes de proyectos
         public async Task<List<string>> ObtenerJefesProyectoUnicos()
         {
 
-            var api = "https://prosysspa.youtrack.cloud/api/issues?fields=customFields(name,value(name)),project(name,value)";
+            var api = "https://prosysspa.youtrack.cloud/api/issues?fields=customFields(name,value(name)),project(name),idReadable";
             var result = await ObtenerDatosApi(api);
 
             // Lista para almacenar jefes de proyecto únicos
@@ -403,8 +439,6 @@ namespace YoutrackReport.Servicios.Impllementacion
 
             return jefesProyectoUnicos;
         }
-
-
 
     }
 }

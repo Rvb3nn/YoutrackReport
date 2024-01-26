@@ -111,3 +111,19 @@ a, .btn-link {
     text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5); /* Agrega sombra al texto */
 }
 
+/*.modal-atraso:hover {
+    background-color: #f0f0f0;*/ /* Cambia el color de fondo al pasar el ratón por encima */
+    /*color: #333;*/ /* Cambia el color del texto al pasar el ratón por encima */
+    /*font-weight: bold;*/ /* Cambia el peso de la fuente al pasar el ratón por encima */
+/*}*/
+
+.atraso-con-valor {
+    background-color: orange;
+    color: black;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    border-radius: 5px;
+    text-align: center;
+}
