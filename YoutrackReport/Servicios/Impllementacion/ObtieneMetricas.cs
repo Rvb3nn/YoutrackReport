@@ -387,6 +387,23 @@ namespace YoutrackReport.Servicios.Impllementacion
         }
 
 
+        ////Metodo para vinculaciones 
+        //public async Task<MetricasKPI> LinkVinculadosQA (List<FieldsDTO> metricas, MetricasKPI metricasKPI, string nomJefeProyecto)
+        //{
+        //    var datos = metricas;
+
+
+
+        //}
+
+
+
+
+
+
+
+
+
         //Metodo para los modal de Incidencias con QA y los rechazos
         public List<FieldsDTO> DetallesFiltrosQAModal(List<FieldsDTO> metricas, string nomJefeProyecto, string tipo)
         {
@@ -405,9 +422,9 @@ namespace YoutrackReport.Servicios.Impllementacion
                     x.Assignee = x.Assignee;
                     x.IDMh = x.IDMh;
                     x.URLJira = x.URLJira;
-                    x.URLJira = x.Type;
-                    x.URLJira = x.idReadable;
-                    x.URLJira = x.summary;
+                    x.Type = x.Type;
+                    x.idReadable = x.idReadable;
+                    x.summary = x.summary;
                     return x;
                 })
                 .ToList();
@@ -424,9 +441,9 @@ namespace YoutrackReport.Servicios.Impllementacion
                         x.Assignee = x.Assignee;
                         x.IDMh = x.IDMh;
                         x.URLJira = x.URLJira;
-                        x.URLJira = x.Type;
-                        x.URLJira = x.idReadable;
-                        x.URLJira = x.summary;
+                        x.Type = x.Type;
+                        x.idReadable = x.idReadable;
+                        x.summary = x.summary;
                         return x;
                     })
                 .ToList();
@@ -457,7 +474,8 @@ namespace YoutrackReport.Servicios.Impllementacion
                     x.IDMh = x.IDMh;
                     x.URLJira = x.URLJira;
                     x.Project = x.Project;
-                    x.idReadable = _configuration["UrlIndicencias"] + x.idReadable + "/" + Uri.EscapeDataString(x.summary);
+                    x.idReadable = x.idReadable;
+                    x.UrlYT = _configuration["UrlIndicencias"] + x.idReadable + "/" + Uri.EscapeDataString(x.summary);
                     return x;
                 })
                 .ToList();
@@ -472,7 +490,8 @@ namespace YoutrackReport.Servicios.Impllementacion
                         x.IDMh = x.IDMh;
                         x.URLJira = x.URLJira;
                         x.Project = x.Project;
-                        x.idReadable = _configuration["UrlIndicencias"] + x.idReadable + "/" + Uri.EscapeDataString(x.summary);
+                        x.idReadable = x.idReadable;
+                        x.UrlYT = _configuration["UrlIndicencias"] + x.idReadable + "/" + Uri.EscapeDataString(x.summary);
                         return x;
                     })
                     .ToList();
@@ -487,7 +506,8 @@ namespace YoutrackReport.Servicios.Impllementacion
                     x.IDMh = x.IDMh;
                     x.URLJira = x.URLJira;
                     x.Project = x.Project;
-                    x.idReadable = _configuration["UrlIndicencias"] + x.idReadable + "/" + Uri.EscapeDataString(x.summary);
+                    x.idReadable = x.idReadable;
+                    x.UrlYT = _configuration["UrlIndicencias"] + x.idReadable + "/" + Uri.EscapeDataString(x.summary);
                     return x;
                 })
                 .ToList();
@@ -507,7 +527,8 @@ namespace YoutrackReport.Servicios.Impllementacion
                     x.IDMh = x.IDMh;
                     x.URLJira = x.URLJira;
                     x.Project = x.Project;
-                    x.idReadable = _configuration["UrlIndicencias"] + x.idReadable + "/" + Uri.EscapeDataString(x.summary);
+                    x.idReadable = x.idReadable;
+                    x.UrlYT = _configuration["UrlIndicencias"] + x.idReadable + "/" + Uri.EscapeDataString(x.summary);
                     return x;
                 })
                 .ToList();

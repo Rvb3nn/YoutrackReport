@@ -10,6 +10,7 @@ namespace YoutrackReport.DTOs
     {
         public string Project { get; set; }
         public string idReadable { get; set; }
+        public string UrlYT { get; set; }
 
         //public string links { get; set; }
         //public string Issues { get; set; }

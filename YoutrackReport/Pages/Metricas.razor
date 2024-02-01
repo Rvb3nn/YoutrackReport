@@ -144,7 +144,7 @@
                                                         {
                                                             // Itera sobre la lista correspondiente según el tipo de detalles (Atrasados o En curso)
                                                             <tr>
-                                                                <td>@atrasoModal.Project</td>
+                                                                <td>@atrasoModal.idReadable</td>
                                                                 <td>@atrasoModal.Assignee</td>
                                                                 <td>@atrasoModal.State</td>
                                                                 <td>
@@ -166,7 +166,7 @@
                                                                         @(DateTime.Parse(atrasoModal.FechaTerminoReal).ToString("dd-MM-yyyy"))
                                                                     }
                                                                 </td>
-                                                                <td><a href="@atrasoModal.idReadable" target="_blank">Ir</a></td>
+                                                                <td><a href="@atrasoModal.UrlYT" target="_blank">Ir</a></td>
                                                                 <td><a href="@atrasoModal.URLJira" target="_blank">Ir</a></td>
                                                             </tr>
                                                         }
