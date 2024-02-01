@@ -29,6 +29,7 @@ namespace YoutrackReport.DTOs
         public int QAPendiente { get; set; }
         public int QAExitoso { get; set; }
         public int QARealizado { get; set; }
+        public int Rechazos { get; set; }
 
     }
 

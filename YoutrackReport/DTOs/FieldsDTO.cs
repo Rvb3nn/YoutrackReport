@@ -10,6 +10,14 @@ namespace YoutrackReport.DTOs
     {
         public string Project { get; set; }
         public string idReadable { get; set; }
+
+        //public string links { get; set; }
+        //public string Issues { get; set; }
+
+        public List<Issues> Issues { get; set; }  // Cambiada a lista de Issues
+        public List<Links> links { get; set; }
+
+        public string summary { get; set; }
         public string Subsystem { get; set; }
         public string Type { get; set; }
         public string Priority { get; set; }
@@ -33,6 +41,12 @@ namespace YoutrackReport.DTOs
         public string SprintsSeparadosPorComa { get; set; }
         public string Completado { get; set; }
         public string FixedInBuild { get; set; }
+
+        public bool TieneQA()
+        {
+            return (Issues != null && Issues.Any()) || (links != null && links.Any(link => link.issues != null && link.issues.Any()));
+        }
+
 
         public IEnumerable<object> ToArray()
         {

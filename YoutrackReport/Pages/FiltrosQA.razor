@@ -9,10 +9,6 @@
 @inject ObtieneMetricas ObtieneMetricasService
 
 
-<!-- Archivo CSS para estilos de las cartas -->
-@* <link rel="stylesheet" href="~/css/metricasStyle.css" /> *@
-
-
 <!-- INICIO HTML -->
 
 <div class="container text-center">
@@ -36,34 +32,32 @@
                             <th scope="col">Exitoso</th>
                             <th scope="col">Incidencias con QA</th>
                             <th scope="col">Incidencias sin QA</th>
+                            <th scope="col">Rechazos</th>
                         </tr>
                     </thead>
                     <tbody>
-                        @foreach (var jefeProyecto in lista.kPI_Lista_JPs)
+                        @foreach (var jefeProyecto in lista.kPI_Lista_JPs.OrderBy(j => j.NomJP))
                         {
                             <tr>
                                 <td class="text-start">@jefeProyecto.NomJP</td>
                                 <td>@jefeProyecto.QAPendiente</td>
                                 <td>@jefeProyecto.QAFallido</td>
                                 <td>@jefeProyecto.QAExitoso</td>
-                                <td>@jefeProyecto.ConQACount</td>
-                                <td>@jefeProyecto.SinQACount</td>
-                                @* <td>
-                                    <!-- Cambio en el atributo data-bs-target para incluir el hash del nombre del jefe de proyecto -->
-                                    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="@($"#exampleModal{jefeProyecto.NomJP.GetHashCode()}")" @onclick="(() => traerDatosDetallesQA(jefeProyecto.NomJP))">
-                                        Detalles atrasos
-                                    </button>
-                                </td> *@
+                                @* <td>@jefeProyecto.ConQACount</td> *@
+                                <td style="cursor: pointer" data-bs-toggle="modal" data-bs-target='@($"#exampleModal{jefeProyecto.NomJP.GetHashCode()}")' @onclick='(() => traerDatosDetallesQA(jefeProyecto.NomJP, "Con QA"))'>@jefeProyecto.ConQACount</td>
+                                <td>...</td>
+                                @* <td>@jefeProyecto.Rechazos</td> *@
+                                <td style="cursor: pointer" data-bs-toggle="modal" data-bs-target='@($"#exampleModal{jefeProyecto.NomJP.GetHashCode()}")' @onclick='(() => traerDatosDetallesQA(jefeProyecto.NomJP, "Rechazos"))'>@jefeProyecto.Rechazos</td>
                             </tr>
 
-                            @* <!-- Modal -->
+                            <!-- Modal -->
                             <!-- Cambio en el id del modal para incluir el hash del nombre del jefe de proyecto -->
                             <div class="modal fade" id="@($"exampleModal{jefeProyecto.NomJP.GetHashCode()}")" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
                                 <div class="modal-dialog modal-xl">
                                     <div class="modal-content">
                                         <div class="modal-header">
                                             <!-- Cambio en el título del modal para incluir el nombre del jefe de proyecto -->
-                                            <h5 class="modal-title" id="exampleModalLabel">Detalles atrasos del jefe de proyecto @jefeProyecto.NomJP</h5>
+                                            <h5 class="modal-title" id="exampleModalLabel">Detalles @tipoDetallesQA del jefe de proyecto @jefeProyecto.NomJP</h5>
                                             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                                         </div>
                                         <div class="modal-body">
@@ -79,23 +73,46 @@
                                                 <table class="table table-striped">
                                                     <thead>
                                                         <tr>
-                                                            <th scope="col">Nombre proyecto</th>
+                                                            <th scope="col">Dev</th>
                                                             <th scope="col">Id</th>
-                                                            <th scope="col">Desarrollador</th>
-                                                            <th scope="col">Estado</th>
-                                                            <th scope="col">QA sin fechas</th>
+                                                            <th scope="col">Summary</th>
+                                                            <th scope="col">Tipo</th>
+                                                            <th scope="col">Fecha En desarrollo</th>
+                                                            <th scope="col">Fecha QA</th>
+                                                            <th scope="col">Fecha Produccion</th>
+                                                            <th scope="col">Url YT</th>
                                                             <th scope="col">Url Jira</th>
                                                         </tr>
                                                     </thead>
                                                     <tbody>
-                                                        @foreach (var atrasoModal in listaQAFechasNulas)
+                                                        @foreach (var atrasoModal in (tipoDetallesQA == "Rechazos" ? listaRechazos : listaConQA ))
                                                         {
+                                                            // Itera sobre la lista correspondiente según el tipo de detalles (Atrasados o En curso)
                                                             <tr>
-                                                                <td>@atrasoModal.Subsystem</td>
-                                                                <td>@atrasoModal.IDMh</td>
                                                                 <td>@atrasoModal.Assignee</td>
-                                                                <td>@atrasoModal.State</td>
-                                                                <td>@(atrasoModal.FechaTerminoQA != null ? atrasoModal.FechaTerminoQA.ToString() : "Sin fecha")</td>
+                                                                <td>@atrasoModal.idReadable</td>
+                                                                <td>@atrasoModal.summary</td>
+                                                                <td>@atrasoModal.Type</td>
+                                                                <td>
+                                                                    <!--Condicion para eliminar la hora de las fechas ya que algunas fechas son nulas -->
+                                                                    @if (!string.IsNullOrEmpty(atrasoModal.FechaTerminoDesa))
+                                                                    {
+                                                                        @(DateTime.Parse(atrasoModal.FechaTerminoDesa).ToString("dd-MM-yyyy"))
+                                                                    }
+                                                                </td>
+                                                                <td>
+                                                                    @if (!string.IsNullOrEmpty(atrasoModal.FechaTerminoQA))
+                                                                    {
+                                                                        @(DateTime.Parse(atrasoModal.FechaTerminoQA).ToString("dd-MM-yyyy"))
+                                                                    }
+                                                                </td>
+                                                                <td>
+                                                                    @if (!string.IsNullOrEmpty(atrasoModal.FechaTerminoReal))
+                                                                    {
+                                                                        @(DateTime.Parse(atrasoModal.FechaTerminoReal).ToString("dd-MM-yyyy"))
+                                                                    }
+                                                                </td>
+                                                                <td><a href="@atrasoModal.idReadable" target="_blank">Ir</a></td>
                                                                 <td><a href="@atrasoModal.URLJira" target="_blank">Ir</a></td>
                                                             </tr>
                                                         }
@@ -108,7 +125,7 @@
                                         </div>
                                     </div>
                                 </div>
-                            </div> *@
+                            </div>
                         }
                     </tbody>
                 </table>
@@ -126,11 +143,12 @@
 <!-- FIN HTML -->
 @code {
     private string cargandoDetallesJP = null;
-
+    private string tipoDetallesQA;
     private List<FieldsDTO> metricas;
     public int totalProyectos = 0;
     private MetricasKPI lista = new();
-    private List<FieldsDTO> listaQAFechasNulas = new();
+    private List<FieldsDTO> listaConQA = new();
+    private List<FieldsDTO> listaRechazos = new();
 
     protected override async Task OnInitializedAsync()
     {
@@ -140,6 +158,9 @@
 
             if (metricas != null)
             {
+                //Cuenta solo los proyectos Control de calidad Prosys
+                metricas = metricas.Where(x => x.Project == "Control de calidad Prosys").ToList();
+
                 totalProyectos = metricas.Count;
                 MetricasKPI metricasKPI = ObtieneMetricasService.CalcularTotales(metricas);
                 metricasKPI = await ObtieneMetricasService.CalcularTotalesPorJP(metricas, metricasKPI);
@@ -152,23 +173,40 @@
         }
     }
 
-    // private async Task traerDatosDetallesQA(string jefeProyecto)
-    // {
-    //     try
-    //     {
-    //         // Establecer la variable de carga para mostrar el spinner
-    //         cargandoDetallesJP = jefeProyecto;
-    //         // Forzar la actualización del estado para que se refleje inmediatamente en la interfaz de usuario
-    //         StateHasChanged();
+    private async Task traerDatosDetallesQA(string jefeproyecto, string tipo)
+    {
+        try
+        {
+            tipoDetallesQA = tipo;
 
-    //         metricas = await ObtieneMetricasService.ObtenerDatosComunes();
-    //         listaQAFechasNulas = ObtieneMetricasService.DetallesQAFechasNull(metricas, jefeProyecto);
-    //     }
-    //     finally
-    //     {
-    //         // Restablecer la variable de carga después de completar la obtención de datos
-    //         cargandoDetallesJP = null;
-    //     }
-    // }
+            // establecer la variable de carga para mostrar el spinner
+            cargandoDetallesJP = jefeproyecto;
+            // forzar la actualización del estado para que se refleje inmediatamente en la interfaz de usuario
+            StateHasChanged();
+
+            metricas = await ObtieneMetricasService.ObtenerDatosComunes();
+            //listaQAFechasNulas = ObtieneMetricasService.DetallesQAFechasNull(metricas, jefeproyecto, tipo);
+            metricas = metricas.Where(x => x.Project == "Control de calidad Prosys").ToList();
+
+
+            // Verifica el tipo de detalles
+            if (tipoDetallesQA == "Rechazos")
+            {
+                //Si es "Atrasados", obtiene los detalles de atrasos para el jefe de proyecto
+                listaRechazos = ObtieneMetricasService.DetallesFiltrosQAModal(metricas, jefeproyecto, tipo);
+            }
+            else //if (tipoDetallesQA == "Rechazos")
+            {
+                //Si es "En curso", obtiene los detalles de atrasos para el jefe de proyecto
+                listaConQA = ObtieneMetricasService.DetallesFiltrosQAModal(metricas, jefeproyecto, tipo);
+            }
+
+        }
+        finally
+        {
+            // restablecer la variable de carga después de completar la obtención de datos
+            cargandoDetallesJP = null;
+        }
+    }
 
 }

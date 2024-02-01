@@ -129,6 +129,7 @@
                                                 <table class="table table-striped">
                                                     <thead>
                                                         <tr>
+                                                            <th scope="col">Proyecto</th>
                                                             <th scope="col">Dev</th>
                                                             <th scope="col">Estado</th>
                                                             <th scope="col">Fecha En desarrollo</th>
@@ -143,6 +144,7 @@
                                                         {
                                                             // Itera sobre la lista correspondiente según el tipo de detalles (Atrasados o En curso)
                                                             <tr>
+                                                                <td>@atrasoModal.Project</td>
                                                                 <td>@atrasoModal.Assignee</td>
                                                                 <td>@atrasoModal.State</td>
                                                                 <td>
@@ -245,12 +247,12 @@
             if (tipoDetalles == "Atrasados")
             {
                 //Si es "Atrasados", obtiene los detalles de atrasos para el jefe de proyecto
-                listaAtrasados = ObtieneMetricasService.DetallesJpModalAtrasados(metricas, jefeProyecto);
+                listaAtrasados = ObtieneMetricasService.DetallesJPModal(metricas, jefeProyecto, tipo);
             }
             else if (tipoDetalles == "En curso")
             {
                 //Si es "En curso", obtiene los detalles de atrasos para el jefe de proyecto
-                listaEnCurso = ObtieneMetricasService.DetallesJpModalEnCurso(metricas, jefeProyecto);
+                listaEnCurso = ObtieneMetricasService.DetallesJPModal(metricas, jefeProyecto, tipo);
             }
 
         }
