@@ -15,8 +15,9 @@ namespace YoutrackReport.DTOs
         //public string links { get; set; }
         //public string Issues { get; set; }
 
-        public List<Issues> Issues { get; set; }  // Cambiada a lista de Issues
-        public List<Links> links { get; set; }
+        public List<ProjectIssues> Issues { get; set; }  // Cambiada a lista de Issues
+        public List<ProjectLinks> links { get; set; }
+        public string ProjectId { get; set; }
 
         public string summary { get; set; }
         public string Subsystem { get; set; }

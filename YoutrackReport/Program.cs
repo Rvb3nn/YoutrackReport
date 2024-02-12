@@ -12,13 +12,6 @@ builder.Services.AddServerSideBlazor();
 builder.Services.AddSingleton<WeatherForecastService>();
 builder.Services.AddHttpClient();
 
-builder.Services.AddScoped<IObtieneInformacionCovidService, ObtieneInformacionCovidService>();
-builder.Services.AddScoped<IObtieneUsuariosYoutrackService, ObtieneUsuariosService>();
-builder.Services.AddScoped<IObtieneProyectosServices, ObtieneProyectosServices>();
-//builder.Services.AddScoped<IObtienePanelDPrincipal, ObtienePanelPrincipal>();
-builder.Services.AddScoped<IObtieneArchivoAdj, ObtieneArchivoAdj>();
-builder.Services.AddScoped<IObtieneComentario, ObtieneComentario>();
-builder.Services.AddScoped<IObtieneActivity, ObtieneActivity>();
 builder.Services.AddScoped<ObtieneMetricas>();
 builder.Services.AddSingleton<ObtieneMetricasJsonYT>();
 

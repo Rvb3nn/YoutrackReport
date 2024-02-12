@@ -14,7 +14,7 @@ namespace YoutrackReport.DTOs
         public string summary { get; set; }
         [JsonProperty("customFields")]
         public List<CustomField> customField { get; set; }
-        public List<Links> links { get; set; }
+        public List<ProjectLinks> links { get; set; }
         [JsonProperty("$type")]
         public string type { get; set; }
 
@@ -37,17 +37,20 @@ namespace YoutrackReport.DTOs
         public string Type { get; set; }
     }
 
-    //clase para las vinculaciones
-    public class Links
+    // Clase para las vinculaciones
+    public class ProjectLinks
     {
-        public List<Issues> issues { get; set; }
+        public List<ProjectIssues> issues { get; set; }
+        public string ProjectId { get; set; }
     }
 
-    public class Issues
+    public class ProjectIssues
     {
+        public string ProjectId { get; set; }
         public string idReadable { get; set; }
         public string summary { get; set; }
         public string id { get; set; }
     }
+
 
 }

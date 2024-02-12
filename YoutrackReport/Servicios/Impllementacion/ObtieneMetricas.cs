@@ -19,71 +19,6 @@ namespace YoutrackReport.Servicios.Impllementacion
 
 
 
-        //public async Task<List<FieldsDTO>> ObtenerDatosComunes()
-        //{
-        //    try
-        //    {
-        //        ObtieneMetricasJsonYT obtieneMetricasJsonYT = new();
-
-        //        // Obtiene los datos desde la API
-        //        var result = await obtieneMetricasJsonYT.ObtenerDatosApi();
-        //        List<FieldsDTO> datos = new List<FieldsDTO>();
-
-        //        foreach (var res in result)
-        //        {
-        //            FieldsDTO prueba = new FieldsDTO();
-
-        //            var propertiesDTO = typeof(FieldsDTO).GetProperties();
-
-        //            foreach (var propertyDTO in propertiesDTO)
-        //            {
-        //                string propertyName = propertyDTO.Name;
-
-        //                if (propertyName == "FechaTerminoDesa" || propertyName == "FechaTerminoQA" || propertyName == "FechaTerminoReal")
-        //                {
-        //                    var fechaProperty = res.customField.Find(x => x.Name == propertyName);
-
-        //                    if (fechaProperty?.Value != null)
-        //                    {
-        //                        long fechaValue = Convert.ToInt64(fechaProperty.Value);
-        //                        DateTime fecha = DateTimeOffset.FromUnixTimeMilliseconds(fechaValue).UtcDateTime;
-
-        //                        propertyDTO.SetValue(prueba, fecha.ToString());
-        //                    }
-        //                }
-        //                else
-        //                {
-        //                    // Busca si hay un campo en la respuesta que coincida con la propiedad actual
-        //                    var field = res.GetType().GetProperty(propertyName);
-
-        //                    if (field != null)
-        //                    {
-        //                        var value = field.GetValue(res, null);
-        //                        propertyDTO.SetValue(prueba, value);
-        //                    }
-        //                    else
-        //                    {
-        //                        // Puedes agregar lógica aquí para manejar propiedades adicionales si es necesario
-        //                    }
-        //                }
-        //            }
-
-        //            datos.Add(prueba);
-        //        }
-
-        //        return datos;
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        // Manejo de excepciones
-        //        throw;
-        //    }
-        //}
-
-
-
-
-
         // Método para obtener y transformar datos comunes
         public async Task<List<FieldsDTO>> ObtenerDatosComunes()
         {
@@ -136,18 +71,25 @@ namespace YoutrackReport.Servicios.Impllementacion
                         prueba.summary = res.summary;
                     }
 
+
                     //Vinculacion
                     if (res.links != null && res.links.Any())
                     {
                         // Recorrer las vinculaciones
                         foreach (var vinculo in res.links)
                         {
+                            // Asignar el identificador del proyecto a la vinculación
+                            vinculo.ProjectId = res.idReadable;
+
                             // Si la vinculación tiene problemas
                             if (vinculo.issues != null && vinculo.issues.Any())
                             {
                                 // Recorrer los problemas
                                 foreach (var problema in vinculo.issues)
                                 {
+                                    // Asignar el identificador del proyecto al issue
+                                    problema.ProjectId = res.idReadable;
+
                                     // Aquí puedes acceder a los datos del problema
                                     string idProblema = problema.idReadable;
                                     string resumenProblema = problema.summary;
@@ -157,22 +99,9 @@ namespace YoutrackReport.Servicios.Impllementacion
                     }
 
 
-                    //// Filtra las vinculaciones por proyecto utilizando el idReadable
-                    //var vinculacionesProyecto = res.links?
-                    //    .Where(link => link.issues?.Any(issue => issue.idReadable?.Equals(prueba.idReadable, StringComparison.OrdinalIgnoreCase) ?? false) ?? false)
-                    //    .ToList();
-
-                    //// Agrega a la lista solo si hay vinculaciones con el proyecto correspondiente
-                    //if (vinculacionesProyecto != null && vinculacionesProyecto.Any())
-                    //{
-                    //    datos.Add(prueba);
-                    //}
 
 
-
-
-
-                    if (res.customField.FindAll(x => x.Name == "Type").FirstOrDefault()?.Value != null)
+                        if (res.customField.FindAll(x => x.Name == "Type").FirstOrDefault()?.Value != null)
                     {
                         prueba.Type = JsonConvert.DeserializeObject<Value>(res.customField.FindAll(x => x.Name == "Type").FirstOrDefault().Value.ToString()).name;
                     }
@@ -319,6 +248,7 @@ namespace YoutrackReport.Servicios.Impllementacion
             //Lista para almacenar resultados por jefe de proyecto
             List<KPI_Lista_JP> list_jpKpi = new();
 
+
             // Calcular totales por cada jefe de proyecto
             foreach (var jefeProyecto in jefesProyectoUnicos)
             {
@@ -340,24 +270,76 @@ namespace YoutrackReport.Servicios.Impllementacion
                 jpKpi.CantidadEncursoJP = jpKpi.TotalJP - jpKpi.CantidadTerminadoJP;
 
 
-                ////Contar incidencias Con QA y rechazos
-                //jpKpi.ConQACount = datos
-                //    .Count(x => x.JefeDeProyecto == jefeProyecto && !x.TieneQA() && x.Type != "Rechazo");
+                //Contar incidencias Con QA, rechazos y rechazos sin idmh
+                jpKpi.ConQACount = datos
+                    .Where(x => x.JefeDeProyecto == jefeProyecto && x.Type != "Rechazo")
+                    .Select(x => new
+                    {
+                        IdMH = x.IDMh,
+                        IdReadable = x.idReadable
+                    })
+                .Count();
 
-                //jpKpi.Rechazos = datos
-                //    .Count(x => x.JefeDeProyecto == jefeProyecto && !x.TieneQA() && x.Type == "Rechazo");
+                jpKpi.Rechazos = datos
+                    .Where(x => x.JefeDeProyecto == jefeProyecto && x.IDMh != null && x.Type == "Rechazo")
+                    .Select(x => new
+                    {
+                        IdMH = x.IDMh,
+                        IdReadable = x.idReadable
+                    })
+                .Count();
 
+                jpKpi.RechazosSinId = datos
+                    .Where(x => x.JefeDeProyecto == jefeProyecto && x.IDMh == null && x.Type == "Rechazo")
+                    .Select(x => new
+                    {
+                        IdMH = x.IDMh,
+                        IdReadable = x.idReadable
+                    })
+                .Count();
 
-                // Lista con QA
+                //Lista de las incidencias con QA, rechazos y rechazos sin idmh
                 var proyectosConQA = datos
-                    .Where(x => x.JefeDeProyecto == jefeProyecto && !x.TieneQA() && x.Type != "Rechazo")
-                    .ToList();
+                    .Where(x => x.JefeDeProyecto == jefeProyecto && x.Type != "Rechazo")
+                    .Select(x => new
+                    {
+                        IdMH = x.IDMh,
+                        IdReadable = x.idReadable
+                    })
+                .ToList();
 
-                // Lista Rechazos
                 var proyectosRechazos = datos
-                    .Where(x => x.JefeDeProyecto == jefeProyecto && !x.TieneQA() && x.Type == "Rechazo")
-                    .ToList();
+                    .Where(x => x.JefeDeProyecto == jefeProyecto && x.IDMh != null && x.Type == "Rechazo")
+                    .Select(x => new
+                    {
+                        IdMH = x.IDMh,
+                        IdReadable = x.idReadable
+                    })
+                .ToList();
 
+                var proyectosRechazosSinId = datos
+                    .Where(x => x.JefeDeProyecto == jefeProyecto && x.IDMh == null && x.Type == "Rechazo")
+                    .Select(x => new
+                    {
+                        IdMH = x.IDMh,
+                        IdReadable = x.idReadable
+                    })
+                .ToList();
+
+
+                //// Imprimir contenido de proyectosConQA
+                //Console.WriteLine($"Proyectos con QA para el Jefe de Proyecto {jefeProyecto}:");
+                //foreach (var proyecto in proyectosConQA)
+                //{
+                //    Console.WriteLine($"IdMH: {proyecto.IdMH}, IdReadable: {proyecto.IdReadable}");
+                //}
+
+                //// Imprimir contenido de proyectosRechazos
+                //Console.WriteLine($"Proyectos de Rechazo para el Jefe de Proyecto {jefeProyecto}:");
+                //foreach (var proyecto in proyectosRechazos)
+                //{
+                //    Console.WriteLine($"IdMH: {proyecto.IdMH}, IdReadable: {proyecto.IdReadable}");
+                //}
 
 
 
@@ -387,23 +369,6 @@ namespace YoutrackReport.Servicios.Impllementacion
         }
 
 
-        ////Metodo para vinculaciones 
-        //public async Task<MetricasKPI> LinkVinculadosQA (List<FieldsDTO> metricas, MetricasKPI metricasKPI, string nomJefeProyecto)
-        //{
-        //    var datos = metricas;
-
-
-
-        //}
-
-
-
-
-
-
-
-
-
         //Metodo para los modal de Incidencias con QA y los rechazos
         public List<FieldsDTO> DetallesFiltrosQAModal(List<FieldsDTO> metricas, string nomJefeProyecto, string tipo)
         {
@@ -415,7 +380,7 @@ namespace YoutrackReport.Servicios.Impllementacion
             {
 
                 var proyectosRechazos = datos
-                    .Where(x => x.JefeDeProyecto == nomJefeProyecto && !x.TieneQA() && x.Type == "Rechazo")
+                    .Where(x => x.JefeDeProyecto == nomJefeProyecto && x.IDMh != null && x.Type == "Rechazo")
                 .Select(x =>
                 {
                     x.Subsystem = x.Subsystem;  // Agregar el campo Subsystem sin perder la información existente
@@ -434,7 +399,7 @@ namespace YoutrackReport.Servicios.Impllementacion
             else if (tipo != "Rechazos")
             {
                 var proyectosConQA = datos
-                    .Where(x => x.JefeDeProyecto == nomJefeProyecto && !x.TieneQA() && x.Type != "Rechazo")
+                    .Where(x => x.JefeDeProyecto == nomJefeProyecto && x.Type != "Rechazo")
                     .Select(x =>
                     {
                         x.Subsystem = x.Subsystem;  // Agregar el campo Subsystem sin perder la información existente
@@ -449,6 +414,25 @@ namespace YoutrackReport.Servicios.Impllementacion
                 .ToList();
 
                 jpKpi.AddRange(proyectosConQA);
+            }
+            else if (tipo == "Rechazos Sin Id")
+            {
+                var proyectosRechazosSinId = datos
+                    .Where(x => x.JefeDeProyecto == nomJefeProyecto && x.IDMh == null && x.Type == "Rechazo")
+                .Select(x =>
+                {
+                    x.Subsystem = x.Subsystem;  // Agregar el campo Subsystem sin perder la información existente
+                    x.Assignee = x.Assignee;
+                    x.IDMh = x.IDMh;
+                    x.URLJira = x.URLJira;
+                    x.Type = x.Type;
+                    x.idReadable = x.idReadable;
+                    x.summary = x.summary;
+                    return x;
+                })
+                .ToList();
+
+                jpKpi.AddRange(proyectosRechazosSinId);
             }
 
 

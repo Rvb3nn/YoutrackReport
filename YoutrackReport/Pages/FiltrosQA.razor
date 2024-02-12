@@ -31,7 +31,7 @@
                             <th scope="col">Estado fallido</th>
                             <th scope="col">Exitoso</th>
                             <th scope="col">Incidencias con QA</th>
-                            <th scope="col">Incidencias sin QA</th>
+                            @* <th scope="col">Rechazos sin IDMH</th> *@
                             <th scope="col">Rechazos</th>
                         </tr>
                     </thead>
@@ -45,7 +45,8 @@
                                 <td>@jefeProyecto.QAExitoso</td>
                                 @* <td>@jefeProyecto.ConQACount</td> *@
                                 <td style="cursor: pointer" data-bs-toggle="modal" data-bs-target='@($"#exampleModal{jefeProyecto.NomJP.GetHashCode()}")' @onclick='(() => traerDatosDetallesQA(jefeProyecto.NomJP, "Con QA"))'>@jefeProyecto.ConQACount</td>
-                                <td>...</td>
+                                @* <td style="cursor: pointer" data-bs-toggle="modal" data-bs-target='@($"#exampleModal{jefeProyecto.NomJP.GetHashCode()}")' @onclick='(() => traerDatosDetallesQA(jefeProyecto.NomJP, "Rechazos Sin Id"))'>@jefeProyecto.RechazosSinId</td> *@
+                                @* <td>@jefeProyecto.RechazosSinId</td> *@
                                 @* <td>@jefeProyecto.Rechazos</td> *@
                                 <td style="cursor: pointer" data-bs-toggle="modal" data-bs-target='@($"#exampleModal{jefeProyecto.NomJP.GetHashCode()}")' @onclick='(() => traerDatosDetallesQA(jefeProyecto.NomJP, "Rechazos"))'>@jefeProyecto.Rechazos</td>
                             </tr>
@@ -75,6 +76,7 @@
                                                         <tr>
                                                             <th scope="col">Dev</th>
                                                             <th scope="col">Id</th>
+                                                            <th scope="col">IdMH</th>
                                                             <th scope="col">Summary</th>
                                                             <th scope="col">Tipo</th>
                                                             <th scope="col">Fecha En desarrollo</th>
@@ -85,12 +87,12 @@
                                                         </tr>
                                                     </thead>
                                                     <tbody>
-                                                        @foreach (var atrasoModal in (tipoDetallesQA == "Rechazos" ? listaRechazos : listaConQA ))
+                                                        @foreach (var atrasoModal in (tipoDetallesQA == "Rechazos" ? listaRechazos : listaConQA))
                                                         {
-                                                            // Itera sobre la lista correspondiente según el tipo de detalles (Atrasados o En curso)
                                                             <tr>
                                                                 <td>@atrasoModal.Assignee</td>
                                                                 <td>@atrasoModal.idReadable</td>
+                                                                <td>@atrasoModal.IDMh</td>
                                                                 <td>@atrasoModal.summary</td>
                                                                 <td>@atrasoModal.Type</td>
                                                                 <td>
@@ -149,6 +151,7 @@
     private MetricasKPI lista = new();
     private List<FieldsDTO> listaConQA = new();
     private List<FieldsDTO> listaRechazos = new();
+    private List<FieldsDTO> listaRechazosSinId = new();
 
     protected override async Task OnInitializedAsync()
     {
@@ -195,11 +198,16 @@
                 //Si es "Atrasados", obtiene los detalles de atrasos para el jefe de proyecto
                 listaRechazos = ObtieneMetricasService.DetallesFiltrosQAModal(metricas, jefeproyecto, tipo);
             }
+            else if (tipoDetallesQA == "Rechazos Sin Id")
+            {
+                listaRechazosSinId = ObtieneMetricasService.DetallesFiltrosQAModal(metricas, jefeproyecto, tipo);
+            }
             else //if (tipoDetallesQA == "Rechazos")
             {
                 //Si es "En curso", obtiene los detalles de atrasos para el jefe de proyecto
                 listaConQA = ObtieneMetricasService.DetallesFiltrosQAModal(metricas, jefeproyecto, tipo);
             }
+        
 
         }
         finally
