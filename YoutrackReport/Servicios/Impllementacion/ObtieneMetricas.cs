@@ -227,6 +227,43 @@ namespace YoutrackReport.Servicios.Impllementacion
             var datos = metricas;
 
             //Calcular totales            
+            metricasKPI.CantidadTerminado2023 = datos
+                .Where(x => (x.State == "Terminado" || x.State == "Cerrado")
+                            && (x.FechaTerminoReal != null
+                                ? DateTime.Parse(x.FechaTerminoReal).Year == 2023
+                                : DateTime.Now.Year == 2023))
+                .Count();
+
+            metricasKPI.CantidadTerminado2024 = datos
+                .Where(x => (x.State == "Terminado" || x.State == "Cerrado")
+                            && (x.FechaTerminoReal != null
+                                ? DateTime.Parse(x.FechaTerminoReal).Year == 2024
+                                : DateTime.Now.Year == 2024))
+                .Count();
+
+            //Lista para filtrar el año
+            var CantidadTerminado2023 = datos
+                .Where(x => (x.State == "Terminado" || x.State == "Cerrado")
+                            && (x.FechaTerminoReal != null
+                                ? DateTime.Parse(x.FechaTerminoReal).Year == 2023
+                                : DateTime.Now.Year == 2023))
+                .ToList();
+
+            var CantidadTerminado2024 = datos
+                .Where(x => (x.State == "Terminado" || x.State == "Cerrado")
+                            && (x.FechaTerminoReal != null
+                                ? DateTime.Parse(x.FechaTerminoReal).Year == 2024
+                                : DateTime.Now.Year == 2024))
+                .ToList();
+
+            // Imprimir contenido de proyectosConQA
+            Console.WriteLine("Resultados 2024: ");
+            foreach (var item in CantidadTerminado2024)
+            {
+                Console.WriteLine($"IdReadable: {item.idReadable}, FechaTerminoReal: {item.FechaTerminoReal}");
+            }
+
+
             metricasKPI.CantidadTerminado = datos.Where(x => x.State == "Terminado" || x.State == "Cerrado").Count();
             metricasKPI.CantidadEnCurso = datos.Count - metricasKPI.CantidadTerminado;
 
@@ -248,6 +285,7 @@ namespace YoutrackReport.Servicios.Impllementacion
             //Lista para almacenar resultados por jefe de proyecto
             List<KPI_Lista_JP> list_jpKpi = new();
 
+            int totalRechazos = 0;
 
             // Calcular totales por cada jefe de proyecto
             foreach (var jefeProyecto in jefesProyectoUnicos)
@@ -255,18 +293,17 @@ namespace YoutrackReport.Servicios.Impllementacion
                 KPI_Lista_JP jpKpi = new();
                 jpKpi.NomJP = jefeProyecto;
                 jpKpi.CantidadTerminadoJP = datosTer.Where(x => x.JefeDeProyecto == jefeProyecto).Count();
-                jpKpi.CantidadDesarrolloJP = datos.Where(x => x.JefeDeProyecto == jefeProyecto && (x.State == "En desarrollo" || x.State == "En curso")).Count();
-                jpKpi.CantidadDetenidoJP = datos.Where(x => x.JefeDeProyecto == jefeProyecto && (x.State == "Detenido")).Count();
-                jpKpi.CantidadPorIniciarJP = datos.Where(x => x.JefeDeProyecto == jefeProyecto && (x.State == "Pendiente")).Count();
+                jpKpi.CantidadDesarrolloJP = datos.Where(x => x.JefeDeProyecto == jefeProyecto && (x.State == "En desarrollo" || x.State == "En curso" || x.State == "Pendiente" || x.State == "Detenido")).Count();
+                jpKpi.CantidadQAJP = datos.Where(x => x.JefeDeProyecto == jefeProyecto && (x.State == "Instalación QA" || x.State == "Exitoso completo" || x.State == "Fallido" || x.State == "Exitoso liviano" || x.State == "Pruebas" || x.State == "Pruebas PROSYS")).Count();
+                jpKpi.CantidadProdJP = datos.Where(x => x.JefeDeProyecto == jefeProyecto && (x.State == "Instalación producción" || x.State == "Certificación producción")).Count();
 
                 //Proyectos atrasados por estados de jefe de proyecto
-                jpKpi.AtrasoDesarrolloJP = datos.Where(x => x.JefeDeProyecto == jefeProyecto && ((x.FechaTerminoDesa != null ? DateTime.Parse(x.FechaTerminoDesa) : DateTime.Now) < DateTime.Now) && (x.State == "En desarrollo" || x.State == "En curso")).Count();
-                jpKpi.AtrasoQAJP = datos.Where(x => x.JefeDeProyecto == jefeProyecto && ((x.FechaTerminoQA != null ? DateTime.Parse(x.FechaTerminoQA) : DateTime.Now) < DateTime.Now) && (x.State == "Detenido")).Count();
-                jpKpi.AtrasoProduccionJP = datos.Where(x => x.JefeDeProyecto == jefeProyecto && ((x.FechaTerminoReal != null ? DateTime.Parse(x.FechaTerminoReal) : DateTime.Now) < DateTime.Now) && (x.State == "Pendiente")).Count();
-             
+                jpKpi.AtrasoDesarrolloJP = datos.Where(x => x.JefeDeProyecto == jefeProyecto && ((x.FechaTerminoDesa != null ? DateTime.Parse(x.FechaTerminoDesa) : DateTime.Now) < DateTime.Now) && (x.State == "En desarrollo" || x.State == "En curso" || x.State == "Pendiente" || x.State == "Detenido")).Count();
+                jpKpi.AtrasoQAJP = datos.Where(x => x.JefeDeProyecto == jefeProyecto && ((x.FechaTerminoQA != null ? DateTime.Parse(x.FechaTerminoQA) : DateTime.Now) < DateTime.Now) && (x.State == "Instalación QA" || x.State == "Exitoso completo" || x.State == "Fallido" || x.State == "Exitoso liviano" || x.State == "Pruebas" || x.State == "Pruebas PROSYS")).Count();
+                jpKpi.AtrasoProduccionJP = datos.Where(x => x.JefeDeProyecto == jefeProyecto && ((x.FechaTerminoReal != null ? DateTime.Parse(x.FechaTerminoReal) : DateTime.Now) < DateTime.Now) && (x.State == "Instalación producción" || x.State == "Certificación producción")).Count();
 
                 jpKpi.TotalAtrasosJP = jpKpi.AtrasoDesarrolloJP + jpKpi.AtrasoQAJP + jpKpi.AtrasoProduccionJP;
-                jpKpi.TotalJP = jpKpi.CantidadTerminadoJP + jpKpi.CantidadDesarrolloJP + jpKpi.CantidadDetenidoJP + jpKpi.CantidadPorIniciarJP + jpKpi.CantidadEncursoJP;
+                jpKpi.TotalJP = jpKpi.CantidadTerminadoJP + jpKpi.CantidadDesarrolloJP + jpKpi.CantidadQAJP + jpKpi.CantidadProdJP + jpKpi.CantidadEncursoJP;
                 jpKpi.CantidadEncursoJP = jpKpi.TotalJP - jpKpi.CantidadTerminadoJP;
 
 
@@ -289,14 +326,7 @@ namespace YoutrackReport.Servicios.Impllementacion
                     })
                 .Count();
 
-                jpKpi.RechazosSinId = datos
-                    .Where(x => x.JefeDeProyecto == jefeProyecto && x.IDMh == null && x.Type == "Rechazo")
-                    .Select(x => new
-                    {
-                        IdMH = x.IDMh,
-                        IdReadable = x.idReadable
-                    })
-                .Count();
+                totalRechazos += jpKpi.Rechazos;
 
                 //Lista de las incidencias con QA, rechazos y rechazos sin idmh
                 var proyectosConQA = datos
@@ -317,16 +347,6 @@ namespace YoutrackReport.Servicios.Impllementacion
                     })
                 .ToList();
 
-                var proyectosRechazosSinId = datos
-                    .Where(x => x.JefeDeProyecto == jefeProyecto && x.IDMh == null && x.Type == "Rechazo")
-                    .Select(x => new
-                    {
-                        IdMH = x.IDMh,
-                        IdReadable = x.idReadable
-                    })
-                .ToList();
-
-
                 //// Imprimir contenido de proyectosConQA
                 //Console.WriteLine($"Proyectos con QA para el Jefe de Proyecto {jefeProyecto}:");
                 //foreach (var proyecto in proyectosConQA)
@@ -341,8 +361,6 @@ namespace YoutrackReport.Servicios.Impllementacion
                 //    Console.WriteLine($"IdMH: {proyecto.IdMH}, IdReadable: {proyecto.IdReadable}");
                 //}
 
-
-
                 jpKpi.QAFallido = datos
                     .Where(x => x.JefeDeProyecto == jefeProyecto && x.State == "Fallido")
                     .Count();
@@ -352,9 +370,10 @@ namespace YoutrackReport.Servicios.Impllementacion
                     .Count();
 
                 jpKpi.QAExitoso = datos
-                    .Where(x => x.JefeDeProyecto == jefeProyecto //&& x.FechaTerminoQA != null
-                                && (x.State == "Exitoso completo" || x.State == "Exitoso liviano"))
+                    .Where(x => x.JefeDeProyecto == jefeProyecto && (x.State == "Exitoso completo" || x.State == "Exitoso liviano"))
                     .Count();
+
+                jpKpi.TotalQA = jpKpi.ConQACount + jpKpi.Rechazos + jpKpi.QAFallido + jpKpi.QAPendiente + jpKpi.QAExitoso;
 
 
                 //Añade a la lista
@@ -362,11 +381,19 @@ namespace YoutrackReport.Servicios.Impllementacion
 
             }
 
+            // Calcular porcentaje de rechazos después de la iteración completa
+            foreach (var jpKpi in list_jpKpi)
+            {
+                // Calcular el porcentaje de rechazos en comparación con el total de proyectos
+                jpKpi.PorcentajeRechazos = totalRechazos != 0 ? Math.Round((double)(jpKpi.Rechazos * 100) / totalRechazos, 1) : 0;
+            }
+
             //Asignar la lista de resultados a la propiedad de la clase MetricasKPI
             metricasKPI.kPI_Lista_JPs = list_jpKpi;
 
             return metricasKPI;
         }
+
 
 
         //Metodo para los modal de Incidencias con QA y los rechazos
@@ -450,7 +477,7 @@ namespace YoutrackReport.Servicios.Impllementacion
             {
                 var jpKpiDesa = datos
                 .Where(x => x.JefeDeProyecto == nomJefeProyecto && ((x.FechaTerminoDesa != null ? DateTime.Parse(x.FechaTerminoDesa) : DateTime.Now) < DateTime.Now) &&
-                (x.State == "En desarrollo" || x.State == "En curso"))
+                (x.State == "En desarrollo" || x.State == "En curso" || x.State == "Pendiente" || x.State == "Detenido"))
                 .Select(x =>
                 {
                     x.Subsystem = x.Subsystem;
@@ -466,7 +493,7 @@ namespace YoutrackReport.Servicios.Impllementacion
 
                 var jpKpiQA = datos
                     .Where(x => x.JefeDeProyecto == nomJefeProyecto && ((x.FechaTerminoQA != null ? DateTime.Parse(x.FechaTerminoQA) : DateTime.Now) < DateTime.Now) &&
-                    (x.State == "Detenido"))
+                    (x.State == "Instalación QA" || x.State == "Exitoso completo" || x.State == "Fallido" || x.State == "Exitoso liviano" || x.State == "Pruebas" || x.State == "Pruebas PROSYS"))
                     .Select(x =>
                     {
                         x.Subsystem = x.Subsystem;
@@ -482,7 +509,7 @@ namespace YoutrackReport.Servicios.Impllementacion
 
                 var jpKpiProd = datos
                 .Where(x => x.JefeDeProyecto == nomJefeProyecto && ((x.FechaTerminoReal != null ? DateTime.Parse(x.FechaTerminoReal) : DateTime.Now) < DateTime.Now) &&
-                (x.State == "Pendiente"))
+                (x.State == "Instalación producción" || x.State == "Certificación producción"))
                 .Select(x =>
                 {
                     x.Subsystem = x.Subsystem;

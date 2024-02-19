@@ -27,12 +27,13 @@
                     <thead>
                         <tr>
                             <th scope="col">Jefe de proyectos</th>
+                            <th scope="col">Total</th>
                             <th scope="col">Pendientes</th>
                             <th scope="col">Estado fallido</th>
                             <th scope="col">Exitoso</th>
-                            <th scope="col">Incidencias con QA</th>
+                            <th scope="col">QA Prosys</th>
                             @* <th scope="col">Rechazos sin IDMH</th> *@
-                            <th scope="col">Rechazos</th>
+                            <th scope="col">Rechazos HDI</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -40,15 +41,12 @@
                         {
                             <tr>
                                 <td class="text-start">@jefeProyecto.NomJP</td>
+                                <td>@jefeProyecto.TotalQA</td>
                                 <td>@jefeProyecto.QAPendiente</td>
                                 <td>@jefeProyecto.QAFallido</td>
                                 <td>@jefeProyecto.QAExitoso</td>
-                                @* <td>@jefeProyecto.ConQACount</td> *@
                                 <td style="cursor: pointer" data-bs-toggle="modal" data-bs-target='@($"#exampleModal{jefeProyecto.NomJP.GetHashCode()}")' @onclick='(() => traerDatosDetallesQA(jefeProyecto.NomJP, "Con QA"))'>@jefeProyecto.ConQACount</td>
-                                @* <td style="cursor: pointer" data-bs-toggle="modal" data-bs-target='@($"#exampleModal{jefeProyecto.NomJP.GetHashCode()}")' @onclick='(() => traerDatosDetallesQA(jefeProyecto.NomJP, "Rechazos Sin Id"))'>@jefeProyecto.RechazosSinId</td> *@
-                                @* <td>@jefeProyecto.RechazosSinId</td> *@
-                                @* <td>@jefeProyecto.Rechazos</td> *@
-                                <td style="cursor: pointer" data-bs-toggle="modal" data-bs-target='@($"#exampleModal{jefeProyecto.NomJP.GetHashCode()}")' @onclick='(() => traerDatosDetallesQA(jefeProyecto.NomJP, "Rechazos"))'>@jefeProyecto.Rechazos</td>
+                                <td style="cursor: pointer" data-bs-toggle="modal" data-bs-target='@($"#exampleModal{jefeProyecto.NomJP.GetHashCode()}")' @onclick='(() => traerDatosDetallesQA(jefeProyecto.NomJP, "Rechazos"))'>@(jefeProyecto.Rechazos) / @(jefeProyecto.PorcentajeRechazos)%</td>
                             </tr>
 
                             <!-- Modal -->
@@ -161,8 +159,13 @@
 
             if (metricas != null)
             {
-                //Cuenta solo los proyectos Control de calidad Prosys
-                metricas = metricas.Where(x => x.Project == "Control de calidad Prosys").ToList();
+                //Metricas 2024
+                metricas = metricas.Where(x => x.Project == "Control de calidad Prosys" && (x.FechaTerminoReal != null
+                                ? DateTime.Parse(x.FechaTerminoReal).Year == 2024
+                                : DateTime.Now.Year == 2024)).ToList();
+                
+                // //Metricas todos los años
+                // metricas = metricas.Where(x => x.Project == "Control de calidad Prosys").ToList();
 
                 totalProyectos = metricas.Count;
                 MetricasKPI metricasKPI = ObtieneMetricasService.CalcularTotales(metricas);
@@ -188,8 +191,14 @@
             StateHasChanged();
 
             metricas = await ObtieneMetricasService.ObtenerDatosComunes();
-            //listaQAFechasNulas = ObtieneMetricasService.DetallesQAFechasNull(metricas, jefeproyecto, tipo);
-            metricas = metricas.Where(x => x.Project == "Control de calidad Prosys").ToList();
+
+            // //Metricas todo los años
+            // metricas = metricas.Where(x => x.Project == "Control de calidad Prosys").ToList();
+
+            //Metricas 2024
+            metricas = metricas.Where(x => x.Project == "Control de calidad Prosys" && (x.FechaTerminoReal != null
+                                ? DateTime.Parse(x.FechaTerminoReal).Year == 2024
+                                : DateTime.Now.Year == 2024)).ToList();
 
 
             // Verifica el tipo de detalles

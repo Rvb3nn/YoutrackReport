@@ -34,6 +34,22 @@
 
                         <div class="row">
                             <div class="col-md">
+                                <div class="card text-dark bg-secondary mb-3 estado-box">
+                                    <div class="card-body">
+                                        <h5 class="card-title">Prod 2023</h5>
+                                        <p class="card-text">@lista.CantidadTerminado2023</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md">
+                                <div class="card text-dark bg-secondary mb-3 estado-box">
+                                    <div class="card-body">
+                                        <h5 class="card-title">Prod 2024</h5>
+                                        <p class="card-text">@lista.CantidadTerminado2024</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md">
                                 <div class="card text-dark bg-info mb-3 estado-box">
                                     <div class="card-body">
                                         <h5 class="card-title">Total de proyectos</h5>
@@ -77,9 +93,9 @@
                             @* <th scope="col">Total</th> *@
                             @* <th scope="col">Terminados</th> *@
                             <th scope="col">En curso</th>
-                            <th scope="col">Desarrollo</th>
-                            <th scope="col">Detenido</th>
-                            <th scope="col">Por iniciar</th>
+                            <th scope="col">En desarrollo</th>
+                            <th scope="col">QA</th>
+                            <th scope="col">Producción</th>
                             <th scope="col">Atrasados</th>
                         </tr>
                     </thead>
@@ -92,8 +108,8 @@
                                 @* <td>@jefeProyecto.CantidadTerminadoJP</td> *@
                                 <td style="cursor: pointer" data-bs-toggle="modal" data-bs-target='@($"#exampleModal{jefeProyecto.NomJP.GetHashCode()}")' @onclick='(() => traerDatosDetallesJP(jefeProyecto.NomJP, "En curso"))'>@jefeProyecto.CantidadEncursoJP</td>
                                 <td>@jefeProyecto.CantidadDesarrolloJP</td>
-                                <td>@jefeProyecto.CantidadDetenidoJP</td>
-                                <td>@jefeProyecto.CantidadPorIniciarJP</td>
+                                <td>@jefeProyecto.CantidadQAJP</td>
+                                <td>@jefeProyecto.CantidadProdJP</td>
                                 <td class="modal-atraso" style="cursor: pointer;" data-bs-toggle="modal" data-bs-target='@($"#exampleModal{jefeProyecto.NomJP.GetHashCode()}")' @onclick='(() => traerDatosDetallesJP(jefeProyecto.NomJP, "Atrasados"))'>
                                     <span class='@((jefeProyecto.TotalAtrasosJP != 0) ? "atraso-con-valor" : "")'>@jefeProyecto.TotalAtrasosJP</span>
                                 </td>
