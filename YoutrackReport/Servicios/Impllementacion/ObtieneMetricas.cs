@@ -530,7 +530,9 @@ namespace YoutrackReport.Servicios.Impllementacion
             else if (tipo == "En curso")
             {
                 var jpKpiEnCurso = datos
-                .Where(x => x.JefeDeProyecto == nomJefeProyecto && (x.State == "En desarrollo" || x.State == "Pendiente" || x.State == "Detenido" || x.State == "En curso"))
+                .Where(x => x.JefeDeProyecto == nomJefeProyecto && (x.State == "En desarrollo" || x.State == "Pendiente" || x.State == "Detenido" || x.State == "En curso"
+                || x.State == "Instalación QA" || x.State == "Exitoso completo" || x.State == "Fallido" || x.State == "Exitoso liviano" || x.State == "Pruebas" || x.State == "Pruebas PROSYS"
+                || x.State == "Instalación producción" || x.State == "Certificación producción"))
                 .Select(x =>
                 {
                     x.Subsystem = x.Subsystem;
