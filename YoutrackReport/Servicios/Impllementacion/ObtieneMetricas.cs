@@ -229,39 +229,36 @@ namespace YoutrackReport.Servicios.Impllementacion
             //Calcular totales            
             metricasKPI.CantidadTerminado2023 = datos
                 .Where(x => (x.State == "Terminado" || x.State == "Cerrado")
-                            && (x.FechaTerminoReal != null
-                                ? DateTime.Parse(x.FechaTerminoReal).Year == 2023
-                                : DateTime.Now.Year == 2023))
+                            && x.FechaTerminoReal != null
+                            && DateTime.Parse(x.FechaTerminoReal).Year == 2023)     //No toma las fechas nulas
                 .Count();
 
             metricasKPI.CantidadTerminado2024 = datos
                 .Where(x => (x.State == "Terminado" || x.State == "Cerrado")
-                            && (x.FechaTerminoReal != null
-                                ? DateTime.Parse(x.FechaTerminoReal).Year == 2024
-                                : DateTime.Now.Year == 2024))
+                            && x.FechaTerminoReal != null
+                            && DateTime.Parse(x.FechaTerminoReal).Year == 2024)     //No toma las fechas nulas
                 .Count();
 
             //Lista para filtrar el año
             var CantidadTerminado2023 = datos
                 .Where(x => (x.State == "Terminado" || x.State == "Cerrado")
-                            && (x.FechaTerminoReal != null
-                                ? DateTime.Parse(x.FechaTerminoReal).Year == 2023
-                                : DateTime.Now.Year == 2023))
+                            && x.FechaTerminoReal != null
+                            && DateTime.Parse(x.FechaTerminoReal).Year == 2023)     //No toma las fechas nulas
                 .ToList();
 
             var CantidadTerminado2024 = datos
                 .Where(x => (x.State == "Terminado" || x.State == "Cerrado")
-                            && (x.FechaTerminoReal != null
-                                ? DateTime.Parse(x.FechaTerminoReal).Year == 2024
-                                : DateTime.Now.Year == 2024))
+                            && x.FechaTerminoReal != null
+                            && DateTime.Parse(x.FechaTerminoReal).Year == 2024)     //No toma las fechas nulas
                 .ToList();
 
-            // Imprimir contenido de proyectosConQA
-            Console.WriteLine("Resultados 2024: ");
-            foreach (var item in CantidadTerminado2024)
-            {
-                Console.WriteLine($"IdReadable: {item.idReadable}, FechaTerminoReal: {item.FechaTerminoReal}");
-            }
+
+            //// Imprimir contenido de proyectosConQA
+            //Console.WriteLine("Resultados 2024: ");
+            //foreach (var item in CantidadTerminado2024)
+            //{
+            //    Console.WriteLine($"IdReadable: {item.idReadable}, FechaTerminoReal: {item.FechaTerminoReal}");
+            //}
 
 
             metricasKPI.CantidadTerminado = datos.Where(x => x.State == "Terminado" || x.State == "Cerrado").Count();
@@ -297,7 +294,7 @@ namespace YoutrackReport.Servicios.Impllementacion
                 jpKpi.CantidadQAJP = datos.Where(x => x.JefeDeProyecto == jefeProyecto && (x.State == "Instalación QA" || x.State == "Exitoso completo" || x.State == "Fallido" || x.State == "Exitoso liviano" || x.State == "Pruebas" || x.State == "Pruebas PROSYS")).Count();
                 jpKpi.CantidadProdJP = datos.Where(x => x.JefeDeProyecto == jefeProyecto && (x.State == "Instalación producción" || x.State == "Certificación producción")).Count();
 
-                //Proyectos atrasados por estados de jefe de proyecto
+                //Proyectos atrasados por estados de jefe de proyecto - tomando fechas nulas
                 jpKpi.AtrasoDesarrolloJP = datos.Where(x => x.JefeDeProyecto == jefeProyecto && ((x.FechaTerminoDesa != null ? DateTime.Parse(x.FechaTerminoDesa) : DateTime.Now) < DateTime.Now) && (x.State == "En desarrollo" || x.State == "En curso" || x.State == "Pendiente" || x.State == "Detenido")).Count();
                 jpKpi.AtrasoQAJP = datos.Where(x => x.JefeDeProyecto == jefeProyecto && ((x.FechaTerminoQA != null ? DateTime.Parse(x.FechaTerminoQA) : DateTime.Now) < DateTime.Now) && (x.State == "Instalación QA" || x.State == "Exitoso completo" || x.State == "Fallido" || x.State == "Exitoso liviano" || x.State == "Pruebas" || x.State == "Pruebas PROSYS")).Count();
                 jpKpi.AtrasoProduccionJP = datos.Where(x => x.JefeDeProyecto == jefeProyecto && ((x.FechaTerminoReal != null ? DateTime.Parse(x.FechaTerminoReal) : DateTime.Now) < DateTime.Now) && (x.State == "Instalación producción" || x.State == "Certificación producción")).Count();
@@ -305,7 +302,7 @@ namespace YoutrackReport.Servicios.Impllementacion
                 jpKpi.TotalAtrasosJP = jpKpi.AtrasoDesarrolloJP + jpKpi.AtrasoQAJP + jpKpi.AtrasoProduccionJP;
                 jpKpi.TotalJP = jpKpi.CantidadTerminadoJP + jpKpi.CantidadDesarrolloJP + jpKpi.CantidadQAJP + jpKpi.CantidadProdJP + jpKpi.CantidadEncursoJP;
                 jpKpi.CantidadEncursoJP = jpKpi.TotalJP - jpKpi.CantidadTerminadoJP;
-
+               
 
                 //Contar incidencias Con QA, rechazos y rechazos sin idmh
                 jpKpi.ConQACount = datos
@@ -317,6 +314,7 @@ namespace YoutrackReport.Servicios.Impllementacion
                     })
                 .Count();
 
+                //Toma los rechazos que tengan asignado un IDMH
                 jpKpi.Rechazos = datos
                     .Where(x => x.JefeDeProyecto == jefeProyecto && x.IDMh != null && x.Type == "Rechazo")
                     .Select(x => new
@@ -417,6 +415,7 @@ namespace YoutrackReport.Servicios.Impllementacion
                     x.Type = x.Type;
                     x.idReadable = x.idReadable;
                     x.summary = x.summary;
+                    x.UrlYT = _configuration["UrlIndicencias"] + x.idReadable + "/" + Uri.EscapeDataString(x.summary);
                     return x;
                 })
                 .ToList();
@@ -436,6 +435,7 @@ namespace YoutrackReport.Servicios.Impllementacion
                         x.Type = x.Type;
                         x.idReadable = x.idReadable;
                         x.summary = x.summary;
+                        x.UrlYT = _configuration["UrlIndicencias"] + x.idReadable + "/" + Uri.EscapeDataString(x.summary);
                         return x;
                     })
                 .ToList();
@@ -455,6 +455,7 @@ namespace YoutrackReport.Servicios.Impllementacion
                     x.Type = x.Type;
                     x.idReadable = x.idReadable;
                     x.summary = x.summary;
+                    x.UrlYT = _configuration["UrlIndicencias"] + x.idReadable + "/" + Uri.EscapeDataString(x.summary);
                     return x;
                 })
                 .ToList();

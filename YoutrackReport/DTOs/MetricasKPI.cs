@@ -35,6 +35,7 @@ namespace YoutrackReport.DTOs
         public int RechazosSinId { get; set; }
         public double PorcentajeRechazos { get; set; }
         public int TotalRechazos { get; set; }
+        public int JPTerminado { get; set; }
 
     }
 
