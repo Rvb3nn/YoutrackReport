@@ -159,13 +159,19 @@
 
             if (metricas != null)
             {
-                //Metricas 2024
-                metricas = metricas.Where(x => x.Project == "Control de calidad Prosys" && (x.FechaTerminoReal != null
-                                ? DateTime.Parse(x.FechaTerminoReal).Year == 2024
-                                : DateTime.Now.Year == 2024)).ToList();
+                // //Metricas 2024
+                // metricas = metricas.Where(x => x.Project == "Control de calidad Prosys" && (x.FechaTerminoReal != null
+                //                 ? DateTime.Parse(x.FechaTerminoReal).Year == 2024
+                //                 : DateTime.Now.Year == 2024)).ToList();
+
+
+                // //Metricas 2024 no cuenta fechas nulas
+                // metricas = metricas.Where(x => x.Project == "Control de calidad Prosys" && x.FechaTerminoReal != null
+                //                 && DateTime.Parse(x.FechaTerminoReal).Year == 2024)
+                //                 .ToList();
                 
-                // //Metricas todos los años
-                // metricas = metricas.Where(x => x.Project == "Control de calidad Prosys").ToList();
+                //Metricas todos los años
+                metricas = metricas.Where(x => x.Project == "Control de calidad Prosys").ToList();
 
                 totalProyectos = metricas.Count;
                 MetricasKPI metricasKPI = ObtieneMetricasService.CalcularTotales(metricas);
@@ -192,13 +198,19 @@
 
             metricas = await ObtieneMetricasService.ObtenerDatosComunes();
 
-            // //Metricas todo los años
-            // metricas = metricas.Where(x => x.Project == "Control de calidad Prosys").ToList();
+            // //Metricas 2024
+            // metricas = metricas.Where(x => x.Project == "Control de calidad Prosys" && (x.FechaTerminoReal != null
+            //                     ? DateTime.Parse(x.FechaTerminoReal).Year == 2024
+            //                     : DateTime.Now.Year == 2024)).ToList();
 
-            //Metricas 2024
-            metricas = metricas.Where(x => x.Project == "Control de calidad Prosys" && (x.FechaTerminoReal != null
-                                ? DateTime.Parse(x.FechaTerminoReal).Year == 2024
-                                : DateTime.Now.Year == 2024)).ToList();
+            
+            // //Metricas 2024 no cuenta fechas nulas
+            // metricas = metricas.Where(x => x.Project == "Control de calidad Prosys" && x.FechaTerminoReal != null
+            //                 && DateTime.Parse(x.FechaTerminoReal).Year == 2024)
+            //                 .ToList();
+
+            //Metricas todo los años
+            metricas = metricas.Where(x => x.Project == "Control de calidad Prosys").ToList();
 
 
             // Verifica el tipo de detalles

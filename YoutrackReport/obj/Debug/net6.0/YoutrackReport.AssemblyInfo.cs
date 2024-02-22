@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("YoutrackReport")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+68247314fefa8ef53f56c019cf369d012c2dedcb")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+65ba46a9a4e80cea72f982028e587c7955043005")]
 [assembly: System.Reflection.AssemblyProductAttribute("YoutrackReport")]
 [assembly: System.Reflection.AssemblyTitleAttribute("YoutrackReport")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
