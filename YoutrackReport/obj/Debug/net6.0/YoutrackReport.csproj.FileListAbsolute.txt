@@ -304,3 +304,4 @@ C:\Users\rtoro\OneDrive\Escritorio\ALL\Tareas U\Git\YoutrackReport\YoutrackRepor
 C:\Users\rtoro\OneDrive\Escritorio\ALL\Tareas U\Git\YoutrackReport\YoutrackReport\bin\Debug\net6.0\Microsoft.JSInterop.dll
 C:\Users\rtoro\OneDrive\Escritorio\ALL\Tareas U\Git\YoutrackReport\YoutrackReport\bin\Debug\net6.0\Microsoft.JSInterop.WebAssembly.dll
 C:\Users\rtoro\OneDrive\Escritorio\ALL\Tareas U\Git\YoutrackReport\YoutrackReport\bin\Debug\net6.0\System.IO.Pipelines.dll
+C:\Users\rtoro\OneDrive\Escritorio\ALL\Tareas U\Git\YoutrackReport\YoutrackReport\bin\Debug\net6.0\ChartJs.Blazor.dll

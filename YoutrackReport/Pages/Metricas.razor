@@ -7,6 +7,8 @@
 @using System.Collections.Generic
 @using YoutrackReport.Servicios.Impllementacion
 
+@using ChartJs.Blazor;
+
 @inject ObtieneMetricas ObtieneMetricasService
 
 
@@ -23,6 +25,16 @@
         </div>
     </div>
 
+    @* <div class="row">
+        <div class="col-md-12">
+            <label for="selectYear">Seleccionar Año:</label>
+            <select id="selectYear" @onchange="ActualizarMetricas">
+                <option value="2024">2024</option>
+                <option value="2023">2023</option>
+            </select>
+        </div>
+    </div> *@
+
     @if (metricas != null)
     {
         <div class="row">
@@ -34,7 +46,7 @@
 
                         <div class="row">
                             <div class="col-md">
-                                <div class="card text-white bg-secondary mb-3 estado-box">
+                                <div class="card text-white bg-purple mb-3 estado-box">
                                     <div class="card-body">
                                         <h5 class="card-title">Prod 2023</h5>
                                         <p class="card-text">@lista.CantidadTerminado2023</p>
@@ -42,23 +54,15 @@
                                 </div>
                             </div>
                             <div class="col-md">
-                                <div class="card text-white bg-secondary mb-3 estado-box">
+                                <div class="card text-white bg-warning mb-3 estado-box">
                                     <div class="card-body">
                                         <h5 class="card-title">Prod 2024</h5>
                                         <p class="card-text">@lista.CantidadTerminado2024</p>
                                     </div>
                                 </div>
                             </div>
-                            @* <div class="col-md">
-                                <div class="card text-white bg-info mb-3 estado-box">
-                                    <div class="card-body">
-                                        <h5 class="card-title">Total de proyectos</h5>
-                                        <p class="card-text">@totalProyectos</p>
-                                    </div>
-                                </div>
-                            </div> *@
                             <div class="col-md">
-                                <div class="card text-white bg-warning mb-3 estado-box">
+                                <div class="card text-white bg-blue mb-3 estado-box">
                                     <div class="card-body">
                                         <h5 class="card-title">En curso</h5>
                                         <p class="card-text">@lista.CantidadEnCurso</p>
@@ -73,6 +77,14 @@
                                     </div>
                                 </div>
                             </div>
+                            @* <div class="col-md">
+                                <div class="card text-white bg-red mb-3 estado-box">
+                                    <div class="card-body">
+                                        <h5 class="card-title">Total atrasos</h5>
+                                        <p class="card-text">...</p>
+                                    </div>
+                                </div>
+                            </div> *@
                         </div>
 
                     </div>
@@ -83,6 +95,7 @@
             </div>
         </div>
 
+
         <!-- TABLA JP -->
         <div class="row" style="padding-top: 50px">
             <div class="col-12">
@@ -90,8 +103,6 @@
                     <thead>
                         <tr>
                             <th scope="col">Jefe de proyectos</th>
-                            @* <th scope="col">Total</th> *@
-                            @* <th scope="col">Terminados</th> *@
                             <th scope="col">En curso</th>
                             <th scope="col">En desarrollo</th>
                             <th scope="col">QA</th>
@@ -104,12 +115,12 @@
                         {
                             <tr>
                                 <td class="text-start">@jefeProyecto.NomJP</td>
-                                @* <td>@jefeProyecto.TotalJP</td> *@
-                                @* <td>@jefeProyecto.CantidadTerminadoJP</td> *@
                                 <td style="cursor: pointer" data-bs-toggle="modal" data-bs-target='@($"#exampleModal{jefeProyecto.NomJP.GetHashCode()}")' @onclick='(() => traerDatosDetallesJP(jefeProyecto.NomJP, "En curso"))'>@jefeProyecto.CantidadEncursoJP</td>
                                 <td>@jefeProyecto.CantidadDesarrolloJP</td>
                                 <td>@jefeProyecto.CantidadQAJP</td>
-                                <td>@jefeProyecto.CantidadProdJP</td>
+                                <td class="modal-atraso" style="cursor: pointer;" data-bs-toggle="modal" data-bs-target='@($"#exampleModal{jefeProyecto.NomJP.GetHashCode()}")' @onclick='(() => traerDatosDetallesJP(jefeProyecto.NomJP, "Producción"))'>
+                                    <span class='@((jefeProyecto.CantidadProdJP != 0) ? "prod-con-valor" : "")'>@jefeProyecto.CantidadProdJP</span>
+                                </td>
                                 <td class="modal-atraso" style="cursor: pointer;" data-bs-toggle="modal" data-bs-target='@($"#exampleModal{jefeProyecto.NomJP.GetHashCode()}")' @onclick='(() => traerDatosDetallesJP(jefeProyecto.NomJP, "Atrasados"))'>
                                     <span class='@((jefeProyecto.TotalAtrasosJP != 0) ? "atraso-con-valor" : "")'>@jefeProyecto.TotalAtrasosJP</span>
                                 </td>
@@ -156,7 +167,7 @@
                                                         </tr>
                                                     </thead>
                                                     <tbody>
-                                                        @foreach (var atrasoModal in (tipoDetalles == "Atrasados" ? listaAtrasados : listaEnCurso))
+                                                        @foreach (var atrasoModal in (tipoDetalles == "Atrasados" ? listaAtrasados : (tipoDetalles == "En curso" ? listaEnCurso : listaProduccion)))
                                                         {
                                                             // Itera sobre la lista correspondiente según el tipo de detalles (Atrasados o En curso)
                                                             <tr>
@@ -219,6 +230,39 @@
     private MetricasKPI lista = new();
     private List<FieldsDTO> listaAtrasados = new();
     private List<FieldsDTO> listaEnCurso = new();
+    private List<FieldsDTO> listaProduccion = new();
+
+    private string selectedYear = "2024"; // Año predeterminado
+
+
+    // private async Task ActualizarMetricas(ChangeEventArgs e)
+    // {
+    //     selectedYear = e.Value.ToString();
+
+    //     try
+    //     {
+    //         metricas = await ObtieneMetricasService.ObtenerDatosComunes();
+
+    //         // Filtrar por año seleccionado
+    //         metricas = metricas
+    //             .Where(x => x.Project != "Control de calidad Prosys" && x.FechaTerminoReal != null && DateTime.Parse(x.FechaTerminoReal).Year == int.Parse(selectedYear))
+    //             .ToList();
+
+    //         // Recalcular totales
+    //         totalProyectos = metricas.Count;
+    //         MetricasKPI metricasKPI = ObtieneMetricasService.CalcularTotales(metricas);
+    //         metricasKPI = await ObtieneMetricasService.CalcularTotalesPorJP(metricas, metricasKPI);
+    //         lista = metricasKPI;
+
+    //         // Forzar la actualización del estado para que se refleje inmediatamente en la interfaz de usuario
+    //         StateHasChanged();
+    //     }
+    //     catch (Exception ex)
+    //     {
+    //         Console.WriteLine($"Error al obtener métricas: {ex.Message}");
+    //     }
+    // }
+
 
 
     protected override async Task OnInitializedAsync()
@@ -269,6 +313,11 @@
             {
                 //Si es "En curso", obtiene los detalles de atrasos para el jefe de proyecto
                 listaEnCurso = ObtieneMetricasService.DetallesJPModal(metricas, jefeProyecto, tipo);
+            }
+            else if (tipoDetalles == "Producción")
+            {
+                //Si es "En curso", obtiene los detalles de atrasos para el jefe de proyecto
+                listaProduccion = ObtieneMetricasService.DetallesJPModal(metricas, jefeProyecto, tipo);
             }
 
         }

@@ -8,6 +8,7 @@ namespace YoutrackReport.DTOs
         public int CantidadTerminado { get; set; }
         public int CantidadTerminado2023 { get; set; }
         public int CantidadTerminado2024 { get; set; }
+        public int TotalAtrasosJP { get; set; }
 
         public List<KPI_Lista_JP> kPI_Lista_JPs { get; set; }
     }
