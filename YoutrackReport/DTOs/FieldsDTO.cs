@@ -44,41 +44,35 @@ namespace YoutrackReport.DTOs
         public string Completado { get; set; }
         public string FixedInBuild { get; set; }
 
-        public bool TieneQA()
-        {
-            return (Issues != null && Issues.Any()) || (links != null && links.Any(link => link.issues != null && link.issues.Any()));
-        }
-
-
-        public IEnumerable<object> ToArray()
-        {
-            return new object[] {
-        Project,
-        Subsystem,
-        Type,
-        Priority,
-        State,
-        RechazoHDI,
-        EncargadoHDI,
-        JefeDeProyecto,
-        Assignee,
-        DueDate,
-        Estimacion,
-        FechaInicio,
-        FechaTerminoDesa,
-        FechaTerminoQA,
-        FechaTerminoReal,
-        URLJira,
-        URLBitbucket,
-        URLSonarQube,
-        Dificultad,
-        IDMh,
-        IDAgil,
-        SprintsSeparadosPorComa,
-        Completado,
-        FixedInBuild
-        };
-        }
+        //public IEnumerable<object> ToArray()
+        //{
+        //    return new object[] {
+        //Project,
+        //Subsystem,
+        //Type,
+        //Priority,
+        //State,
+        //RechazoHDI,
+        //EncargadoHDI,
+        //JefeDeProyecto,
+        //Assignee,
+        //DueDate,
+        //Estimacion,
+        //FechaInicio,
+        //FechaTerminoDesa,
+        //FechaTerminoQA,
+        //FechaTerminoReal,
+        //URLJira,
+        //URLBitbucket,
+        //URLSonarQube,
+        //Dificultad,
+        //IDMh,
+        //IDAgil,
+        //SprintsSeparadosPorComa,
+        //Completado,
+        //FixedInBuild
+        //};
+        //}
 
 
 

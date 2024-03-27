@@ -11,6 +11,7 @@ namespace YoutrackReport.DTOs
         public int TotalAtrasosJP { get; set; }
 
         public List<KPI_Lista_JP> kPI_Lista_JPs { get; set; }
+        public List<T_Rechazos> T_RechazosT { get; set; }
     }
 
     public class KPI_Lista_JP 
@@ -37,7 +38,18 @@ namespace YoutrackReport.DTOs
         public double PorcentajeRechazos { get; set; }
         public int TotalRechazos { get; set; }
         public int JPTerminado { get; set; }
+        //public int TipoRechazosCount { get; set; }
+        //public int TipoRechazos { get; set; }
+        //public string NomRechazo { get; set; }
+        
 
+    }
+
+    public class T_Rechazos
+    {
+        public int TipoRechazosCount { get; set; }
+        public int TipoRechazos { get; set; }
+        public string NomRechazo { get; set; }
     }
 
 }

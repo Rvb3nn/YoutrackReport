@@ -129,6 +129,31 @@
                 </table>
             </div>
         </div>
+
+
+        <div class="row" style="padding-top: 50px">
+            <div class="col-12">
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th scope="col">Rechazos HDI</th>
+                            <th scope="col">Cantidad</th>
+
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var tipoRechazo in lista.T_RechazosT)
+                        {
+                            <tr>
+                                <td>@tipoRechazo.NomRechazo</td>
+                                <td>@tipoRechazo.TipoRechazosCount</td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
     }
     else
     {
@@ -157,24 +182,26 @@
 
             if (metricas != null)
             {
-                // //Metricas 2024
-                // metricas = metricas.Where(x => x.Project == "Control de calidad Prosys" && (x.FechaTerminoReal != null
-                //                 ? DateTime.Parse(x.FechaTerminoReal).Year == 2024
-                //                 : DateTime.Now.Year == 2024)).ToList();
-
-
                 //Metricas 2024 no cuenta fechas nulas
                 metricas = metricas.Where(x => x.Project == "Control de calidad Prosys" && x.FechaTerminoReal != null
                                 && DateTime.Parse(x.FechaTerminoReal).Year == 2024)
                                 .ToList();
-                
-                // //Metricas todos los años
-                // metricas = metricas.Where(x => x.Project == "Control de calidad Prosys").ToList();
+
+                // totalProyectos = metricas.Count;
+                // //MetricasKPI metricasKPI = await ObtieneMetricasService.TiposRechazos(metricas, new MetricasKPI());
+                // MetricasKPI metricasKPI = ObtieneMetricasService.CalcularTotales(metricas);
+                // metricasKPI = await ObtieneMetricasService.CalcularTotalesPorJP(metricas, metricasKPI);
+                // //metricasKPI = await ObtieneMetricasService.TiposRechazos(metricas, metricasKPI);
+                // lista = metricasKPI;
+
 
                 totalProyectos = metricas.Count;
                 MetricasKPI metricasKPI = ObtieneMetricasService.CalcularTotales(metricas);
                 metricasKPI = await ObtieneMetricasService.CalcularTotalesPorJP(metricas, metricasKPI);
+                metricasKPI = await ObtieneMetricasService.TiposRechazos(metricas, metricasKPI);
                 lista = metricasKPI;
+
+
             }
         }
         catch (Exception ex)

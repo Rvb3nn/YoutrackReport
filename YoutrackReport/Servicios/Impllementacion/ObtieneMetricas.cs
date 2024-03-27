@@ -306,7 +306,6 @@ namespace YoutrackReport.Servicios.Impllementacion
                 jpKpi.TotalJP = jpKpi.CantidadTerminadoJP + jpKpi.CantidadDesarrolloJP + jpKpi.CantidadQAJP + jpKpi.CantidadProdJP + jpKpi.CantidadEncursoJP;
                 jpKpi.CantidadEncursoJP = jpKpi.TotalJP - jpKpi.CantidadTerminadoJP;
                
-
                 //Contar incidencias Con QA, rechazos y rechazos sin idmh
                 jpKpi.ConQACount = datos
                     .Where(x => x.JefeDeProyecto == jefeProyecto && x.Type != "Rechazo") 
@@ -362,6 +361,20 @@ namespace YoutrackReport.Servicios.Impllementacion
                     })
                 .ToList();
 
+
+
+                var TipoRechazos = datos
+                    .Where(x => x.JefeDeProyecto == jefeProyecto && x.IDMh != null && x.Type == "Rechazo")
+                .Select(x => new
+                {
+                    Type = x.Type,
+                    idReadable = x.idReadable,
+                    summary = x.summary,
+                })
+                .ToList();
+
+
+
                 //// Imprimir contenido de proyectosConQA
                 //Console.WriteLine($"Proyectos con QA para el Jefe de Proyecto {jefeProyecto}:");
                 //foreach (var proyecto in proyectosConQA)
@@ -411,7 +424,6 @@ namespace YoutrackReport.Servicios.Impllementacion
 
             return metricasKPI;
         }
-
 
 
         //Metodo para los modal de Incidencias con QA y los rechazos
@@ -622,6 +634,118 @@ namespace YoutrackReport.Servicios.Impllementacion
             }
 
             return jefesProyectoUnicos;
+        }
+
+
+        //Metodo para summary tipo rechazo
+        public async Task<List<string>> ObtenerTiposRechazos(List<FieldsDTO> metricas)
+        {
+
+            // Lista para almacenar los tipos de rechazos
+            List<string> tiposRechazos = new List<string>();
+
+            foreach (FieldsDTO res in metricas)
+            {
+                if (res.summary != null)
+                {
+                    string summary_ = res.summary;
+
+                    // Agrega a la lista si aún no está presente
+                    if (!tiposRechazos.Contains(summary_))
+                    {
+                        tiposRechazos.Add(summary_);
+                    }
+                }
+            }
+
+            return tiposRechazos;
+        }
+
+        //Metodo para obtener los tipos de rechazos
+        public async Task<MetricasKPI> TiposRechazos (List<FieldsDTO> metricas, MetricasKPI metricasKPI)
+        {
+            // Obtener la lista de los tipos de rechazos
+            List<string> tiposRechazos = await ObtenerTiposRechazos(metricas);
+
+            //Obtener datos
+            var datos = metricas;
+
+
+            //Lista para almacenar resultados por rechazos
+            List<T_Rechazos> list_jpKpi = new();
+
+            //// Calcular totales por cada jefe de proyecto
+            //foreach (var summary_ in tiposRechazos)
+            //{
+            //    T_Rechazos jpKpi = new();
+
+            //    jpKpi.NomRechazo = summary_;
+            //    jpKpi.TipoRechazosCount = datos.Where(x => x.summary == summary_).Count();
+
+            //    var TipoRechazosList = datos
+            //        .Where(x => x.summary == summary_ && x.IDMh != null && x.Type == "Rechazo")
+            //    .Select(x => new
+            //    {
+            //        Type = x.Type,
+            //        idReadable = x.idReadable,
+            //        summary = x.summary,
+            //        NomJP = x.JefeDeProyecto
+            //    })
+            //    .ToList();
+
+            //    jpKpi.TipoRechazos = datos
+            //        .Where(x => x.summary == summary_ && x.IDMh != null && x.Type == "Rechazo")
+            //    .Select(x => new
+            //    {
+            //        Type = x.Type,
+            //        idReadable = x.idReadable,
+            //        summary = x.summary,
+            //        NomJP = x.JefeDeProyecto
+            //    })
+            //    .Count();
+
+            //    //Añade a la lista
+            //    list_jpKpi.Add(jpKpi);
+
+            //}
+
+            foreach (var summary_ in tiposRechazos)
+            {
+                // Verificar si el tipo de rechazo es "Rechazo"
+                if (datos.Any(x => x.summary == summary_ && x.Type == "Rechazo"))
+                {
+                    T_Rechazos jpKpi = new();
+
+                    // Asignar NomRechazo solo si el tipo de rechazo es "Rechazo"
+                    jpKpi.NomRechazo = summary_;
+
+                    jpKpi.TipoRechazosCount = datos.Count(x => x.summary == summary_ && x.Type == "Rechazo");
+
+                    // Obtener la lista de rechazos específicos para este tipo de rechazo
+                    var TipoRechazosList = datos
+                        .Where(x => x.summary == summary_ && x.Type == "Rechazo" && x.IDMh != null)
+                        .Select(x => new
+                        {
+                            Type = x.Type,
+                            idReadable = x.idReadable,
+                            summary = x.summary,
+                            NomJP = x.JefeDeProyecto
+                        })
+                        .ToList();
+
+                    // Obtener el recuento de rechazos para este tipo
+                    jpKpi.TipoRechazos = TipoRechazosList.Count;
+
+                    // Añadir a la lista
+                    list_jpKpi.Add(jpKpi);
+                }
+            }
+
+
+            //Asignar la lista de resultados a la propiedad de la clase MetricasKPI
+            metricasKPI.T_RechazosT = list_jpKpi;
+
+            return metricasKPI;
         }
 
     }

@@ -52,5 +52,4 @@ namespace YoutrackReport.DTOs
         public string id { get; set; }
     }
 
-
 }

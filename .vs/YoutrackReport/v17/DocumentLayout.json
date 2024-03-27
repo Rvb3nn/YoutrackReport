@@ -1,0 +1,167 @@
+{
+  "Version": 1,
+  "WorkspaceRootPath": "C:\\Users\\rtoro\\OneDrive\\Escritorio\\ALL\\Tareas U\\Git\\YoutrackReport\\",
+  "Documents": [
+    {
+      "AbsoluteMoniker": "D:0:0:{D0A94F7B-9A9E-497C-A606-0BFBE538F62B}|YoutrackReport\\YoutrackReport.csproj|c:\\users\\rtoro\\onedrive\\escritorio\\all\\tareas u\\git\\youtrackreport\\youtrackreport\\pages\\filtrosqa.razor||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{D0A94F7B-9A9E-497C-A606-0BFBE538F62B}|YoutrackReport\\YoutrackReport.csproj|solutionrelative:youtrackreport\\pages\\filtrosqa.razor||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{D0A94F7B-9A9E-497C-A606-0BFBE538F62B}|YoutrackReport\\YoutrackReport.csproj|c:\\users\\rtoro\\onedrive\\escritorio\\all\\tareas u\\git\\youtrackreport\\youtrackreport\\servicios\\impllementacion\\obtienemetricas.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{D0A94F7B-9A9E-497C-A606-0BFBE538F62B}|YoutrackReport\\YoutrackReport.csproj|solutionrelative:youtrackreport\\servicios\\impllementacion\\obtienemetricas.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{D0A94F7B-9A9E-497C-A606-0BFBE538F62B}|YoutrackReport\\YoutrackReport.csproj|c:\\users\\rtoro\\onedrive\\escritorio\\all\\tareas u\\git\\youtrackreport\\youtrackreport\\dtos\\metricaskpi.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{D0A94F7B-9A9E-497C-A606-0BFBE538F62B}|YoutrackReport\\YoutrackReport.csproj|solutionrelative:youtrackreport\\dtos\\metricaskpi.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{D0A94F7B-9A9E-497C-A606-0BFBE538F62B}|YoutrackReport\\YoutrackReport.csproj|c:\\users\\rtoro\\onedrive\\escritorio\\all\\tareas u\\git\\youtrackreport\\youtrackreport\\pages\\metricas.razor||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{D0A94F7B-9A9E-497C-A606-0BFBE538F62B}|YoutrackReport\\YoutrackReport.csproj|solutionrelative:youtrackreport\\pages\\metricas.razor||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{D0A94F7B-9A9E-497C-A606-0BFBE538F62B}|YoutrackReport\\YoutrackReport.csproj|c:\\users\\rtoro\\onedrive\\escritorio\\all\\tareas u\\git\\youtrackreport\\youtrackreport\\dtos\\fieldsdto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{D0A94F7B-9A9E-497C-A606-0BFBE538F62B}|YoutrackReport\\YoutrackReport.csproj|solutionrelative:youtrackreport\\dtos\\fieldsdto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{D0A94F7B-9A9E-497C-A606-0BFBE538F62B}|YoutrackReport\\YoutrackReport.csproj|c:\\users\\rtoro\\onedrive\\escritorio\\all\\tareas u\\git\\youtrackreport\\youtrackreport\\dtos\\metricasdto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{D0A94F7B-9A9E-497C-A606-0BFBE538F62B}|YoutrackReport\\YoutrackReport.csproj|solutionrelative:youtrackreport\\dtos\\metricasdto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{D0A94F7B-9A9E-497C-A606-0BFBE538F62B}|YoutrackReport\\YoutrackReport.csproj|c:\\users\\rtoro\\onedrive\\escritorio\\all\\tareas u\\git\\youtrackreport\\youtrackreport\\pages\\_layout.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{D0A94F7B-9A9E-497C-A606-0BFBE538F62B}|YoutrackReport\\YoutrackReport.csproj|solutionrelative:youtrackreport\\pages\\_layout.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{D0A94F7B-9A9E-497C-A606-0BFBE538F62B}|YoutrackReport\\YoutrackReport.csproj|c:\\users\\rtoro\\onedrive\\escritorio\\all\\tareas u\\git\\youtrackreport\\youtrackreport\\appsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}",
+      "RelativeMoniker": "D:0:0:{D0A94F7B-9A9E-497C-A606-0BFBE538F62B}|YoutrackReport\\YoutrackReport.csproj|solutionrelative:youtrackreport\\appsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{D0A94F7B-9A9E-497C-A606-0BFBE538F62B}|YoutrackReport\\YoutrackReport.csproj|c:\\users\\rtoro\\onedrive\\escritorio\\all\\tareas u\\git\\youtrackreport\\youtrackreport\\servicios\\impllementacion\\obtienemetricasjsonyt.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{D0A94F7B-9A9E-497C-A606-0BFBE538F62B}|YoutrackReport\\YoutrackReport.csproj|solutionrelative:youtrackreport\\servicios\\impllementacion\\obtienemetricasjsonyt.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    }
+  ],
+  "DocumentGroupContainers": [
+    {
+      "Orientation": 0,
+      "VerticalTabListWidth": 256,
+      "DocumentGroups": [
+        {
+          "DockedWidth": 200,
+          "SelectedChildIndex": 1,
+          "Children": [
+            {
+              "$type": "Document",
+              "DocumentIndex": 3,
+              "Title": "Metricas.razor",
+              "DocumentMoniker": "C:\\Users\\rtoro\\OneDrive\\Escritorio\\ALL\\Tareas U\\Git\\YoutrackReport\\YoutrackReport\\Pages\\Metricas.razor",
+              "RelativeDocumentMoniker": "YoutrackReport\\Pages\\Metricas.razor",
+              "ToolTip": "C:\\Users\\rtoro\\OneDrive\\Escritorio\\ALL\\Tareas U\\Git\\YoutrackReport\\YoutrackReport\\Pages\\Metricas.razor",
+              "RelativeToolTip": "YoutrackReport\\Pages\\Metricas.razor",
+              "ViewState": "AQIAAAIBAAAAAAAAAAAiwOUAAAAlAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2024-01-17T23:13:42.463Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "FiltrosQA.razor",
+              "DocumentMoniker": "C:\\Users\\rtoro\\OneDrive\\Escritorio\\ALL\\Tareas U\\Git\\YoutrackReport\\YoutrackReport\\Pages\\FiltrosQA.razor",
+              "RelativeDocumentMoniker": "YoutrackReport\\Pages\\FiltrosQA.razor",
+              "ToolTip": "C:\\Users\\rtoro\\OneDrive\\Escritorio\\ALL\\Tareas U\\Git\\YoutrackReport\\YoutrackReport\\Pages\\FiltrosQA.razor",
+              "RelativeToolTip": "YoutrackReport\\Pages\\FiltrosQA.razor",
+              "ViewState": "AQIAAHsAAAAAAAAAAAAAAJMAAAAsAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2024-01-23T18:09:05.784Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "ObtieneMetricas.cs",
+              "DocumentMoniker": "C:\\Users\\rtoro\\OneDrive\\Escritorio\\ALL\\Tareas U\\Git\\YoutrackReport\\YoutrackReport\\Servicios\\Impllementacion\\ObtieneMetricas.cs",
+              "RelativeDocumentMoniker": "YoutrackReport\\Servicios\\Impllementacion\\ObtieneMetricas.cs",
+              "ToolTip": "C:\\Users\\rtoro\\OneDrive\\Escritorio\\ALL\\Tareas U\\Git\\YoutrackReport\\YoutrackReport\\Servicios\\Impllementacion\\ObtieneMetricas.cs",
+              "RelativeToolTip": "YoutrackReport\\Servicios\\Impllementacion\\ObtieneMetricas.cs",
+              "ViewState": "AQIAAJ4CAAAAAAAAAAAQwLcCAAAQAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-01-17T23:13:42.466Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 5,
+              "Title": "MetricasDTO.cs",
+              "DocumentMoniker": "C:\\Users\\rtoro\\OneDrive\\Escritorio\\ALL\\Tareas U\\Git\\YoutrackReport\\YoutrackReport\\DTOs\\MetricasDTO.cs",
+              "RelativeDocumentMoniker": "YoutrackReport\\DTOs\\MetricasDTO.cs",
+              "ToolTip": "C:\\Users\\rtoro\\OneDrive\\Escritorio\\ALL\\Tareas U\\Git\\YoutrackReport\\YoutrackReport\\DTOs\\MetricasDTO.cs",
+              "RelativeToolTip": "YoutrackReport\\DTOs\\MetricasDTO.cs",
+              "ViewState": "AQIAACMAAAAAAAAAAAAAADQAAAAFAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-01-17T23:13:42.472Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 4,
+              "Title": "FieldsDTO.cs",
+              "DocumentMoniker": "C:\\Users\\rtoro\\OneDrive\\Escritorio\\ALL\\Tareas U\\Git\\YoutrackReport\\YoutrackReport\\DTOs\\FieldsDTO.cs",
+              "RelativeDocumentMoniker": "YoutrackReport\\DTOs\\FieldsDTO.cs",
+              "ToolTip": "C:\\Users\\rtoro\\OneDrive\\Escritorio\\ALL\\Tareas U\\Git\\YoutrackReport\\YoutrackReport\\DTOs\\FieldsDTO.cs",
+              "RelativeToolTip": "YoutrackReport\\DTOs\\FieldsDTO.cs",
+              "ViewState": "AQIAAAEAAAAAAAAAAAAswDsAAAAVAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-01-17T23:13:42.434Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 6,
+              "Title": "_Layout.cshtml",
+              "DocumentMoniker": "C:\\Users\\rtoro\\OneDrive\\Escritorio\\ALL\\Tareas U\\Git\\YoutrackReport\\YoutrackReport\\Pages\\_Layout.cshtml",
+              "RelativeDocumentMoniker": "YoutrackReport\\Pages\\_Layout.cshtml",
+              "ToolTip": "C:\\Users\\rtoro\\OneDrive\\Escritorio\\ALL\\Tareas U\\Git\\YoutrackReport\\YoutrackReport\\Pages\\_Layout.cshtml",
+              "RelativeToolTip": "YoutrackReport\\Pages\\_Layout.cshtml",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAACUAAAAAAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2024-02-29T14:30:21.806Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "MetricasKPI.cs",
+              "DocumentMoniker": "C:\\Users\\rtoro\\OneDrive\\Escritorio\\ALL\\Tareas U\\Git\\YoutrackReport\\YoutrackReport\\DTOs\\MetricasKPI.cs",
+              "RelativeDocumentMoniker": "YoutrackReport\\DTOs\\MetricasKPI.cs",
+              "ToolTip": "C:\\Users\\rtoro\\OneDrive\\Escritorio\\ALL\\Tareas U\\Git\\YoutrackReport\\YoutrackReport\\DTOs\\MetricasKPI.cs",
+              "RelativeToolTip": "YoutrackReport\\DTOs\\MetricasKPI.cs",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAACcAAAAIAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-01-18T17:22:16.752Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 7,
+              "Title": "appsettings.json",
+              "DocumentMoniker": "C:\\Users\\rtoro\\OneDrive\\Escritorio\\ALL\\Tareas U\\Git\\YoutrackReport\\YoutrackReport\\appsettings.json",
+              "RelativeDocumentMoniker": "YoutrackReport\\appsettings.json",
+              "ToolTip": "C:\\Users\\rtoro\\OneDrive\\Escritorio\\ALL\\Tareas U\\Git\\YoutrackReport\\YoutrackReport\\appsettings.json",
+              "RelativeToolTip": "YoutrackReport\\appsettings.json",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAAA8AAABfAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001642|",
+              "WhenOpened": "2024-02-16T15:36:08.711Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 8,
+              "Title": "ObtieneMetricasJsonYT.cs",
+              "DocumentMoniker": "C:\\Users\\rtoro\\OneDrive\\Escritorio\\ALL\\Tareas U\\Git\\YoutrackReport\\YoutrackReport\\Servicios\\Impllementacion\\ObtieneMetricasJsonYT.cs",
+              "RelativeDocumentMoniker": "YoutrackReport\\Servicios\\Impllementacion\\ObtieneMetricasJsonYT.cs",
+              "ToolTip": "C:\\Users\\rtoro\\OneDrive\\Escritorio\\ALL\\Tareas U\\Git\\YoutrackReport\\YoutrackReport\\Servicios\\Impllementacion\\ObtieneMetricasJsonYT.cs",
+              "RelativeToolTip": "YoutrackReport\\Servicios\\Impllementacion\\ObtieneMetricasJsonYT.cs",
+              "ViewState": "AQIAAAkAAAAAAAAAAAAMwBUAAAAMAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-02-16T15:33:31.513Z"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
