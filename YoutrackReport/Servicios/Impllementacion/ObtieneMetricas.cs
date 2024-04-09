@@ -239,17 +239,6 @@ namespace YoutrackReport.Servicios.Impllementacion
                             && DateTime.Parse(x.FechaTerminoReal).Year == 2024)     //No toma las fechas nulas
                 .Count();
 
-            //// Imprimir contenido de proyectosConQA
-            //Console.WriteLine("Resultados 2024: ");
-            //foreach (var item in CantidadTerminado2024)
-            //{
-            //    Console.WriteLine($"IdReadable: {item.idReadable}, FechaTerminoReal: {item.FechaTerminoReal}");
-            //}
-
-            // Llamada al método para obtener TotalAtrasosJP
-            //metricasKPI.TotalAtrasosJP = await CalcularTotalesPorJP(metricas, metricasKPI);
-
-
             metricasKPI.CantidadTerminado = datos.Where(x => x.State == "Terminado" || x.State == "Cerrado").Count();
             metricasKPI.CantidadEnCurso = datos.Count - metricasKPI.CantidadTerminado;
 
@@ -374,21 +363,6 @@ namespace YoutrackReport.Servicios.Impllementacion
                 .ToList();
 
 
-
-                //// Imprimir contenido de proyectosConQA
-                //Console.WriteLine($"Proyectos con QA para el Jefe de Proyecto {jefeProyecto}:");
-                //foreach (var proyecto in proyectosConQA)
-                //{
-                //    Console.WriteLine($"IdMH: {proyecto.IdMH}, IdReadable: {proyecto.IdReadable}");
-                //}
-
-                //// Imprimir contenido de proyectosRechazos
-                //Console.WriteLine($"Proyectos de Rechazo para el Jefe de Proyecto {jefeProyecto}:");
-                //foreach (var proyecto in proyectosRechazos)
-                //{
-                //    Console.WriteLine($"IdMH: {proyecto.IdMH}, IdReadable: {proyecto.IdReadable}");
-                //}
-
                 jpKpi.QAFallido = datos
                     .Where(x => x.JefeDeProyecto == jefeProyecto && x.State == "Fallido")
                     //&& x.FechaTerminoReal != null && DateTime.Parse(x.FechaTerminoReal).Year == 2024)
@@ -412,12 +386,12 @@ namespace YoutrackReport.Servicios.Impllementacion
 
             }
 
-            // Calcular porcentaje de rechazos después de la iteración completa
-            foreach (var jpKpi in list_jpKpi)
-            {
-                // Calcular el porcentaje de rechazos en comparación con el total de proyectos
-                jpKpi.PorcentajeRechazos = totalRechazos != 0 ? Math.Round((double)(jpKpi.Rechazos * 100) / totalRechazos, 1) : 0;
-            }
+            //// Calcular porcentaje de rechazos después de la iteración completa
+            //foreach (var jpKpi in list_jpKpi)
+            //{
+            //    // Calcular el porcentaje de rechazos en comparación con el total de proyectos
+            //    jpKpi.PorcentajeRechazos = totalRechazos != 0 ? Math.Round((double)(jpKpi.Rechazos * 100) / totalRechazos, 1) : 0;
+            //}
 
             //Asignar la lista de resultados a la propiedad de la clase MetricasKPI
             metricasKPI.kPI_Lista_JPs = list_jpKpi;
@@ -674,41 +648,6 @@ namespace YoutrackReport.Servicios.Impllementacion
             //Lista para almacenar resultados por rechazos
             List<T_Rechazos> list_jpKpi = new();
 
-            //// Calcular totales por cada jefe de proyecto
-            //foreach (var summary_ in tiposRechazos)
-            //{
-            //    T_Rechazos jpKpi = new();
-
-            //    jpKpi.NomRechazo = summary_;
-            //    jpKpi.TipoRechazosCount = datos.Where(x => x.summary == summary_).Count();
-
-            //    var TipoRechazosList = datos
-            //        .Where(x => x.summary == summary_ && x.IDMh != null && x.Type == "Rechazo")
-            //    .Select(x => new
-            //    {
-            //        Type = x.Type,
-            //        idReadable = x.idReadable,
-            //        summary = x.summary,
-            //        NomJP = x.JefeDeProyecto
-            //    })
-            //    .ToList();
-
-            //    jpKpi.TipoRechazos = datos
-            //        .Where(x => x.summary == summary_ && x.IDMh != null && x.Type == "Rechazo")
-            //    .Select(x => new
-            //    {
-            //        Type = x.Type,
-            //        idReadable = x.idReadable,
-            //        summary = x.summary,
-            //        NomJP = x.JefeDeProyecto
-            //    })
-            //    .Count();
-
-            //    //Añade a la lista
-            //    list_jpKpi.Add(jpKpi);
-
-            //}
-
             foreach (var summary_ in tiposRechazos)
             {
                 // Verificar si el tipo de rechazo es "Rechazo"
@@ -719,7 +658,7 @@ namespace YoutrackReport.Servicios.Impllementacion
                     // Asignar NomRechazo solo si el tipo de rechazo es "Rechazo"
                     jpKpi.NomRechazo = summary_;
 
-                    jpKpi.TipoRechazosCount = datos.Count(x => x.summary == summary_ && x.Type == "Rechazo");
+                    //jpKpi.TipoRechazosCount = datos.Count(x => x.summary == summary_ && x.Type == "Rechazo");
 
                     // Obtener la lista de rechazos específicos para este tipo de rechazo
                     var TipoRechazosList = datos
@@ -743,9 +682,45 @@ namespace YoutrackReport.Servicios.Impllementacion
 
 
             //Asignar la lista de resultados a la propiedad de la clase MetricasKPI
-            metricasKPI.T_RechazosT = list_jpKpi;
+            metricasKPI.Tipo_Rechazos = list_jpKpi;
 
             return metricasKPI;
+        }
+
+
+        //Metodo para los modal de Incidencias con QA y los rechazos
+        public List<FieldsDTO> DetallesTipoRechazosModal(List<FieldsDTO> metricas, string summary_, string tipo)
+        {
+            var datos = metricas;
+
+            List<FieldsDTO> jpKpi = new();
+
+            if (tipo == "Rechazos")
+            {
+
+                var TRechazos = datos
+                    .Where(x => x.summary == summary_ && x.Type == "Rechazo" && x.IDMh != null)
+                .Select(x =>
+                {
+                    x.Subsystem = x.Subsystem;  // Agregar el campo Subsystem sin perder la información existente
+                    x.Assignee = x.Assignee;
+                    x.IDMh = x.IDMh;
+                    x.URLJira = x.URLJira;
+                    x.Type = x.Type;
+                    x.idReadable = x.idReadable;
+                    x.summary = x.summary;
+                    x.UrlYT = _configuration["UrlIndicencias"] + x.idReadable + "/" + Uri.EscapeDataString(x.summary);
+                    return x;
+                })
+                .ToList();
+
+                jpKpi.AddRange(TRechazos);
+            }
+            
+            
+
+
+            return jpKpi;
         }
 
     }

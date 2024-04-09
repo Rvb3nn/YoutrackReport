@@ -32,8 +32,7 @@
                             <th scope="col">Estado fallido</th>
                             <th scope="col">Exitoso</th>
                             <th scope="col">QA Prosys</th>
-                            @* <th scope="col">Rechazos sin IDMH</th> *@
-                            <th scope="col">Rechazos HDI</th>
+                            @* <th scope="col">Rechazos HDI</th> *@
                         </tr>
                     </thead>
                     <tbody>
@@ -46,7 +45,7 @@
                                 <td>@jefeProyecto.QAFallido</td>
                                 <td>@jefeProyecto.QAExitoso</td>
                                 <td style="cursor: pointer" data-bs-toggle="modal" data-bs-target='@($"#exampleModal{jefeProyecto.NomJP.GetHashCode()}")' @onclick='(() => traerDatosDetallesQA(jefeProyecto.NomJP, "Con QA"))'>@jefeProyecto.ConQACount</td>
-                                <td style="cursor: pointer" data-bs-toggle="modal" data-bs-target='@($"#exampleModal{jefeProyecto.NomJP.GetHashCode()}")' @onclick='(() => traerDatosDetallesQA(jefeProyecto.NomJP, "Rechazos"))'>@(jefeProyecto.Rechazos) / @(jefeProyecto.PorcentajeRechazos)%</td>
+                                @* <td style="cursor: pointer" data-bs-toggle="modal" data-bs-target='@($"#exampleModal{jefeProyecto.NomJP.GetHashCode()}")' @onclick='(() => traerDatosDetallesQA(jefeProyecto.NomJP, "Rechazos"))'>@(jefeProyecto.Rechazos) / @(jefeProyecto.PorcentajeRechazos)%</td> *@
                             </tr>
 
                             <!-- Modal -->
@@ -136,18 +135,98 @@
                 <table class="table table-striped">
                     <thead>
                         <tr>
-                            <th scope="col">Rechazos HDI</th>
+                            <th class="text-start" scope="col">Rechazos HDI</th>
                             <th scope="col">Cantidad</th>
 
                         </tr>
                     </thead>
                     <tbody>
-                        @foreach (var tipoRechazo in lista.T_RechazosT)
+                        @foreach (var tipoRechazo in lista.Tipo_Rechazos)
                         {
                             <tr>
-                                <td>@tipoRechazo.NomRechazo</td>
-                                <td>@tipoRechazo.TipoRechazosCount</td>
+                                <td class="text-start">@tipoRechazo.NomRechazo</td>
+                                @* <td>@tipoRechazo.TipoRechazos</td> *@
+                                <td style="cursor: pointer" data-bs-toggle="modal" data-bs-target='@($"#exampleModal{tipoRechazo.NomRechazo.GetHashCode()}")' @onclick='(() => traerTiposRechazos(tipoRechazo.NomRechazo, "Rechazos"))'>@tipoRechazo.TipoRechazos</td>
                             </tr>
+
+                            <!-- Modal -->
+                            <!-- Cambio en el id del modal para incluir el hash del nombre del jefe de proyecto -->
+                            <div class="modal fade" id="@($"exampleModal{tipoRechazo.NomRechazo.GetHashCode()}")" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                <div class="modal-dialog modal-xl">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <!-- Cambio en el título del modal para incluir el nombre del jefe de proyecto -->
+                                            <h5 class="modal-title" id="exampleModalLabel">Detalles del @tipoRechazo.NomRechazo</h5>
+                                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                        </div>
+                                        <div class="modal-body">
+                                            @if (cargandoDetallesJP == tipoRechazo.NomRechazo)
+                                            {
+                                                <!-- Spinner para indicar que se están cargando los detalles -->
+                                                <div class="spinner-border" role="status">
+                                                    <span class="visually-hidden">Cargando...</span>
+                                                </div>
+                                            }
+                                            else
+                                            {
+                                                <table class="table table-striped">
+                                                    <thead>
+                                                        <tr>
+                                                            <th scope="col">Dev</th>
+                                                            <th scope="col">Id</th>
+                                                            <th scope="col">IdMH</th>
+                                                            <th scope="col">Summary</th>
+                                                            <th scope="col">Jefe de proyecto</th>
+                                                            <th scope="col">Fecha En desarrollo</th>
+                                                            <th scope="col">Fecha QA</th>
+                                                            <th scope="col">Fecha Produccion</th>
+                                                            <th scope="col">Url YT</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        @if (tipoDetallesQA == "Rechazos")
+                                                        {
+                                                            @foreach (var TipoRechazoModal in listaTipoRechazos)
+                                                            {
+                                                                <tr>
+                                                                    <td>@TipoRechazoModal.Assignee</td>
+                                                                    <td>@TipoRechazoModal.idReadable</td>
+                                                                    <td>@TipoRechazoModal.IDMh</td>
+                                                                    <td>@TipoRechazoModal.summary</td>
+                                                                    <td>@TipoRechazoModal.JefeDeProyecto</td>
+                                                                    <td>
+                                                                        @if (!string.IsNullOrEmpty(TipoRechazoModal.FechaTerminoDesa))
+                                                                        {
+                                                                            @(DateTime.Parse(TipoRechazoModal.FechaTerminoDesa).ToString("dd-MM-yyyy"))
+                                                                        }
+                                                                    </td>
+                                                                    <td>
+                                                                        @if (!string.IsNullOrEmpty(TipoRechazoModal.FechaTerminoQA))
+                                                                        {
+                                                                            @(DateTime.Parse(TipoRechazoModal.FechaTerminoQA).ToString("dd-MM-yyyy"))
+                                                                        }
+                                                                    </td>
+                                                                    <td>
+                                                                        @if (!string.IsNullOrEmpty(TipoRechazoModal.FechaTerminoReal))
+                                                                        {
+                                                                            @(DateTime.Parse(TipoRechazoModal.FechaTerminoReal).ToString("dd-MM-yyyy"))
+                                                                        }
+                                                                    </td>
+                                                                    <td><a href="@TipoRechazoModal.UrlYT" target="_blank">Ir</a></td>
+                                                                </tr>
+                                                            }
+                                                        }
+
+                                                    </tbody>
+                                                </table>
+                                            }
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
                         }
                     </tbody>
                 </table>
@@ -172,7 +251,7 @@
     private MetricasKPI lista = new();
     private List<FieldsDTO> listaConQA = new();
     private List<FieldsDTO> listaRechazos = new();
-    private List<FieldsDTO> listaRechazosSinId = new();
+    private List<FieldsDTO> listaTipoRechazos = new();
 
     protected override async Task OnInitializedAsync()
     {
@@ -244,16 +323,48 @@
                 //Si es "Atrasados", obtiene los detalles de atrasos para el jefe de proyecto
                 listaRechazos = ObtieneMetricasService.DetallesFiltrosQAModal(metricas, jefeproyecto, tipo);
             }
-            else if (tipoDetallesQA == "Rechazos Sin Id")
-            {
-                listaRechazosSinId = ObtieneMetricasService.DetallesFiltrosQAModal(metricas, jefeproyecto, tipo);
-            }
             else //if (tipoDetallesQA == "Rechazos")
             {
                 //Si es "En curso", obtiene los detalles de atrasos para el jefe de proyecto
                 listaConQA = ObtieneMetricasService.DetallesFiltrosQAModal(metricas, jefeproyecto, tipo);
             }
         
+
+        }
+        finally
+        {
+            // restablecer la variable de carga después de completar la obtención de datos
+            cargandoDetallesJP = null;
+        }
+    }
+
+
+
+    private async Task traerTiposRechazos(string summary_, string tipo)
+    {
+        try
+        {
+            tipoDetallesQA = tipo;
+
+            // establecer la variable de carga para mostrar el spinner
+            cargandoDetallesJP = summary_;
+
+            // forzar la actualización del estado para que se refleje inmediatamente en la interfaz de usuario
+            StateHasChanged();
+
+            metricas = await ObtieneMetricasService.ObtenerDatosComunes();
+
+            //Metricas 2024 no cuenta fechas nulas
+            metricas = metricas.Where(x => x.Project == "Control de calidad Prosys" && x.FechaTerminoReal != null
+                            && DateTime.Parse(x.FechaTerminoReal).Year == 2024)
+                            .ToList();
+
+            // Verifica el tipo de detalles
+            if (tipoDetallesQA == "Rechazos")
+            {
+                //Si es "Atrasados", obtiene los detalles de atrasos para el jefe de proyecto
+                listaTipoRechazos = ObtieneMetricasService.DetallesTipoRechazosModal(metricas, summary_, tipo);
+            }
 
         }
         finally

@@ -11,7 +11,7 @@ namespace YoutrackReport.DTOs
         public int TotalAtrasosJP { get; set; }
 
         public List<KPI_Lista_JP> kPI_Lista_JPs { get; set; }
-        public List<T_Rechazos> T_RechazosT { get; set; }
+        public List<T_Rechazos> Tipo_Rechazos { get; set; }
     }
 
     public class KPI_Lista_JP 
